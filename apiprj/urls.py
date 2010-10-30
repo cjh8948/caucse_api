@@ -13,6 +13,6 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     (r'^admin/', include(admin.site.urls)),
 
-    (r'^1/', include('api1.urls')),
-    (r'^', include('api1.urls')),
+    #(r'^1/', include('api1.urls')),
+    #(r'^', include('api1.urls')),
 )
