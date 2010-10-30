@@ -1,0 +1,32 @@
+== 프로젝트 내려받기
+```sh
+# readonly mode
+git clone git://github.com/caucse-dev/caucse_api.git
+```
+
+== 설정파일편집하기
+=== apiprj/secure.py 편집
+```python
+DB_NAME = "api_database"
+DB_USER = "api_db_user"
+DB_PASSWORD = "api_db_password"
+
+SECRET_KEY = "django_project_unique_secret_key_string"
+```
+apiprj/secure.py.example 을 apiprj/secure.py로 복사해 위와 같이 편집한다.
+
+== 아파치 - mod_wsgi와 연동하기
+=== apache/apiprj.wsgi 파일 편집
+```python
+MODULE_PATH = '/path/to/caucse_api/apiprj/api1'
+PROJECT_PATH = '/path/to/caucse_api/apiprj'
+```
+apache/apiprj.wsgi.example 파일을 apache/apiprj.wsgi로 변경해 위와 같이 설치된 경로로 설정해준다.
+
+=== 아파치 설정파일 추가
+```ini
+LoadModule wsgi_module modules/mod_wsgi.so
+WSGIScriptAlias /api /path/to/caucse_api/apiprj.wsgi
+```
+mod_wsgi 설치 후, 위 내용을 아파치 설정 파일에 추가한다. 
+
