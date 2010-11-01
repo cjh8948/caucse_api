@@ -43,7 +43,7 @@ def boards_lookup(request):
         board_dict['description'] = board.description
         board_dict['admin'] = board.admin_id
         board_dict['count'] = board_model.objects.count()
-        board_dict['count_24h_ago'] = board_model.objects\
+        board_dict['count_24h'] = board_model.objects\
                                                  .filter(reg_date__gt=day_ago)\
                                                  .count()
         boards.append(board_dict)
@@ -55,6 +55,7 @@ def boards_lookup(request):
 def boards_list(request):
     page = 0
     per_page = 20
+    ret_item = {}
     
     # get request parameter 
     board_id = request.GET['board_id']
@@ -62,6 +63,9 @@ def boards_list(request):
         page = int(request.GET['page'])
     if request.GET.has_key('per_page'):
         per_page = int(request.GET['per_page'])
+    ret_item['list_info'] = {'board_id':board_id,
+                             'page':page,
+                             'per_page':per_page}
 
     # prepare query parameter 
     start_index = page * per_page
@@ -85,7 +89,8 @@ def boards_list(request):
             # TODO: should convert to url
             item_dict['filename'] = article.file_name
         item_list.append(item_dict)        
+    ret_item['list'] = item_list
 
     # return JSON object 
-    ret = dumps(item_list, ensure_ascii=False)
+    ret = dumps(ret_item, ensure_ascii=False)
     return HttpResponse(ret)
