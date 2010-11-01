@@ -5,6 +5,8 @@ from django.utils.simplejson import dumps
 from models import *
 import datetime
 
+# TODO: should separate logic from view
+
 def users_show(request):
     id = request.GET['user_id']
     member = Member.objects.get(id=id)
@@ -50,3 +52,40 @@ def boards_lookup(request):
     ret = dumps(boards, ensure_ascii=False)
     return HttpResponse(ret)
 
+def boards_list(request):
+    page = 0
+    per_page = 20
+    
+    # get request parameter 
+    board_id = request.GET['board_id']
+    if request.GET.has_key('page'):
+        page = int(request.GET['page'])
+    if request.GET.has_key('per_page'):
+        per_page = int(request.GET['per_page'])
+
+    # prepare query parameter 
+    start_index = page * per_page
+    end_index = start_index + per_page
+    classname = board_id.title().replace('_','')
+    board_model = eval(classname)
+    
+    # compose data into list
+    item_list = []
+    articles = board_model.objects.all().order_by('-reg_date')
+    for article in articles[start_index:end_index]:
+        item_dict = {}
+        item_dict['board_id'] = board_id
+        item_dict['article_id'] = article.id
+        item_dict['title'] = article.title
+        item_dict['view_count'] = article.count
+        # need to setup datetime timezone info
+        item_dict['reg_date'] = article.reg_date.isoformat()
+        item_dict['comment_count'] = article.comment
+        if article.file_name:
+            # TODO: should convert to url
+            item_dict['filename'] = article.file_name
+        item_list.append(item_dict)        
+
+    # return JSON object 
+    ret = dumps(item_list, ensure_ascii=False)
+    return HttpResponse(ret)
