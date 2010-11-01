@@ -3,5 +3,5 @@ from django.conf.urls.defaults import *
 urlpatterns = patterns('api1.views',
     (r'^users/show', 'users_show'),
     (r'^users/lookup', 'users_lookup'),
-    (r'^boards/list', 'boards_list'),
+    (r'^boards/lookup', 'boards_lookup'),
 )
