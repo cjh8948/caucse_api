@@ -7,6 +7,43 @@ import datetime
 
 # TODO: should separate logic from view
 
+def articles_show(request):
+    board_id = request.GET['board_id']
+    article_id = int(request.GET['article_id'])
+
+    board_classname = board_id.title().replace('_','')
+    board_class = eval(board_classname)
+    article_model = board_class.objects.get(id=article_id)
+
+    article = {}
+    article['board_id'] = board_id
+    article['id'] = article_model.id
+    article['author'] = article_model.name
+    article['author_id'] = article_model.user_id
+    article['title'] = article_model.title
+    article['view_count'] = article_model.count
+    article['reg_date'] = article_model.reg_date.isoformat()
+    article['content'] = article_model.content
+    article['file'] = article_model.file_name
+    article['comment'] = []
+
+    comment_classname = "Comment"+board_classname[5:]
+    comment_class = eval(comment_classname)
+    comment_model = comment_class.objects.filter(idx=article_model.id)
+
+    for comment in comment_model:
+        cmt = {}
+        cmt['board_id'] = board_id
+        cmt['id'] = comment.id
+        cmt['content'] = comment.content
+        cmt['reg_date'] = comment.reg_date.isoformat()
+        cmt['author'] = comment.name
+        cmt['author_id'] = comment.user_id
+        article['comment'].append(cmt)
+   
+    ret = dumps(article, ensure_ascii=False) 
+    return HttpResponse(ret)
+    
 def users_show(request):
     id = request.GET['user_id']
     member = Member.objects.get(id=id)
@@ -44,8 +81,8 @@ def boards_lookup(request):
         board_dict['admin'] = board.admin_id
         board_dict['count'] = board_model.objects.count()
         board_dict['count_24h'] = board_model.objects\
-                                                 .filter(reg_date__gt=day_ago)\
-                                                 .count()
+                                             .filter(reg_date__gt=day_ago)\
+                                             .count()
         boards.append(board_dict)
 
     # return json object
@@ -88,7 +125,7 @@ def boards_list(request):
         if article.file_name:
             # TODO: should convert to url
             item_dict['filename'] = article.file_name
-        item_list.append(item_dict)        
+        item_list.append(item_dict)
     ret_item['list'] = item_list
 
     # return JSON object 
