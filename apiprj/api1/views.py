@@ -2,6 +2,8 @@ from django.http import HttpResponse
 from django.core import serializers
 from django.utils.simplejson import dumps
 
+import modelwrap 
+
 from models import *
 import datetime
 
@@ -10,37 +12,7 @@ import datetime
 def articles_show(request):
     board_id = request.GET['board_id']
     article_id = int(request.GET['article_id'])
-
-    board_classname = board_id.title().replace('_','')
-    board_class = eval(board_classname)
-    article_model = board_class.objects.get(id=article_id)
-
-    article = {}
-    article['board_id'] = board_id
-    article['id'] = article_model.id
-    article['author'] = article_model.name
-    article['author_id'] = article_model.user_id
-    article['title'] = article_model.title
-    article['view_count'] = article_model.count
-    article['reg_date'] = article_model.reg_date.isoformat()
-    article['content'] = article_model.content
-    article['file'] = article_model.file_name
-    article['comment'] = []
-
-    comment_classname = "Comment"+board_classname[5:]
-    comment_class = eval(comment_classname)
-    comment_model = comment_class.objects.filter(idx=article_model.id)
-
-    for comment in comment_model:
-        cmt = {}
-        cmt['board_id'] = board_id
-        cmt['id'] = comment.id
-        cmt['content'] = comment.content
-        cmt['reg_date'] = comment.reg_date.isoformat()
-        cmt['author'] = comment.name
-        cmt['author_id'] = comment.user_id
-        article['comment'].append(cmt)
-   
+    article = modelwrap.get_article(board_id, article_id)
     ret = dumps(article, ensure_ascii=False) 
     return HttpResponse(ret)
     
@@ -119,6 +91,8 @@ def boards_list(request):
         item_dict['article_id'] = article.id
         item_dict['title'] = article.title
         item_dict['view_count'] = article.count
+        item_dict['author_id'] = article.user_id
+        item_dict['author'] = article.name
         # need to setup datetime timezone info
         item_dict['reg_date'] = article.reg_date.isoformat()
         item_dict['comment_count'] = article.comment
