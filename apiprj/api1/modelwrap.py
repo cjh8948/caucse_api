@@ -42,7 +42,7 @@ def pack_article(article, board_id, comments=[]):
 def get_comments(board_id, article_id):
     comment_model = eval_comment(board_id)
     comments = comment_model.objects.filter(idx=article_id)
-    return map(lambda cmt: pack_comment(board_id, cmt), comments)
+    return map(lambda cmt: pack_comment(cmt, board_id), comments)
 
 def get_article(board_id, article_id):
     board_model = eval_board(board_id)
