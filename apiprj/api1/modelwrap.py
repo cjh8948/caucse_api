@@ -48,6 +48,6 @@ def get_article(board_id, article_id):
     board_model = eval_board(board_id)
     article_model = board_model.objects.get(id=article_id)
     comments = get_comments(board_id, article_id)
-    article = pack_article(board_id, article_model, comments) 
+    article = pack_article(article_model, board_id, comments) 
     return article
 
