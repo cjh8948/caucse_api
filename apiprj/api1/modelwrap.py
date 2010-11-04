@@ -32,12 +32,21 @@ def pack_article(article, board_id, comments=[]):
                       'author': {'name': article.name,
                                  'id': article.user_id},
                       'title': article.title,
-                      'view_count': article.count,
+                      'hits': article.count,
                       'reg_date': article.reg_date.isoformat(),
                       'content': article.content,
                       'file': article.file_name,
                       'comments': comments}
     return packed_article
+
+def pack_board(board, count=None, count24h=None):
+    packed_board = {'board_id': board.tablename,
+                    'title': board.title,
+                    'description': board.description,
+                    'admin': board.admin_id,
+                    'count': count,
+                    'count24h': count24h}
+    return packed_board
 
 def get_comments(board_id, article_id):
     comment_model = eval_comment(board_id)
@@ -51,3 +60,28 @@ def get_article(board_id, article_id):
     article = pack_article(article_model, board_id, comments) 
     return article
 
+def get_articles(board_id, page=0, per_page=20):
+    s = page * per_page
+    e = s + per_page
+    board_model = eval_board(board_id)
+    articles = board_model.objects.all().order_by('-reg_date')[s:e]
+    return map(lambda article: pack_article(article, board_id), articles)
+
+def get_board(board_id):
+    # get boardinfo model object
+    boardinfo = None
+    if board_id.startswith('board'):
+        boardinfo = models.Boardinfo.objects.get(tablename=board_id)
+    elif board_id.startswith('photo'):
+        boardinfo = models.Photoinfo.objects.get(tablename=board_id)
+
+    # count articles
+    board_model = eval_board(board_id)
+    time_window = datetime.datetime.today() - datetime.timedelta(days=1)
+    count = board_model.objects.count()
+    count24h = board_model.objects.filter(reg_date__gt=time_window).count()
+    
+    # return json object
+    board = pack_board(boardinfo, count=count, count24h=count24h)
+    return board
+    
