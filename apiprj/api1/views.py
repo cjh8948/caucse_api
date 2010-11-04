@@ -61,7 +61,7 @@ def boards_lookup(request):
     ret = dumps(boards, ensure_ascii=False)
     return HttpResponse(ret)
 
-def boards_list(request):
+def articles_list(request):
     page = 0
     per_page = 20
     ret_item = {}
