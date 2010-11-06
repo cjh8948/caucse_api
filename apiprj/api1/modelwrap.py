@@ -1,7 +1,9 @@
 #!/usr/bin/python
 
-import models
+import os
 import datetime
+import models
+from apiprj.secure import USER_IMG_PATH, USER_IMG_PREFIX
 
 class ModelnameError(Exception):pass
 
@@ -23,14 +25,16 @@ def pack_comment(cmt, board_id):
                   'content': cmt.content,
                   'reg_date': cmt.reg_date.isoformat(),
                   'author': {'name': cmt.name, 
-                             'id': cmt.user_id}}
+                             'id': cmt.user_id,
+                             'img_url': get_user_img_url(cmt.user_id)}}
     return packed_cmt
 
 def pack_article(article, board_id, comments=[]):
     packed_article = {'board_id': board_id,
                       'id': article.id,
                       'author': {'name': article.name,
-                                 'id': article.user_id},
+                                 'id': article.user_id,
+                                 'img_url': get_user_img_url(article.user_id)},
                       'title': article.title,
                       'hits': article.count,
                       'reg_date': article.reg_date.isoformat(),
@@ -47,6 +51,13 @@ def pack_board(board, count=None, count24h=None):
                     'count': count,
                     'count24h': count24h}
     return packed_board
+
+def get_user_img_url(user_id):
+    img_path = os.path.join(USER_IMG_PATH, user_id)
+    if os.path.isfile(img_path):
+        return USER_IMG_PREFIX + user_id
+    else:
+        return "http://s.twimg.com/a/1278188204/images/default_profile_0_normal.png"
 
 def get_comments(board_id, article_id):
     comment_model = eval_comment(board_id)
