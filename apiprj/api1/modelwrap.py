@@ -52,12 +52,25 @@ def pack_board(board, count=None, count24h=None):
                     'count24h': count24h}
     return packed_board
 
+def pack_user(user):
+    packed_user = {'id': user.id,
+                   'name': user.name,
+                   'entrance_year': user.id_number,
+                   'mobile': user.cell_phone,
+                   'email': user.email,
+                   'img_url': get_user_img_url(user.id)}
+    return packed_user
+
 def get_user_img_url(user_id):
     img_path = os.path.join(USER_IMG_PATH, user_id)
     if os.path.isfile(img_path):
         return USER_IMG_PREFIX + user_id
     else:
         return "http://s.twimg.com/a/1278188204/images/default_profile_0_normal.png"
+
+def get_user(user_id):
+    user = models.Member.objects.get(id=user_id)
+    return pack_user(user)
 
 def get_comments(board_id, article_id):
     comment_model = eval_comment(board_id)

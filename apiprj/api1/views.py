@@ -4,11 +4,6 @@ from django.utils.simplejson import dumps
 
 import modelwrap 
 
-from models import *
-import datetime
-
-# TODO: should separate logic from view
-
 def articles_show(request):
     board_id = request.GET['board_id']
     article_id = int(request.GET['article_id'])
@@ -18,14 +13,14 @@ def articles_show(request):
     
 def users_show(request):
     id = request.GET['user_id']
-    member = Member.objects.get(id=id)
-    ret = serializers.serialize('json', [member], ensure_ascii=False)
+    user = modelwrap.get_user(id)
+    ret = dumps(user, ensure_ascii=False)
     return HttpResponse(ret)
     
 def users_lookup(request):
     id_list = request.GET['user_id'].split(',')
-    members = [Member.objects.get(id=id) for id in id_list]
-    ret = serializers.serialize('json', members, ensure_ascii=False)
+    users = map(modelwrap.get_user, id_list)
+    ret = dumps(users, ensure_ascii=False)
     return HttpResponse(ret)
  
 def boards_lookup(request):
