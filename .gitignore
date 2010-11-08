@@ -1,3 +1,4 @@
 *.pyc
 apache/*.wsgi
 apiprj/secure.py
+test/secure.py
