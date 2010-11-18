@@ -29,8 +29,7 @@ class UsersShowTest(ApiTestCase):
         self.assertEqual(obj['email'], 'gochist@gmail.com')
         self.assertEqual(obj['entrance_year'], 99)
         # validate keys
-        keys = [u'name', u'mobile', u'id', u'img_url', u'email', 
-                u'entrance_year']
+        keys = ['name', 'mobile', 'id', 'img_url', 'email', 'entrance_year']
         self.assertEqual(obj.keys(), keys)
 
 class UsersLookupTest(ApiTestCase):

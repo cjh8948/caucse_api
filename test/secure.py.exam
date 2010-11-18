@@ -1,1 +1,2 @@
 URL_PREFIX = "http://path.to/api/"
+OAUTH_URL_PREFIX = "http://path.to/oauth/"
