@@ -8,6 +8,7 @@ import oauth2 as oauth
 def request_token(request):
     server = utils.AuthServer()
     oauth_request = server.conv_oauthrequest(request)
+    print oauth_request
 
     # TODO: get consumer from DB
     consumer = oauth.Consumer(oauth_request['oauth_consumer_key'], 
