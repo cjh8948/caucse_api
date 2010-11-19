@@ -26,6 +26,9 @@ class OauthTestCase(unittest.TestCase):
         client = oauth.Client(self.consumer, token)
         resp, content = client.request(ACCESS_TOKEN_URL, "POST")
         self.assertEquals(resp['status'],'200')
+        access_token = dict(urlparse.parse_qsl(content))
+        self.assertTrue(access_token.has_key('oauth_token'))
+        self.assertTrue(access_token.has_key('oauth_token_secret'))
 
 if __name__ == '__main__':
     unittest.main()
