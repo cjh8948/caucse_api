@@ -9,7 +9,7 @@ ACCESS_TOKEN_URL = OAUTH_URL_PREFIX+'access_token'
 AUTHORIZE_URL = OAUTH_URL_PREFIX+'authorize'
 
 class RequestTokenTestCase(unittest.TestCase):
-    def test_request_token(self):
+    def test_success_case(self):
         consumer = oauth.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
         client = oauth.Client(consumer)
         resp, content = client.request(REQUEST_TOKEN_URL, "GET")
@@ -17,6 +17,12 @@ class RequestTokenTestCase(unittest.TestCase):
         request_token = dict(urlparse.parse_qsl(content))
         self.assertTrue(request_token.has_key('oauth_token'))
         self.assertTrue(request_token.has_key('oauth_token_secret'))
+
+    def test_wrong_consumer_secret(self):
+        consumer = oauth.Consumer(CONSUMER_KEY, "wrong_secret")
+        client = oauth.Client(consumer)
+        resp, content = client.request(REQUEST_TOKEN_URL, "GET")
+        self.assertNotEquals(resp['status'], '200')
 
 
 class OauthTestCase(unittest.TestCase): 
