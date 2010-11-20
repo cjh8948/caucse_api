@@ -8,18 +8,21 @@ REQUEST_TOKEN_URL = OAUTH_URL_PREFIX+'request_token'
 ACCESS_TOKEN_URL = OAUTH_URL_PREFIX+'access_token'
 AUTHORIZE_URL = OAUTH_URL_PREFIX+'authorize'
 
-class OauthTestCase(unittest.TestCase): 
-    def setUp(self):
-        self.consumer = oauth.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
-        
+class RequestTokenTestCase(unittest.TestCase):
     def test_request_token(self):
-        client = oauth.Client(self.consumer)
+        consumer = oauth.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
+        client = oauth.Client(consumer)
         resp, content = client.request(REQUEST_TOKEN_URL, "GET")
         self.assertEquals(resp['status'], '200')
         request_token = dict(urlparse.parse_qsl(content))
         self.assertTrue(request_token.has_key('oauth_token'))
         self.assertTrue(request_token.has_key('oauth_token_secret'))
 
+
+class OauthTestCase(unittest.TestCase): 
+    def setUp(self):
+        self.consumer = oauth.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
+        
     def test_access_token(self):
         token = oauth.Token("request_token_key", "request_token_secret")
         token.set_verifier("1234")

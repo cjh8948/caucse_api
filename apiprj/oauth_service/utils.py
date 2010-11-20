@@ -28,6 +28,3 @@ class AuthServer(oauth.Server):
                                      query_string=qs)
 
         return request
-
-
-
