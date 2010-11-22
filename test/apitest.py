@@ -50,7 +50,7 @@ class RequestTokenTestCase(ApiTestCase):
         self.assertNotEquals(resp['status'], '200')
 
 
-class OauthTestCase(ApiTestCase):
+class AccessTokenTestCase(ApiTestCase):
     api = "oauth/access_token"
 
     def setUp(self):
