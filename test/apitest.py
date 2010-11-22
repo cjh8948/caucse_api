@@ -22,18 +22,21 @@ class ApiTestCase(unittest.TestCase):
             url += '?' + urllib.urlencode(param)
         return url
 
-    def get_request(self, consumer, token, param=None):
+    def oauth_get(self, consumer, token, param=None, callback=None):
         url = self.get_url(param)
         client = ClientAlpha(consumer, token)
+        if callback: client.set_callback(callback)
         resp, content = client.request(url, "GET")
         return resp, content
 
 class RequestTokenTestCase(ApiTestCase):
+    api = "oauth/request_token"
+
     def test_success_case(self):
         consumer = oauth.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
-        client = ClientAlpha(consumer)
-        client.set_callback("http://callback.net")
-        resp, content = client.request(REQUEST_TOKEN_URL, "GET")
+        resp, content = self.oauth_get(consumer=consumer, token=None, 
+                                         param=None, 
+                                         callback="http://callback.net")
         self.assertEquals(resp['status'], '200')
         request_token = dict(urlparse.parse_qsl(content))
         self.assertTrue(request_token.has_key('oauth_token'))
@@ -83,7 +86,7 @@ class UsersShowTest(ApiTestCase):
 
         # make request
         param = {'user_id': 'gochi'}
-        resp, content = self.get_request(consumer, token, param)
+        resp, content = self.oauth_get(consumer, token, param)
         self.assertEqual(resp['status'],'200')
 
         # validate result
@@ -100,6 +103,13 @@ class UsersShowTest(ApiTestCase):
 class UsersLookupTest(ApiTestCase):
     api = "users/lookup"
 
+    def test_wrong_access_token_secret(self):
+        consumer = oauth.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
+        token = oauth.Token(ACCESS_TOKEN_KEY, "worng_secret")
+        param = {'user_id':'gochi,reset'}
+        resp, content = self.oauth_get(consumer, token, param)
+        self.assertNotEqual(resp['status'], 200)
+
     def test_gochi_reset(self):
         # build oauth objects
         consumer = oauth.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
@@ -107,7 +117,7 @@ class UsersLookupTest(ApiTestCase):
 
         # make request
         param = {'user_id':'gochi,reset'}
-        resp, content = self.get_request(consumer, token, param)
+        resp, content = self.oauth_get(consumer, token, param)
         self.assertEqual(resp['status'],'200')
 
         # validate result
