@@ -1,14 +1,32 @@
 from django.core.exceptions import ObjectDoesNotExist
 import oauth2 as oauth
 import models
+import uuid
 
 def oauth_required(func):
     def verify_request(request, *arg):
-        server = AuthServer()
-        params = server.verify_django_request(request)
-        print "params:",params
+        try:
+            server = AuthServer()
+            params = server.verify_django_request(request)
+        except Exception,e:
+            print e
+            raise e
         return func(request, *arg)
     return verify_request
+
+def generate_token():
+    return str(uuid.uuid4()).replace('-','')
+
+def new_request_token(consumer_key, callback=None):
+    token = models.Token(key=generate_token(), secret=generate_token(),
+                         consumer=models.Consumer.objects.get(key=consumer_key), type="REQUEST", 
+                         callback=callback)
+    token.save()
+
+    oauth_token = oauth.Token(token.key, token.secret)
+    oauth_token.set_callback(token.callback)
+    return oauth_token
+    
 
 class AuthServer(oauth.Server):
     def __init__(self, signature_methods=None):

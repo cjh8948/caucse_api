@@ -1,4 +1,5 @@
 import httplib2
+from urlparse import parse_qsl, urlparse
 import oauth2 as oauth
 
 class ClientAlpha(oauth.Client):
@@ -32,9 +33,9 @@ class ClientAlpha(oauth.Client):
             if self.callback: 
                 parameters['oauth_callback'] = self.callback
         else:
-            parameters = None
+            parameters = dict(parse_qsl(urlparse(uri).query))
             if self.callback: 
-                parameters = {'oauth_callback': self.callback}
+                parameters['oauth_callback'] = self.callback
 
         req = oauth.Request.from_consumer_and_token(self.consumer,
                                                     token=self.token,

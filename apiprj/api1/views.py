@@ -1,9 +1,11 @@
 from django.http import HttpResponse
 from django.core import serializers
 from django.utils.simplejson import dumps
+from oauth_service.utils import oauth_required
 
 import modelwrap 
 
+@oauth_required
 def articles_show(request):
     board_id = request.GET['board_id']
     article_id = int(request.GET['article_id'])
@@ -11,12 +13,14 @@ def articles_show(request):
     ret = dumps(article, ensure_ascii=False) 
     return HttpResponse(ret)
     
+@oauth_required
 def users_show(request):
     id = request.GET['user_id']
     user = modelwrap.get_user(id)
     ret = dumps(user, ensure_ascii=False)
     return HttpResponse(ret)
     
+@oauth_required
 def users_lookup(request):
     id_list = request.GET['user_id'].split(',')
     users = map(modelwrap.get_user, id_list)
@@ -29,6 +33,7 @@ def boards_lookup(request):
     ret = dumps(boards, ensure_ascii=False)
     return HttpResponse(ret)
 
+@oauth_required
 def articles_list(request):
     page = 0
     per_page = 20
