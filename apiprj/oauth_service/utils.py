@@ -2,6 +2,14 @@ from django.core.exceptions import ObjectDoesNotExist
 import oauth2 as oauth
 import models
 
+def oauth_required(func):
+    def verify_request(request, *arg):
+        server = AuthServer()
+        params = server.verify_django_request(request)
+        print "params:",params
+        return func(request, *arg)
+    return verify_request
+
 class AuthServer(oauth.Server):
     def __init__(self, signature_methods=None):
         """currently AuthServer supports only SHA1 signature."""
