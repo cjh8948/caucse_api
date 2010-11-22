@@ -4,14 +4,10 @@ import models
 import uuid
 
 def oauth_required(func):
-    def verify_request(request, *arg):
-        try:
-            server = AuthServer()
-            params = server.verify_django_request(request)
-        except Exception,e:
-            print e
-            raise e
-        return func(request, *arg)
+    def verify_request(request, *arg, **keywords):
+        server = AuthServer()
+        params = server.verify_django_request(request)
+        return func(request, *arg, **keywords)
     return verify_request
 
 def generate_token():
