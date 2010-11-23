@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import render_to_response
 from utils import oauth_required
 import utils
 import oauth2 as oauth
@@ -29,6 +30,5 @@ def access_token(request):
     return HttpResponse(access_token.to_string())
 
 def authorize(request):
-    ret = ""
-    return HttpResponse(ret)
+    return render_to_response('auth_form.html',{})
 

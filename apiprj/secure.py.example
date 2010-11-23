@@ -6,4 +6,4 @@ SECRET_KEY = ""
 
 USER_IMG_PATH = ""
 USER_IMG_PREFIX = ""
-
+TEMPLATE_DIRS = ("")
