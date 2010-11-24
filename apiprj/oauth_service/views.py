@@ -1,13 +1,13 @@
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render_to_response
-from utils import oauth_required
+from utils import oauth_verify
 import utils
 import oauth2 as oauth
 import models
 from api1.models import Member
 
-@oauth_required 
+@oauth_verify 
 def request_token(request):
     consumer_key = request.REQUEST['oauth_consumer_key']
     callback = request.REQUEST['oauth_callback']
@@ -15,13 +15,19 @@ def request_token(request):
     return HttpResponse(token.to_string())
 
 @csrf_exempt
-@oauth_required 
+@oauth_verify 
 def access_token(request):
-    # TODO: need to verify verifier
-    # TODO: make and fetch real token here
-    access_token_key = "access_token_key"
-    access_token_secret = "access_token_secret"
-    access_token = oauth.Token(key=access_token_key, secret=access_token_key)
+    # need to verify verifier
+    request_token = request.REQUEST['oauth_token']
+    token = models.Token.objects.get(key=request_token)
+    verifier = request.REQUEST['oauth_verifier']
+    if token.type != 'R' or token.verifier != verifier:
+        raise Exception
+    
+    # make and fetch real token here
+    print request.REQUEST
+    token.promote_to_access()
+    access_token = token.to_oauth_token()
     return HttpResponse(access_token.to_string())
 
 @csrf_exempt

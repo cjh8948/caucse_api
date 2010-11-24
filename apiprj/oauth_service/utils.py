@@ -7,6 +7,13 @@ import hashlib
 def oauth_required(func):
     def verify_request(request, *arg, **keywords):
         server = AuthServer()
+        params = server.verify_access_django_request(request)
+        return func(request, *arg, **keywords)
+    return verify_request
+
+def oauth_verify(func):
+    def verify_request(request, *arg, **keywords):
+        server = AuthServer()
         params = server.verify_django_request(request)
         return func(request, *arg, **keywords)
     return verify_request
@@ -68,6 +75,14 @@ class AuthServer(oauth.Server):
         token = None
         if 'oauth_token' in request:
             token = self.fetch_token(request['oauth_token'])
+        return self.verify_request(request, consumer, token)
+
+    def verify_access_django_request(self, django_request):
+        request = self.conv_oauthrequest(django_request)
+        consumer = self.fetch_consumer(request['oauth_consumer_key'])
+        token = models.Token.objects.get(key=request['oauth_token'])
+        if token.type != "A":
+            raise Exception("no access token")
         return self.verify_request(request, consumer, token)
 
     def fetch_consumer(self, consumer_key):

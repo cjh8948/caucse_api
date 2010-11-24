@@ -31,11 +31,22 @@ class Token(models.Model):
     modified = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
 
+    def generate_token(self):
+        return str(uuid.uuid4()).replace('-','')
+
     def new_verifier(self):
         if self.type == 'A':
             raise Exception
 
         self.verifier = "%06d"%random.randint(0,999999)
+        self.save()
+
+    def promote_to_access(self):
+        if self.type == 'A':
+            raise Exception
+        self.key = self.generate_token()
+        self.secret = self.generate_token()
+        self.type = 'A'
         self.save()
 
     def to_oauth_token(self):
