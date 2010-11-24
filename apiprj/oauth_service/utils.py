@@ -21,8 +21,8 @@ def generate_token():
 
 def new_request_token(consumer_key, callback=None):
     token = models.Token(key=generate_token(), secret=generate_token(),
-                         consumer=models.Consumer.objects.get(key=consumer_key), type="REQUEST", 
-                         callback=callback)
+                         consumer=models.Consumer.objects.get(key=consumer_key),
+                         type="R", callback=callback)
     token.save()
 
     oauth_token = oauth.Token(token.key, token.secret)

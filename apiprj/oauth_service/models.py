@@ -3,15 +3,15 @@ import oauth2 as oauth
 import random
 
 class Consumer(models.Model):
-    TYPE_CHOICES = (('Client', 'Client'),('Browser','Browser'))
+    TYPE_CHOICES = (('C', 'CLIENT'),('B','BROWSER'))
 
-    key = models.CharField(unique=True, max_length=255, primary_key=True)
+    key = models.CharField(unique=True, max_length=255)
     secret = models.CharField(max_length=255)
     name = models.CharField(max_length=100)
     user_id = models.CharField(max_length=20)
     description = models.TextField()
-    type = models.CharField(max_length=10, choices=TYPE_CHOICES, 
-                            default='Client')
+    type = models.CharField(max_length=1, choices=TYPE_CHOICES, 
+                            default='C')
     modified = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
 
@@ -19,11 +19,11 @@ class Consumer(models.Model):
         return self.key
 
 class Token(models.Model):
-    TYPE_CHOICES = (('REQUEST', 'request'), ('ACCESS','access'))
+    TYPE_CHOICES = (('R', 'REQUEST'), ('A','ACCESS'))
 
     key = models.CharField(unique=True, max_length=255, primary_key=True)
     secret = models.CharField(max_length=255)
-    type = models.CharField(max_length=10, choices=TYPE_CHOICES)
+    type = models.CharField(max_length=1, choices=TYPE_CHOICES)
     consumer = models.ForeignKey('Consumer')
     callback = models.CharField(max_length=255, blank=True, null=True)
     user = models.CharField(blank=True, max_length=20)
@@ -32,7 +32,7 @@ class Token(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def new_verifier(self):
-        if self.type == 'ACCESS':
+        if self.type == 'A':
             raise Exception
 
         self.verifier = "%06d"%random.randint(0,999999)
