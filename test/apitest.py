@@ -1,5 +1,5 @@
-from secure import URL_PREFIX, OAUTH_URL_PREFIX
-import unittest, json, urllib, urlparse
+from secure import URL_PREFIX, TEST_USER, TEST_USER_PASSWORD
+import unittest, json, urllib, urllib2, urlparse
 from oauth_client_a import ClientAlpha
 import oauth2 as oauth
 
@@ -9,9 +9,6 @@ REQUEST_TOKEN_KEY = 'request_token_key'
 REQUEST_TOKEN_SECRET = 'request_token_secret'
 ACCESS_TOKEN_KEY = 'access_token_key'
 ACCESS_TOKEN_SECRET = 'access_token_secret'
-REQUEST_TOKEN_URL = OAUTH_URL_PREFIX+'request_token'
-ACCESS_TOKEN_URL = OAUTH_URL_PREFIX+'access_token'
-AUTHORIZE_URL = OAUTH_URL_PREFIX+'authorize'
 
 class ApiTestCase(unittest.TestCase): 
     api = ""
@@ -29,8 +26,26 @@ class ApiTestCase(unittest.TestCase):
         resp, content = client.request(url, "GET")
         return resp, content
 
+    def oauth_post(self, consumer, token, param):
+        url = URL_PREFIX + self.api
+        client = ClientAlpha(consumer, token)
+        body = urllib.urlencode(param)
+        resp, content = client.request(url,"POST",body=body)
+        return resp, content
+
+    def plain_get(self, param):
+        url = self.get_url(param)
+        f = urllib2.urlopen(url)
+        return f.read()
+
 class RequestTokenTestCase(ApiTestCase):
     api = "oauth/request_token"
+
+    def test_case_nocallback(self):
+        consumer = oauth.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
+        resp, content = self.oauth_get(consumer=consumer, token=None, 
+                                       param=None)
+        self.assertNotEquals(resp['status'], '200')
 
     def test_success_case(self):
         consumer = oauth.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
@@ -46,8 +61,38 @@ class RequestTokenTestCase(ApiTestCase):
     def test_wrong_consumer_secret(self):
         consumer = oauth.Consumer(CONSUMER_KEY, "wrong_secret")
         client = ClientAlpha(consumer)
-        resp, content = client.request(REQUEST_TOKEN_URL, "GET")
+        resp, content = client.request(self.get_url(), "GET")
         self.assertNotEquals(resp['status'], '200')
+
+class OauthAuthorizeTestCase(ApiTestCase):
+    def setUp(self):
+        # request token
+        self.api = "oauth/request_token"
+        self.consumer = consumer = oauth.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
+        resp, content = self.oauth_get(consumer=consumer, token=None,
+                                       param=None, callback="oob")
+        self.assertEquals(resp['status'], '200')
+        content_dict = dict(urlparse.parse_qsl(content))
+        self.token = oauth.Token(content_dict['oauth_token'], 
+                                 content_dict['oauth_token_secret'])
+
+    def tearDown(self):
+        self.api = "oauth/authorize"
+        self.token = None
+
+    def test_oauth_authorize(self):
+        self.api = "oauth/authorize"
+        params = {'user_id': TEST_USER, 'password':TEST_USER_PASSWORD}
+        resp, content = self.oauth_post(self.consumer, self.token, params)
+        self.assertEquals(resp['status'],'200')
+        self.assertTrue('PIN:' in content)
+        
+    def test_oauth_authorize_with_wrong_password(self):
+        self.api = "oauth/authorize"
+        params = {'user_id': TEST_USER, 'password': "wrong_password"}
+        resp, content = self.oauth_post(self.consumer, self.token, params)
+        self.assertNotEquals(resp['status'],'200')
+        
 
 
 class AccessTokenTestCase(ApiTestCase):
@@ -60,7 +105,7 @@ class AccessTokenTestCase(ApiTestCase):
         token = oauth.Token("request_token_key", "request_token_secret")
         token.set_verifier("1234")
         client = ClientAlpha(self.consumer, token)
-        resp, content = client.request(ACCESS_TOKEN_URL, "POST")
+        resp, content = client.request(self.get_url(), "POST")
         self.assertEquals(resp['status'],'200')
         access_token = dict(urlparse.parse_qsl(content))
         self.assertTrue(access_token.has_key('oauth_token'))
@@ -70,7 +115,7 @@ class AccessTokenTestCase(ApiTestCase):
         token = oauth.Token("request_token_key", "wrong_request_token_secret")
         token.set_verifier("1234")
         client = ClientAlpha(self.consumer, token)
-        resp, content = client.request(ACCESS_TOKEN_URL, "POST")
+        resp, content = client.request(self.get_url(), "POST")
         self.assertNotEquals(resp['status'],'200')
         access_token = dict(urlparse.parse_qsl(content))
         self.assertFalse(access_token.has_key('oauth_token'))

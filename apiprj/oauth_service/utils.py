@@ -2,6 +2,7 @@ from django.core.exceptions import ObjectDoesNotExist
 import oauth2 as oauth
 import models
 import uuid
+import hashlib
 
 def oauth_required(func):
     def verify_request(request, *arg, **keywords):
@@ -9,6 +10,11 @@ def oauth_required(func):
         params = server.verify_django_request(request)
         return func(request, *arg, **keywords)
     return verify_request
+
+def mysql_password(password):
+    phase1 = hashlib.sha1(password).digest()
+    phase2 = hashlib.sha1(phase1).hexdigest()
+    return "*"+phase2.upper()
 
 def generate_token():
     return str(uuid.uuid4()).replace('-','')

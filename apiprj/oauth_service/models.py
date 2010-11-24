@@ -1,5 +1,6 @@
 from django.db import models
 import oauth2 as oauth
+import random
 
 class Consumer(models.Model):
     TYPE_CHOICES = (('Client', 'Client'),('Browser','Browser'))
@@ -26,11 +27,21 @@ class Token(models.Model):
     consumer = models.ForeignKey('Consumer')
     callback = models.CharField(max_length=255, blank=True, null=True)
     user = models.CharField(blank=True, max_length=20)
+    verifier = models.CharField(blank=True, max_length=255)
     modified = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
 
-class Nonce(models.Model):
-    key = models.CharField(max_length=255, primary_key=True)
-    token_key = models.CharField(max_length=255)
-    consumer_key = models.CharField(max_length=255)
-    
+    def new_verifier(self):
+        if self.type == 'ACCESS':
+            raise Exception
+
+        self.verifier = "%06d"%random.randint(0,999999)
+        self.save()
+
+    def to_oauth_token(self):
+        token = oauth.Token(self.key, self.secret)
+        if self.callback:
+            token.set_callback(self.callback)
+        if self.verifier:
+            token.set_verifier(self.verifier)
+        return token
