@@ -6,6 +6,7 @@ import utils
 import oauth2 as oauth
 import models
 from api1.models import Member
+import urllib
 
 @oauth_verify 
 def request_token(request):
@@ -25,7 +26,6 @@ def access_token(request):
         raise Exception
     
     # make and fetch real token here
-    print request.REQUEST
     token.promote_to_access()
     access_token = token.to_oauth_token()
     return HttpResponse(access_token.to_string())
@@ -48,6 +48,7 @@ def authorize(request):
 
         # make verifier 
         token = models.Token.objects.get(key=oauth_token)
+        token.user = user_id
         token.new_verifier()
         oauth_token = token.to_oauth_token()
 
@@ -56,6 +57,7 @@ def authorize(request):
             params = {'verifier': token.verifier}
             return render_to_response('auth_verifier.html', params)
         else:
-            # TODO: redirect to callback url
-            return HttpResponse("not implemented yet")
-
+            params = {'oauth_token': token.key,
+                      'oauth_verifier': token.verifier}
+            callback_url = token.callback + "?" + urllib.urlencode(params)
+            return HttpResponseRedirect(callback_url)

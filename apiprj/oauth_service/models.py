@@ -1,6 +1,6 @@
 from django.db import models
 import oauth2 as oauth
-import random
+import random, uuid
 
 class Consumer(models.Model):
     TYPE_CHOICES = (('C', 'CLIENT'),('B','BROWSER'))
@@ -21,7 +21,7 @@ class Consumer(models.Model):
 class Token(models.Model):
     TYPE_CHOICES = (('R', 'REQUEST'), ('A','ACCESS'))
 
-    key = models.CharField(unique=True, max_length=255, primary_key=True)
+    key = models.CharField(unique=True, max_length=255)
     secret = models.CharField(max_length=255)
     type = models.CharField(max_length=1, choices=TYPE_CHOICES)
     consumer = models.ForeignKey('Consumer')
