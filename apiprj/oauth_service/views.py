@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render_to_response
 from utils import oauth_verify
@@ -44,7 +44,7 @@ def authorize(request):
         # check password
         member = Member.objects.get(id=user_id) 
         if member.password != utils.mysql_password(password):
-            raise Exception
+            raise Exception("wrong password")
 
         # make verifier 
         token = models.Token.objects.get(key=oauth_token)
