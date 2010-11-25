@@ -3,14 +3,14 @@ import oauth2 as oauth
 import random, uuid
 
 class Consumer(models.Model):
-    TYPE_CHOICES = (('C', 'CLIENT'),('B','BROWSER'))
+    TYPE_CHOICES = (('C', 'CLIENT'), ('B', 'BROWSER'))
 
     key = models.CharField(unique=True, max_length=255)
     secret = models.CharField(max_length=255)
     name = models.CharField(max_length=100)
     user_id = models.CharField(max_length=20)
     description = models.TextField()
-    type = models.CharField(max_length=1, choices=TYPE_CHOICES, 
+    type = models.CharField(max_length=1, choices=TYPE_CHOICES,
                             default='C')
     modified = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -19,7 +19,7 @@ class Consumer(models.Model):
         return self.key
 
 class Token(models.Model):
-    TYPE_CHOICES = (('R', 'REQUEST'), ('A','ACCESS'))
+    TYPE_CHOICES = (('R', 'REQUEST'), ('A', 'ACCESS'))
 
     key = models.CharField(unique=True, max_length=255)
     secret = models.CharField(max_length=255)
@@ -32,13 +32,13 @@ class Token(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def generate_token(self):
-        return str(uuid.uuid4()).replace('-','')
+        return str(uuid.uuid4()).replace('-', '')
 
     def new_verifier(self):
         if self.type == 'A':
             raise Exception
 
-        self.verifier = "%06d"%random.randint(0,999999)
+        self.verifier = "%06d" % random.randint(0, 999999)
         self.save()
 
     def promote_to_access(self):

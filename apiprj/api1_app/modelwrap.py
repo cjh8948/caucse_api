@@ -8,23 +8,23 @@ from apiprj.secure import USER_IMG_PATH, USER_IMG_PREFIX
 class ModelnameError(Exception):pass
 
 def eval_board(board_id):
-    board_classname = board_id.title().replace('_','')
+    board_classname = board_id.title().replace('_', '')
     if board_classname not in dir(models):
         raise ModelnameError
-    return eval("models."+board_classname)
+    return eval("models." + board_classname)
 
 def eval_comment(board_id):
-    comment_classname = "Comment"+board_id.title().replace('_','')[5:]
+    comment_classname = "Comment" + board_id.title().replace('_', '')[5:]
     if comment_classname not in dir(models):
         raise ModelnameError
-    return eval("models."+comment_classname)
+    return eval("models." + comment_classname)
 
 def pack_comment(cmt, board_id):
-    packed_cmt = {'board_id': board_id, 
-                  'id': cmt.id, 
+    packed_cmt = {'board_id': board_id,
+                  'id': cmt.id,
                   'content': cmt.content,
                   'reg_date': cmt.reg_date.isoformat(),
-                  'author': {'name': cmt.name, 
+                  'author': {'name': cmt.name,
                              'id': cmt.user_id,
                              'img_url': get_user_img_url(cmt.user_id)}}
     return packed_cmt

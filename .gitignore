@@ -1,5 +1,8 @@
+.project
+.pydevproject
 *.pyc
 *.swp
+*.*~
 apache/*.wsgi
 apiprj/secure.py
 autotest/secure.py

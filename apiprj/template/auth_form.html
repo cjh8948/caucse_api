@@ -1,13 +1,22 @@
 <html>
-<head><title>caucse api</title></head>
-<body>
-<h1>An application would like to connect to your account</h1>
-<p>The application {{ consumer.name }} by {{ consumer.user_id }} would like the ability to access and update your data on caucse.net. </p> 
-<form method="POST">
-ID: <input name='user_id'></input>
-PW: <input name='password' type='password'></input>
-<input type='submit' value='Allow'/>
-<input type='hidden' name='oauth_token' value='{{ oauth_token }}'/>
-</form>
-</body>
-</html>
+    <head>
+        <title>caucse api</title>
+    </head>
+    <body>
+        <h1>An application would like to connect to your account</h1>
+        <p>
+            The application {{ consumer.name }} by {{ consumer.user_id }} would like the ability to access and update your data on caucse.net. 
+        </p>
+        <form method="POST">
+            <p>
+                ID: <input name='user_id'/>
+            </p>
+            <p>
+                PW: <input name='password' type='password'/>
+            </p>
+            <p>
+                <input type='submit' value='Allow'/><input type='hidden' name='oauth_token' value='{{ oauth_token }}'/>
+            </p>
+        </form>
+    </body>
+</html>rrrr

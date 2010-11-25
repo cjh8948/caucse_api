@@ -21,10 +21,10 @@ def oauth_verify(func):
 def mysql_password(password):
     phase1 = hashlib.sha1(password).digest()
     phase2 = hashlib.sha1(phase1).hexdigest()
-    return "*"+phase2.upper()
+    return "*" + phase2.upper()
 
 def generate_token():
-    return str(uuid.uuid4()).replace('-','')
+    return str(uuid.uuid4()).replace('-', '')
 
 def new_request_token(consumer_key, callback=None):
     token = models.Token(key=generate_token(), secret=generate_token(),
@@ -52,7 +52,7 @@ class AuthServer(oauth.Server):
             auth_header = {'Authorization': 
                            django_request.META['Authorization']}
         elif 'HTTP_AUTHORIZATION' in django_request.META:
-            auth_header =  {'Authorization': 
+            auth_header = {'Authorization': 
                             django_request.META['HTTP_AUTHORIZATION']}
 
         # build parameters, query string

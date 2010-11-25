@@ -26,7 +26,7 @@ class ApiTestCase(unittest.TestCase):
         url = URL_PREFIX + self.api
         client = ClientAlpha(consumer, token)
         body = urllib.urlencode(param)
-        resp, content = client.request(url,"POST",body=body)
+        resp, content = client.request(url, "POST", body=body)
         return resp, content
 
     def plain_get(self, param):
@@ -39,14 +39,14 @@ class RequestTokenTestCase(ApiTestCase):
 
     def test_case_nocallback(self):
         consumer = oauth.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
-        resp, content = self.oauth_get(consumer=consumer, token=None, 
+        resp, content = self.oauth_get(consumer=consumer, token=None,
                                        param=None)
         self.assertNotEquals(resp['status'], '200')
 
     def test_success_case(self):
         consumer = oauth.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
-        resp, content = self.oauth_get(consumer=consumer, token=None, 
-                                       param=None, 
+        resp, content = self.oauth_get(consumer=consumer, token=None,
+                                       param=None,
                                        callback="http://callback.net")
         self.assertEquals(resp['status'], '200')
         request_token = dict(urlparse.parse_qsl(content))
@@ -69,14 +69,14 @@ class OauthAuthorizeTestCase(ApiTestCase):
                                        param=None, callback="oob")
         self.assertEquals(resp['status'], '200')
         content_dict = dict(urlparse.parse_qsl(content))
-        self.token = oauth.Token(content_dict['oauth_token'], 
+        self.token = oauth.Token(content_dict['oauth_token'],
                                  content_dict['oauth_token_secret'])
 
         # user authorize leg
         self.api = "oauth/authorize"
         params = {'user_id': TEST_USER, 'password': TEST_USER_PASSWORD}
         resp, content = self.oauth_post(consumer, self.token, params)
-        self.assertEquals(resp['status'],'200')
+        self.assertEquals(resp['status'], '200')
 
         # parse verifier
         re_pin = re.compile("PIN: (\d*)")
@@ -96,10 +96,10 @@ class OauthAuthorizeTestCase(ApiTestCase):
         # request restricted resource
         self.api = "users/show"
         param = {'user_id': 'gochi'}
-        access_token = oauth.Token(access_token['oauth_token'], 
+        access_token = oauth.Token(access_token['oauth_token'],
                                    access_token['oauth_token_secret'])
         resp, content = self.oauth_get(consumer, access_token, param)
-        self.assertEqual(resp['status'],'200')
+        self.assertEqual(resp['status'], '200')
 
         # validate result
         obj = json.loads(content)
@@ -123,7 +123,7 @@ class UsersShowTest(ApiTestCase):
         # make request
         param = {'user_id': 'gochi'}
         resp, content = self.oauth_get(consumer, token, param)
-        self.assertEqual(resp['status'],'200')
+        self.assertEqual(resp['status'], '200')
 
         # validate result
         obj = json.loads(content)
@@ -154,11 +154,11 @@ class UsersLookupTest(ApiTestCase):
         # make request
         param = {'user_id':'gochi,reset'}
         resp, content = self.oauth_get(consumer, token, param)
-        self.assertEqual(resp['status'],'200')
+        self.assertEqual(resp['status'], '200')
 
         # validate result
         obj = json.loads(content)
-        self.assertEqual(len(obj),2)
+        self.assertEqual(len(obj), 2)
         self.assertEqual(obj[0]['id'], 'gochi')
         self.assertEqual(obj[1]['id'], 'reset')
 
