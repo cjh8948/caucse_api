@@ -3,7 +3,6 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render_to_response
 from utils import oauth_verify
 import utils
-import oauth2 as oauth
 import models
 from api1_app.models import Member
 import urllib
