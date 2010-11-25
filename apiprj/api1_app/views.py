@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.core import serializers
 from django.utils.simplejson import dumps
-from oauth_service.utils import oauth_required
+from oauth_app.utils import oauth_required
 
 import modelwrap 
 

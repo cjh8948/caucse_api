@@ -5,7 +5,7 @@ from utils import oauth_verify
 import utils
 import oauth2 as oauth
 import models
-from api1.models import Member
+from api1_app.models import Member
 import urllib
 
 @oauth_verify 

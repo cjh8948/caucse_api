@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
 
-urlpatterns = patterns('api1.views',
+urlpatterns = patterns('api1_app.views',
     (r'^articles/list', 'articles_list'),
     (r'^articles/show', 'articles_show'),
     (r'^users/show', 'users_show'),
