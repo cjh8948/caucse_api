@@ -1,4 +1,4 @@
-URL_PREFIX = "http://url.to/"
+URL_PREFIX = "http://localhost:8000/"
 TEST_USER = 'johndoe'
 TEST_USER_PASSWORD = 'foobar'
 CONSUMER_KEY = 'consumer_key'

@@ -4,5 +4,5 @@
 *.swp
 *.*~
 apache/*.wsgi
-apiprj/secure.py
+apiprj/settings.py
 autotest/secure.py

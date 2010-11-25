@@ -3,7 +3,7 @@
 import os
 import datetime
 import models
-from apiprj.secure import USER_IMG_PATH, USER_IMG_PREFIX
+from apiprj.settings import USER_IMG_PATH, USER_IMG_PREFIX
 
 class ModelnameError(Exception):pass
 
