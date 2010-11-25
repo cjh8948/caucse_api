@@ -2,4 +2,4 @@
 *.swp
 apache/*.wsgi
 apiprj/secure.py
-test/secure.py
+autotest/secure.py
