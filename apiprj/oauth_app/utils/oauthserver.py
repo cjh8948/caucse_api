@@ -2,13 +2,18 @@ import oauth2
 from apiprj.oauth_app import models
 
 class ServerAlpha(oauth2.Server):
+    """Caucse API version implementation of an oauth service provider, based 
+    on python-oauth2 Server module.    
+    """
+    
     def __init__(self, signature_methods=None):
-        """currently ServerAlpha supports only SHA1 signature."""
-        sha1_signature_method = {'HMAC-SHA1':oauth2.SignatureMethod_HMAC_SHA1()}
-        self.signature_methods = signature_methods or sha1_signature_method
+        """Currently this class supports only SHA1 signature."""
+        sha1_method = {'HMAC-SHA1': oauth2.SignatureMethod_HMAC_SHA1()}
+        self.signature_methods = signature_methods or sha1_method
 
-    def conv_oauthrequest(self, django_request):
-        """ This method converts django.http.HttpRequest into oauth.Request.
+    def _to_oauth_request(self, django_request):
+        """This method converts django.http.HttpRequest into oauth.Request
+        to process further verification.
         """
         # build auth_header
         auth_header = {}
@@ -33,27 +38,39 @@ class ServerAlpha(oauth2.Server):
 
         return request
 
-    def verify_django_request(self, django_request):
-        request = self.conv_oauthrequest(django_request)
-        consumer = self.fetch_consumer(request['oauth_consumer_key'])
+    def _fetch_consumer(self, consumer_key):
+        consumer = models.Consumer.objects.get(key=consumer_key)
+        return consumer.to_oauth()
+
+    def _fetch_token(self, token_key):
+        token = models.Token.objects.get(key=token_key)
+        return token.to_oauth()        
+
+    def verify_flow_request(self, django_request):
+        """This method converts django request to oauth request and then
+        verifies its signature. 
+        
+        When the request has unknown token or unknown consumer, it will 
+        raise Exception.
+        """
+        
+        request = self._to_oauth_request(django_request)
+        consumer = self._fetch_consumer(request['oauth_consumer_key'])
         token = None
         if 'oauth_token' in request:
-            token = self.fetch_token(request['oauth_token'])
+            token = self._fetch_token(request['oauth_token'])
         return self.verify_request(request, consumer, token)
 
-    def verify_access_django_request(self, django_request):
-        request = self.conv_oauthrequest(django_request)
-        consumer = self.fetch_consumer(request['oauth_consumer_key'])
+    def verify_access_request(self, django_request):
+        """This method converts django request to oauth request and then
+        verifies its signature. 
+        
+        When the request has unknown access token or unknown consumer, it
+        will raise Exception.
+        """
+        request = self._to_oauth_request(django_request)
+        consumer = self._fetch_consumer(request['oauth_consumer_key'])
         token = models.Token.objects.get(key=request['oauth_token'])
         if token.type != "A":
             raise Exception("no access token")
         return self.verify_request(request, consumer, token)
-
-    def fetch_consumer(self, consumer_key):
-        consumer = models.Consumer.objects.get(key=consumer_key)
-        return consumer.to_oauth()
-
-    def fetch_token(self, token_key):
-        token = models.Token.objects.get(key=token_key)
-        return token.to_oauth()        
-

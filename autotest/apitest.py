@@ -13,7 +13,6 @@ class ApiTestCase(unittest.TestCase):
 
     def oauth_get(self, consumer, token, param=None, callback=None):
         url = self.get_url(param)
-        print url,
         client = ClientAlpha(consumer, token)
         if callback: client.set_callback(callback)
         resp, content = client.request(url, "GET")
@@ -21,7 +20,6 @@ class ApiTestCase(unittest.TestCase):
 
     def oauth_post(self, consumer, token, param={}):
         url = URL_PREFIX + self.api
-        print url,
         client = ClientAlpha(consumer, token)
         body = urllib.urlencode(param)
         resp, content = client.request(url, "POST", body=body)
@@ -29,7 +27,6 @@ class ApiTestCase(unittest.TestCase):
 
     def plain_get(self, param):
         url = self.get_url(param)
-        print url,
         f = urllib2.urlopen(url)
         return f.read()
 
@@ -57,7 +54,7 @@ class RequestTokenTestCase(ApiTestCase):
         consumer = oauth2.Consumer(CONSUMER_KEY, "wrong_secret")
         client = ClientAlpha(consumer)
         resp, content = client.request(self.get_url(), "GET")
-        self.assertNotEquals(resp['status'], '200')
+        self.assertEquals(resp['status'], '400') # Bad request error
 
 class OauthAuthorizeTestCase(ApiTestCase):
     def test_oauth_authorize(self):

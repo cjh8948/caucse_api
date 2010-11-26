@@ -33,9 +33,18 @@ class Token(models.Model):
     modified = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
 
-    def generate_token(self):
+    @staticmethod
+    def generate_token():
         return str(uuid.uuid4()).replace('-', '')
 
+    @classmethod
+    def new_request_token(cls, consumer_key, callback=None):
+        consumer = Consumer.objects.get(key=consumer_key)
+        token = cls(key=cls.generate_token(), secret=cls.generate_token(),
+                    consumer=consumer, type="R", callback=callback)
+        token.save()
+        return token
+    
     def new_verifier(self, user):
         if self.type == 'A':
             raise Exception
