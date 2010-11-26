@@ -14,6 +14,9 @@ class Consumer(models.Model):
                             default='C')
     modified = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
+    
+    def to_oauth(self):
+        return oauth.Consumer(self.key, self.secret)
 
     def __unicode__(self):
         return self.key
@@ -34,10 +37,10 @@ class Token(models.Model):
     def generate_token(self):
         return str(uuid.uuid4()).replace('-', '')
 
-    def new_verifier(self):
+    def new_verifier(self, user):
         if self.type == 'A':
             raise Exception
-
+        self.user = user
         self.verifier = "%06d" % random.randint(0, 999999)
         self.save()
 
@@ -49,7 +52,7 @@ class Token(models.Model):
         self.type = 'A'
         self.save()
 
-    def to_oauth_token(self):
+    def to_oauth(self):
         token = oauth.Token(self.key, self.secret)
         if self.callback:
             token.set_callback(self.callback)

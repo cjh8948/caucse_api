@@ -1,45 +1,9 @@
-from django.core.exceptions import ObjectDoesNotExist
 import oauth2 as oauth
-import models
-import uuid
-import hashlib
+from apiprj.oauth_app import models
 
-def oauth_required(func):
-    def verify_request(request, *arg, **keywords):
-        server = AuthServer()
-        params = server.verify_access_django_request(request)
-        return func(request, *arg, **keywords)
-    return verify_request
-
-def oauth_verify(func):
-    def verify_request(request, *arg, **keywords):
-        server = AuthServer()
-        params = server.verify_django_request(request)
-        return func(request, *arg, **keywords)
-    return verify_request
-
-def mysql_password(password):
-    phase1 = hashlib.sha1(password).digest()
-    phase2 = hashlib.sha1(phase1).hexdigest()
-    return "*" + phase2.upper()
-
-def generate_token():
-    return str(uuid.uuid4()).replace('-', '')
-
-def new_request_token(consumer_key, callback=None):
-    token = models.Token(key=generate_token(), secret=generate_token(),
-                         consumer=models.Consumer.objects.get(key=consumer_key),
-                         type="R", callback=callback)
-    token.save()
-
-    oauth_token = oauth.Token(token.key, token.secret)
-    oauth_token.set_callback(token.callback)
-    return oauth_token
-    
-
-class AuthServer(oauth.Server):
+class ServerAlpha(oauth.Server):
     def __init__(self, signature_methods=None):
-        """currently AuthServer supports only SHA1 signature."""
+        """currently ServerAlpha supports only SHA1 signature."""
         sha1_signature_method = {'HMAC-SHA1':oauth.SignatureMethod_HMAC_SHA1()}
         self.signature_methods = signature_methods or sha1_signature_method
 
@@ -87,11 +51,8 @@ class AuthServer(oauth.Server):
 
     def fetch_consumer(self, consumer_key):
         consumer = models.Consumer.objects.get(key=consumer_key)
-        return oauth.Consumer(consumer.key, consumer.secret)
+        return consumer.to_oauth()
 
     def fetch_token(self, token_key):
         token = models.Token.objects.get(key=token_key)
-        return oauth.Token(key=token.key, secret=token.secret)
-
-    def new_token(self, token_type):
-        pass
+        return token.to_oauth()        

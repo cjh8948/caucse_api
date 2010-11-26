@@ -1,5 +1,5 @@
 from secure import *
-from oauth_client_a import ClientAlpha
+from oauthclient import ClientAlpha
 
 import unittest
 import re
