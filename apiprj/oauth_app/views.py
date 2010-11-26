@@ -1,17 +1,17 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render_to_response
-from utils.decorators import oauth_verify
-import utils
-import models
-from apiprj.api1_app.models import Member
 from urllib import urlencode
+from utils import new_request_token, mysql_password
+from utils.decorators import oauth_verify
+from apiprj.api1_app.models import Member
+from models import Token
 
 @oauth_verify 
 def request_token(request):
     consumer_key = request.REQUEST['oauth_consumer_key']
     callback = request.REQUEST['oauth_callback']
-    token = utils.new_request_token(consumer_key, callback)
+    token = new_request_token(consumer_key, callback)
     return HttpResponse(token.to_string())
 
 @csrf_exempt
@@ -19,7 +19,7 @@ def request_token(request):
 def access_token(request):
     # need to verify verifier
     request_token = request.REQUEST['oauth_token']
-    token = models.Token.objects.get(key=request_token)
+    token = Token.objects.get(key=request_token)
     verifier = request.REQUEST['oauth_verifier']
     if token.type != 'R' or token.verifier != verifier:
         raise Exception
@@ -42,11 +42,11 @@ def authorize(request):
 
         # check user_id, password
         member = Member.objects.get(id=user_id) 
-        if member.password != utils.mysql_password(password):
+        if member.password != mysql_password(password):
             raise Exception("wrong password")
 
         # make verifier 
-        token = models.Token.objects.get(key=oauth_token)
+        token = Token.objects.get(key=oauth_token)
         token.new_verifier(user_id)
         oauth_token = token.to_oauth()
 

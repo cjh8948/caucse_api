@@ -1,15 +1,15 @@
-import httplib2
+import httplib2, oauth2
 from urlparse import parse_qsl, urlparse
-import oauth2 as oauth
 
-class ClientAlpha(oauth.Client):
+
+class ClientAlpha(oauth2.Client):
     """ClientAlpha is a worker to attempt to execute a request on flow 1.0a"""
 
     def __init__(self, consumer, token=None, cache=None, timeout=None,
                  proxy_info=None, callback=None):
 
-        oauth.Client.__init__(self, consumer, token, cache, timeout,
-                              proxy_info)
+        oauth2.Client.__init__(self, consumer, token, cache, timeout,
+                               proxy_info)
         self.callback = callback
 
     def set_callback(self, callback):
@@ -38,11 +38,11 @@ class ClientAlpha(oauth.Client):
             if self.callback: 
                 parameters['oauth_callback'] = self.callback
 
-        req = oauth.Request.from_consumer_and_token(self.consumer,
-                                                    token=self.token,
-                                                    http_method=method,
-                                                    http_url=uri,
-                                                    parameters=parameters)
+        req = oauth2.Request.from_consumer_and_token(self.consumer,
+                                                     token=self.token,
+                                                     http_method=method,
+                                                     http_url=uri,
+                                                     parameters=parameters)
         
         req.sign_request(self.method, self.consumer, self.token)
 

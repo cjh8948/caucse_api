@@ -1,6 +1,5 @@
 from django.db import models
-import oauth2 as oauth
-import random, uuid
+import oauth2, random, uuid
 
 class Consumer(models.Model):
     TYPE_CHOICES = (('C', 'CLIENT'), ('B', 'BROWSER'))
@@ -16,7 +15,7 @@ class Consumer(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     
     def to_oauth(self):
-        return oauth.Consumer(self.key, self.secret)
+        return oauth2.Consumer(self.key, self.secret)
 
     def __unicode__(self):
         return self.key
@@ -53,7 +52,7 @@ class Token(models.Model):
         self.save()
 
     def to_oauth(self):
-        token = oauth.Token(self.key, self.secret)
+        token = oauth2.Token(self.key, self.secret)
         if self.callback:
             token.set_callback(self.callback)
         if self.verifier:

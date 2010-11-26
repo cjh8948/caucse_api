@@ -1,10 +1,6 @@
 from secure import *
 from oauthclient import ClientAlpha
-
-import unittest
-import re
-import oauth2 as oauth
-import json, urllib, urllib2, urlparse
+import unittest, re, json, urllib, urllib2, urlparse, oauth2
 
 class ApiTestCase(unittest.TestCase): 
     api = ""
@@ -17,6 +13,7 @@ class ApiTestCase(unittest.TestCase):
 
     def oauth_get(self, consumer, token, param=None, callback=None):
         url = self.get_url(param)
+        print url,
         client = ClientAlpha(consumer, token)
         if callback: client.set_callback(callback)
         resp, content = client.request(url, "GET")
@@ -24,6 +21,7 @@ class ApiTestCase(unittest.TestCase):
 
     def oauth_post(self, consumer, token, param={}):
         url = URL_PREFIX + self.api
+        print url,
         client = ClientAlpha(consumer, token)
         body = urllib.urlencode(param)
         resp, content = client.request(url, "POST", body=body)
@@ -31,6 +29,7 @@ class ApiTestCase(unittest.TestCase):
 
     def plain_get(self, param):
         url = self.get_url(param)
+        print url,
         f = urllib2.urlopen(url)
         return f.read()
 
@@ -38,13 +37,13 @@ class RequestTokenTestCase(ApiTestCase):
     api = "oauth/request_token"
 
     def test_case_nocallback(self):
-        consumer = oauth.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
+        consumer = oauth2.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
         resp, content = self.oauth_get(consumer=consumer, token=None,
                                        param=None)
         self.assertNotEquals(resp['status'], '200')
 
     def test_success_case(self):
-        consumer = oauth.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
+        consumer = oauth2.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
         resp, content = self.oauth_get(consumer=consumer, token=None,
                                        param=None,
                                        callback="http://callback.net")
@@ -55,7 +54,7 @@ class RequestTokenTestCase(ApiTestCase):
         self.assertTrue(request_token.has_key('oauth_callback_confirmed'))
 
     def test_wrong_consumer_secret(self):
-        consumer = oauth.Consumer(CONSUMER_KEY, "wrong_secret")
+        consumer = oauth2.Consumer(CONSUMER_KEY, "wrong_secret")
         client = ClientAlpha(consumer)
         resp, content = client.request(self.get_url(), "GET")
         self.assertNotEquals(resp['status'], '200')
@@ -64,13 +63,13 @@ class OauthAuthorizeTestCase(ApiTestCase):
     def test_oauth_authorize(self):
         # request token
         self.api = "oauth/request_token"
-        consumer = oauth.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
+        consumer = oauth2.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
         resp, content = self.oauth_get(consumer=consumer, token=None,
                                        param=None, callback="oob")
         self.assertEquals(resp['status'], '200')
         content_dict = dict(urlparse.parse_qsl(content))
-        self.token = oauth.Token(content_dict['oauth_token'],
-                                 content_dict['oauth_token_secret'])
+        self.token = oauth2.Token(content_dict['oauth_token'],
+                                  content_dict['oauth_token_secret'])
 
         # user authorize leg
         self.api = "oauth/authorize"
@@ -96,7 +95,7 @@ class OauthAuthorizeTestCase(ApiTestCase):
         # request restricted resource
         self.api = "users/show"
         param = {'user_id': 'gochi'}
-        access_token = oauth.Token(access_token['oauth_token'],
+        access_token = oauth2.Token(access_token['oauth_token'],
                                    access_token['oauth_token_secret'])
         resp, content = self.oauth_get(consumer, access_token, param)
         self.assertEqual(resp['status'], '200')
@@ -117,8 +116,8 @@ class UsersShowTest(ApiTestCase):
 
     def test_gochi(self):
         # build oauth objects
-        consumer = oauth.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
-        token = oauth.Token(ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET)
+        consumer = oauth2.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
+        token = oauth2.Token(ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET)
 
         # make request
         param = {'user_id': 'gochi'}
@@ -140,16 +139,16 @@ class UsersLookupTest(ApiTestCase):
     api = "users/lookup"
 
     def test_wrong_access_token_secret(self):
-        consumer = oauth.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
-        token = oauth.Token(ACCESS_TOKEN_KEY, "worng_secret")
+        consumer = oauth2.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
+        token = oauth2.Token(ACCESS_TOKEN_KEY, "worng_secret")
         param = {'user_id':'gochi,reset'}
         resp, content = self.oauth_get(consumer, token, param)
         self.assertNotEqual(resp['status'], 200)
 
     def test_gochi_reset(self):
         # build oauth objects
-        consumer = oauth.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
-        token = oauth.Token(ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET)
+        consumer = oauth2.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
+        token = oauth2.Token(ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET)
 
         # make request
         param = {'user_id':'gochi,reset'}

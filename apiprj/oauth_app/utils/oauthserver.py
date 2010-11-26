@@ -1,10 +1,10 @@
-import oauth2 as oauth
+import oauth2
 from apiprj.oauth_app import models
 
-class ServerAlpha(oauth.Server):
+class ServerAlpha(oauth2.Server):
     def __init__(self, signature_methods=None):
         """currently ServerAlpha supports only SHA1 signature."""
-        sha1_signature_method = {'HMAC-SHA1':oauth.SignatureMethod_HMAC_SHA1()}
+        sha1_signature_method = {'HMAC-SHA1':oauth2.SignatureMethod_HMAC_SHA1()}
         self.signature_methods = signature_methods or sha1_signature_method
 
     def conv_oauthrequest(self, django_request):
@@ -24,12 +24,12 @@ class ServerAlpha(oauth.Server):
         qs = django_request.META['QUERY_STRING']
 
         # make oauth.Request object
-        request = oauth.Request\
-                       .from_request(django_request.method,
-                                     django_request.build_absolute_uri(),
-                                     headers=auth_header,
-                                     parameters=parameters,
-                                     query_string=qs)
+        request = oauth2.Request\
+                        .from_request(django_request.method,
+                                      django_request.build_absolute_uri(),
+                                      headers=auth_header,
+                                      parameters=parameters,
+                                      query_string=qs)
 
         return request
 
@@ -56,3 +56,4 @@ class ServerAlpha(oauth.Server):
     def fetch_token(self, token_key):
         token = models.Token.objects.get(key=token_key)
         return token.to_oauth()        
+

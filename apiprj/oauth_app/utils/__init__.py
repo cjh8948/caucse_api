@@ -1,5 +1,4 @@
 from apiprj.oauth_app import models
-import oauth2 as oauth
 import uuid, hashlib
 
 def mysql_password(password):

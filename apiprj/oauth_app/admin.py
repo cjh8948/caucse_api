@@ -1,4 +1,4 @@
-from models import *
+from models import Consumer, Token
 from django.contrib import admin
 
 admin.site.register(Consumer)
