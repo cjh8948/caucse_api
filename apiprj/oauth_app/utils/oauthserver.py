@@ -52,8 +52,7 @@ class ServerAlpha(oauth2.Server):
         
         When the request has unknown token or unknown consumer, it will 
         raise Exception.
-        """
-        
+        """                
         request = self._to_oauth_request(django_request)
         consumer = self._fetch_consumer(request['oauth_consumer_key'])
         token = None

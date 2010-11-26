@@ -1,4 +1,5 @@
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
+from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render_to_response
 from urllib import urlencode
@@ -9,8 +10,11 @@ from models import Token
 
 @oauth_verify 
 def request_token(request):
-    consumer_key = request.REQUEST['oauth_consumer_key']
-    callback = request.REQUEST['oauth_callback']
+    try:
+        consumer_key = request.REQUEST['oauth_consumer_key']
+        callback = request.REQUEST['oauth_callback']
+    except KeyError:
+        return HttpResponseBadRequest()
     token = Token.new_request_token(consumer_key, callback)
     return HttpResponse(token.to_oauth().to_string())
 
@@ -18,11 +22,19 @@ def request_token(request):
 @oauth_verify 
 def access_token(request):
     # need to verify verifier
-    request_token = request.REQUEST['oauth_token']
-    token = Token.objects.get(key=request_token)
-    verifier = request.REQUEST['oauth_verifier']
+    try:
+        request_token = request.REQUEST['oauth_token']
+        verifier = request.REQUEST['oauth_verifier']
+    except KeyError:
+        return HttpResponseBadRequest()
+
+    try:
+        token = Token.objects.get(key=request_token)
+    except ObjectDoesNotExist:
+        return HttpResponseBadRequest()
+    
     if token.type != 'R' or token.verifier != verifier:
-        raise Exception
+        return HttpResponseBadRequest()
     
     # make and fetch real token here
     token.promote_to_access()
