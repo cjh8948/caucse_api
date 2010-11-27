@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls.defaults import patterns, include
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -16,5 +16,4 @@ urlpatterns = patterns('',
     (r'^oauth/', include('oauth_app.urls')),
     (r'^1/', include('api1_app.urls')),
     (r'^', include('api1_app.urls')),
-
 )
