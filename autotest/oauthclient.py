@@ -3,22 +3,25 @@ from urlparse import parse_qsl, urlparse
 
 
 class ClientAlpha(oauth2.Client):
-    """ClientAlpha is a worker to attempt to execute a request on flow 1.0a"""
-
-    def __init__(self, consumer, token=None, cache=None, timeout=None,
-                 proxy_info=None, callback=None):
-
-        oauth2.Client.__init__(self, consumer, token, cache, timeout,
-                               proxy_info)
-        self.callback = callback
+    """Caucse API version implementation of an oauth client. It is based on 
+    python-oauth2 Client module.    
+    """
+        
+    callback = None
 
     def set_callback(self, callback):
+        """Callback URL must be registered when request a 'request token'. 
+        If the client is not web service, callback can be set to 'oob'(out of 
+        band) so that it can follow PIN flow. 
+        """
         self.callback = callback
 
     def request(self, uri, method="GET", body=None, headers=None,
                 redirections=httplib2.DEFAULT_MAX_REDIRECTS,
                 connection_type=None):
-        """need to send callback"""
+        """This function calls httplib2.request after signing request with oauth.
+        Parameters used in this function is exactly same with httplib2.request.
+        """
 
         DEFAULT_CONTENT_TYPE = 'application/x-www-form-urlencoded'
 
