@@ -1,6 +1,7 @@
 import os
 import datetime
 import models
+from apiprj.oauth_app.models import Token
 from apiprj.settings import USER_IMG_PATH, USER_IMG_PREFIX
 
 class ModelnameError(Exception):pass
@@ -75,6 +76,13 @@ def get_comments(board_id, article_id):
     comments = comment_model.objects.filter(idx=article_id)
     return map(lambda cmt: pack_comment(cmt, board_id), comments)
 
+def post_comments(board_id, article_id, user_id, content):
+    comment_model = eval_comment(board_id)
+    user_name = models.Member.objects.get(id=user_id).name
+    cmt = comment_model(idx=article_id, user_id=user_id, name=user_name,
+                        content=content, reg_date=datetime.datetime.today())
+    cmt.save()
+
 def get_article(board_id, article_id):
     board_model = eval_board(board_id)
     article_model = board_model.objects.get(id=article_id)
@@ -106,4 +114,7 @@ def get_board(board_id):
     # return json object
     board = pack_board(boardinfo, count=count, count24h=count24h)
     return board
+
+def get_user_id_from_token(oauth_token):
+    return Token.objects.get(key=oauth_token).user
     

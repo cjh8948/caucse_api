@@ -1,8 +1,9 @@
 from django.http import HttpResponse
 from django.utils.simplejson import dumps
+from django.views.decorators.csrf import csrf_exempt
 from apiprj.oauth_app.utils.decorators import oauth_required
 
-import modelwrap 
+import modelwrap
 
 @oauth_required
 def articles_show(request):
@@ -63,8 +64,13 @@ def articles_list(request):
     page = 0
     per_page = 20
     
-    # get request parameter 
-    board_id = request.GET['board_id']
+    # get request parameter
+    try: 
+        board_id = request.GET['board_id']
+    except KeyError as e:
+        ret = dumps({'status':'error', 'message':e.message})
+        return HttpResponse(ret)
+
     if request.GET.has_key('page'):
         page = int(request.GET['page'])
     if request.GET.has_key('per_page'):
@@ -77,4 +83,35 @@ def articles_list(request):
                 'articles': modelwrap.get_articles(board_id, page, per_page)}
     ret = dumps(ret_item, ensure_ascii=False)
 
+    return HttpResponse(ret)
+
+@csrf_exempt
+@oauth_required
+def comments_update(request):
+    """This API posts a comment. 
+    
+    resource: 'comments/update'
+    method: POST, oauth required, rate limited
+    mandatory parameter: board_id, article_id, message"""
+    # read parameter
+    try:
+        board_id = request.POST['board_id']
+        article_id = request.POST['article_id']
+        message = request.POST['message']
+        oauth_token = request.POST['oauth_token']
+    except KeyError as e:
+        ret = dumps({'status':'error', 'message':e.message})
+        return HttpResponse(ret)
+    
+    # update comment
+    try:
+        user_id = modelwrap.get_user_id_from_token(oauth_token)
+        modelwrap.post_comments(board_id=board_id, article_id=article_id,
+                                user_id=user_id, content=message)
+    except Exception as e:
+        ret = dumps({'status':'error', 'message':e.message})
+        return HttpResponse(ret)
+    
+    # return result
+    ret = dumps({'status':'ok'})    
     return HttpResponse(ret)
