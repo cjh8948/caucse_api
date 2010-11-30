@@ -14,7 +14,7 @@ def articles_show(request):
     mandatory parameter: board_id, article_id"""
     board_id = request.GET['board_id']
     article_id = int(request.GET['article_id'])
-    article = modelwrap.get_article(board_id, article_id)
+    article = modelwrap.Article.get(board_id, article_id)
     ret = dumps(article, ensure_ascii=False) 
     return HttpResponse(ret)
     
@@ -26,7 +26,7 @@ def users_show(request):
     method: GET, oauth required, rate limited
     mandatory parameter: user_id"""
     id = request.GET['user_id']
-    user = modelwrap.get_user(id)
+    user = modelwrap.User.get(id)
     ret = dumps(user, ensure_ascii=False)
     return HttpResponse(ret)
     
@@ -38,7 +38,7 @@ def users_lookup(request):
     method: GET, oauth required, rate limited
     mandatory parameter: user_id (comma separated)"""
     id_list = request.GET['user_id'].split(',')
-    users = map(modelwrap.get_user, id_list)
+    users = map(modelwrap.User.get, id_list)
     ret = dumps(users, ensure_ascii=False)
     return HttpResponse(ret)
  
@@ -49,7 +49,7 @@ def boards_lookup(request):
     method: GET, oauth not required, rate limited
     mandatory parameter: board_id (comma separated)"""
     board_list = request.GET['board_id'].split(',')
-    boards = map(modelwrap.get_board, board_list)
+    boards = map(modelwrap.Board.get, board_list)
     ret = dumps(boards, ensure_ascii=False)
     return HttpResponse(ret)
 
@@ -77,10 +77,11 @@ def articles_list(request):
         per_page = int(request.GET['per_page'])
 
     # make json object to return
+    articles = modelwrap.Article.get_list(board_id, page, per_page)
     ret_item = {'option': {'board_id': board_id,
                            'page': page,
                            'per_page': per_page},
-                'articles': modelwrap.get_articles(board_id, page, per_page)}
+                'articles': articles}
     ret = dumps(ret_item, ensure_ascii=False)
 
     return HttpResponse(ret)
@@ -105,9 +106,9 @@ def comments_update(request):
     
     # update comment
     try:
-        user_id = modelwrap.get_user_id_from_token(oauth_token)
-        modelwrap.post_comments(board_id=board_id, article_id=article_id,
-                                user_id=user_id, content=message)
+        user_id = modelwrap.Token.get_user_id(oauth_token)
+        modelwrap.Comment.post(board_id=board_id, article_id=article_id,
+                               user_id=user_id, content=message)
     except Exception as e:
         ret = dumps({'status':'error', 'message':e.message})
         return HttpResponse(ret)
