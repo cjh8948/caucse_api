@@ -123,7 +123,6 @@ class OauthAuthorizeTestCase(ApiTestCase):
         obj = json.loads(content)
         self.assertUserGochi(obj)
         
-
 class UsersShowTest(ApiTestCase):
     def test_best_case(self):
         'oauth_get "users/show?user_id=gochi" should return user gochi in json format'
@@ -189,7 +188,7 @@ class UsersLookupTest(ApiTestCase):
         
 class CommentsUpdateTest(ApiTestCase):
     def test_comment_update(self):
-        'oauth_get "comments/update" should return 200, and {"status":"ok"}'
+        'oauth_post "comments/update" should return 200, and {"status":"ok"}'
         param = {'board_id':'board_alumni99', 'article_id':'20',
                  'message':'comment test'}
         resp, content = self.oauth_post("comments/update", self.consumer,
@@ -198,8 +197,8 @@ class CommentsUpdateTest(ApiTestCase):
         obj = json.loads(content)
         self.assertEqual(obj['status'].lower(), 'ok')
 
-    def test_comment_update_wrong_board(self):
-        'oauth_get "comments/update" with board_id = board_not_registered, should return {"status":"error"}'
+    def test_wrong_board(self):
+        'oauth_post "comments/update" with board_id = board_not_registered, should return {"status":"error"}'
         param = {'board_id':'board_not_registered', 'article_id':'20',
                  'message':'comment test'}
         resp, content = self.oauth_post("comments/update", self.consumer,
