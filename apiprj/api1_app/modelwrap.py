@@ -8,13 +8,6 @@ class ModelnameError(Exception):pass
 
 class Board(object):
     @classmethod
-    def eval(self, board_id):
-        board_classname = board_id.title().replace('_', '')
-        if board_classname not in dir(models):
-            raise ModelnameError
-        return eval("models." + board_classname)
-    
-    @classmethod
     def pack(self, board, count=None, count24h=None):
         packed_board = {'board_id': board.tablename,
                         'title': board.title,
@@ -34,7 +27,7 @@ class Board(object):
             boardinfo = models.Photoinfo.objects.get(tablename=board_id)
     
         # count articles
-        board_model = Board.eval(board_id)
+        board_model = Article.eval(board_id)
         time_window = datetime.datetime.today() - datetime.timedelta(days=1)
         count = board_model.objects.count()
         count24h = board_model.objects.filter(reg_date__gt=time_window).count()
@@ -79,6 +72,13 @@ class Comment(object):
 
 class Article(object):
     @classmethod
+    def eval(self, board_id):
+        board_classname = board_id.title().replace('_', '')
+        if board_classname not in dir(models):
+            raise ModelnameError
+        return eval("models." + board_classname)
+
+    @classmethod
     def pack(self, article, board_id, comments=[]):
         packed_article = {'board_id': board_id,
                           'id': article.id,
@@ -95,7 +95,7 @@ class Article(object):
 
     @classmethod
     def get(self, board_id, article_id):
-        board_model = Board.eval(board_id)
+        board_model = Article.eval(board_id)
         article_model = board_model.objects.get(id=article_id)
         comments = Comment.get(board_id, article_id)
         article = Article.pack(article_model, board_id, comments) 
@@ -105,7 +105,7 @@ class Article(object):
     def get_list(self, board_id, page=0, per_page=20):
         s = page * per_page
         e = s + per_page
-        board_model = Board.eval(board_id)
+        board_model = Article.eval(board_id)
         articles = board_model.objects.all().order_by('-reg_date')[s:e]
         return map(lambda article: Article.pack(article, board_id), articles)
 
