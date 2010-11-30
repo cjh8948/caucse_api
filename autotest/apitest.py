@@ -186,12 +186,12 @@ class UsersLookupTest(ApiTestCase):
         self.assertEqual(resp['status'], '403')
         self.assertEqual(content, "")
         
-class CommentsUpdateTest(ApiTestCase):
+class CommentsCreateTest(ApiTestCase):
     def test_comment_update(self):
         'oauth_post "comments/update" should return 200, and {"status":"ok"}'
         param = {'board_id':'board_alumni99', 'article_id':'20',
                  'message':'comment test'}
-        resp, content = self.oauth_post("comments/update", self.consumer,
+        resp, content = self.oauth_post("comments/create", self.consumer,
                                         self.access_token, param)
         self.assertEqual(resp['status'], '200')
         obj = json.loads(content)
@@ -201,11 +201,23 @@ class CommentsUpdateTest(ApiTestCase):
         'oauth_post "comments/update" with board_id = board_not_registered, should return {"status":"error"}'
         param = {'board_id':'board_not_registered', 'article_id':'20',
                  'message':'comment test'}
-        resp, content = self.oauth_post("comments/update", self.consumer,
+        resp, content = self.oauth_post("comments/create", self.consumer,
                                         self.access_token, param)
         self.assertEqual(resp['status'], '200')
         obj = json.loads(content)
         self.assertEqual(obj['status'].lower(), 'error')
+        
+class ArticlesCreateTest(ApiTestCase):
+    def test_articles_create(self):
+        'oauth_post "articles/create" should return 200, and {"status":"ok"}'        
+        param = {'board_id': 'board_alumni99', 'title': 'title', 
+                 'message': 'message'}
+        resp, content = self.oauth_post("articles/create", self.consumer,
+                                        self.access_token, param)
+        print content
+        self.assertEqual(resp['status'], '200')
+        obj = json.loads(content)
+        self.assertEqual(obj['status'].lower(), 'ok')
         
 if __name__ == '__main__':
     unittest.main()

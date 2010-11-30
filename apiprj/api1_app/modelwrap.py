@@ -1,8 +1,8 @@
-import os
-import datetime
+import os, datetime
 import models
 from apiprj.oauth_app.models import Token as OauthToken
 from apiprj.settings import USER_IMG_PATH, USER_IMG_PREFIX
+from django.db.models.aggregates import Max
 
 class ModelnameError(Exception):pass
 
@@ -67,7 +67,8 @@ class Comment(object):
         comment_model = Comment.eval(board_id)
         user_name = models.Member.objects.get(id=user_id).name
         cmt = comment_model(idx=article_id, user_id=user_id, name=user_name,
-                            content=content, reg_date=datetime.datetime.today())
+                            content=content,
+                            reg_date=datetime.datetime.today())
         cmt.save()
 
 class Article(object):
@@ -80,11 +81,11 @@ class Article(object):
 
     @classmethod
     def pack(self, article, board_id, comments=[]):
+        author = {'name': article.name, 'id': article.user_id,
+                  'img_url': User.get_img_url(article.user_id)}
         packed_article = {'board_id': board_id,
                           'id': article.id,
-                          'author': {'name': article.name,
-                                     'id': article.user_id,
-                                     'img_url': User.get_img_url(article.user_id)},
+                          'author': author,
                           'title': article.title,
                           'hits': article.count,
                           'reg_date': article.reg_date.isoformat(),
@@ -108,6 +109,19 @@ class Article(object):
         board_model = Article.eval(board_id)
         articles = board_model.objects.all().order_by('-reg_date')[s:e]
         return map(lambda article: Article.pack(article, board_id), articles)
+    
+    @classmethod
+    def post(self, board_id, user_id, title, message):
+        article_model = Article.eval(board_id)        
+        max_idx = article_model.objects.all().aggregate(Max('idx'))['idx__max']
+        user = models.Member.objects.get(id=user_id)
+        article = article_model(idx=max_idx + 1, user_id=user_id,
+                                name=user.name, email=user.email, category="",
+                                notice_deadline=datetime.datetime.min,
+                                reg_date=datetime.datetime.now(),
+                                count=0, title=title, content=message,
+                                thread="A", comment=0)
+        article.save()
 
 class User(object):
     @classmethod

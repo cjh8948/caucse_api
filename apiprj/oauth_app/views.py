@@ -10,6 +10,11 @@ from models import Token
 
 @oauth_verify 
 def request_token(request):
+    """This API grants request_token
+    
+    * resource: 'oauth/request_token'
+    ** method: oauth
+    ** mandatory parameter: see [[OauthAuthentication]]"""    
     try:
         consumer_key = request.REQUEST['oauth_consumer_key']
         callback = request.REQUEST['oauth_callback']
@@ -21,6 +26,11 @@ def request_token(request):
 @csrf_exempt
 @oauth_verify 
 def access_token(request):
+    """This API grants access_token
+    
+    * resource: 'oauth/access_token'
+    ** method: oauth
+    ** mandatory parameter: see [[OauthAuthentication]]"""    
     # need to verify verifier
     try:
         request_token = request.REQUEST['oauth_token']
@@ -43,6 +53,17 @@ def access_token(request):
 
 @csrf_exempt
 def authorize(request):
+    """This API asks the user for granting the consumer access protected 
+    resources. 
+    
+    * resource: 'oauth/access_token'
+    ** method: GET
+    ** mandatory parameter: see [[OauthAuthentication]]    
+    
+    * resource: 'oauth/access_token'
+    ** method: POST
+    ** mandatory parameter: see [[OauthAuthentication]]
+    """
     if request.method == "GET":
         params = {'oauth_token' : request.REQUEST['oauth_token']}
         return render_to_response('auth_form.html', params)

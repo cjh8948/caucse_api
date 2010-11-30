@@ -2,8 +2,9 @@
 under oauth protocol."""
 from oauthserver import ServerAlpha
 from django.http import HttpResponseForbidden, HttpResponseBadRequest
+from functools import wraps
 
-def oauth_required(func):
+def oauth_required(view_func):
     """Marks view function to verify that the request is valid for 
     oauth required resources. 
     
@@ -15,11 +16,11 @@ def oauth_required(func):
             ServerAlpha().verify_access_request(request)
         except:
             return HttpResponseForbidden()
-        return func(request, *arg, **keywords)
+        return view_func(request, *arg, **keywords)
     
-    return verify_request
+    return wraps(view_func)(verify_request)
 
-def oauth_verify(func):
+def oauth_verify(view_func):
     """Marks view function to verify that a request is valid for oauth 
     authentication flow(1.0a).
     
@@ -31,6 +32,6 @@ def oauth_verify(func):
             ServerAlpha().verify_flow_request(request)
         except:
             return HttpResponseBadRequest()
-        return func(request, *arg, **keywords)
+        return view_func(request, *arg, **keywords)
     
-    return verify_request
+    return wraps(view_func)(verify_request)
