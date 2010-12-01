@@ -8,11 +8,11 @@ class ModelnameError(Exception):pass
 
 class Board(object):
     @classmethod
-    def pack(self, board, count=None, count24h=None):
-        packed_board = {'board_id': board.tablename,
-                        'title': board.title,
-                        'description': board.description,
-                        'admin': board.admin_id,
+    def pack(self, boardinfo_model, count=None, count24h=None):
+        packed_board = {'board_id': boardinfo_model.tablename,
+                        'title': boardinfo_model.title,
+                        'description': boardinfo_model.description,
+                        'admin': boardinfo_model.admin_id,
                         'count': count,
                         'count24h': count24h}
         return packed_board    
@@ -46,14 +46,17 @@ class Comment(object):
         return eval("models." + comment_classname)
 
     @classmethod
-    def pack(self, cmt, board_id):
+    def pack(self, cmt_model, board_id):
+        author = {'name': cmt_model.name,
+                  'id': cmt_model.user_id,
+                  'img_url': User.get_img_url(cmt_model.user_id)}
+
         packed_cmt = {'board_id': board_id,
-                      'id': cmt.id,
-                      'content': cmt.content,
-                      'reg_date': cmt.reg_date.isoformat(),
-                      'author': {'name': cmt.name,
-                                 'id': cmt.user_id,
-                                 'img_url': User.get_img_url(cmt.user_id)}}
+                      'id': cmt_model.id,
+                      'content': cmt_model.content,
+                      'reg_date': cmt_model.reg_date.isoformat(),
+                      'author': author}
+
         return packed_cmt
     
     @classmethod
@@ -80,17 +83,17 @@ class Article(object):
         return eval("models." + board_classname)
 
     @classmethod
-    def pack(self, article, board_id, comments=[]):
-        author = {'name': article.name, 'id': article.user_id,
-                  'img_url': User.get_img_url(article.user_id)}
+    def pack(self, article_model, board_id, comments=[]):
+        author = {'name': article_model.name, 'id': article_model.user_id,
+                  'img_url': User.get_img_url(article_model.user_id)}
         packed_article = {'board_id': board_id,
-                          'id': article.id,
+                          'id': article_model.id,
                           'author': author,
-                          'title': article.title,
-                          'hits': article.count,
-                          'reg_date': article.reg_date.isoformat(),
-                          'content': article.content,
-                          'file': article.file_name,
+                          'title': article_model.title,
+                          'hits': article_model.count,
+                          'reg_date': article_model.reg_date.isoformat(),
+                          'content': article_model.content,
+                          'file': article_model.file_name,
                           'comments': comments}
         return packed_article
 
@@ -125,13 +128,13 @@ class Article(object):
 
 class User(object):
     @classmethod
-    def pack(self, user):
-        packed_user = {'id': user.id,
-                       'name': user.name,
-                       'entrance_year': user.id_number,
-                       'mobile': user.cell_phone,
-                       'email': user.email,
-                       'img_url': self.get_img_url(user.id)}
+    def pack(self, user_model):
+        packed_user = {'id': user_model.id,
+                       'name': user_model.name,
+                       'entrance_year': user_model.id_number,
+                       'mobile': user_model.cell_phone,
+                       'email': user_model.email,
+                       'img_url': self.get_img_url(user_model.id)}
         return packed_user
 
     @classmethod
