@@ -13,7 +13,7 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     (r'^admin/', include(admin.site.urls)),
 
-    (r'^oauth/', include('oauth_app.urls')),
-    (r'^1/', include('api1_app.urls')),
-    (r'^', include('api1_app.urls')),
+    (r'^oauth/', include('apiprj.oauth_app.urls')),
+    (r'^1/', include('apiprj.api1_app.urls')),
+    (r'^', include('apiprj.api1_app.urls')),
 )

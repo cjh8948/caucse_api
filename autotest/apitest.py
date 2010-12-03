@@ -3,8 +3,10 @@ from oauthclient import ClientAlpha
 import unittest, re, json, urllib, urllib2, urlparse, oauth2
 
 class ApiTestCase(unittest.TestCase): 
-    consumer = oauth2.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
-    access_token = oauth2.Token(ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET) 
+    
+    def setUp(self):
+        self.consumer = oauth2.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
+        self.access_token = oauth2.Token(ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET) 
     
     def get_url(self, resource, param=None):
         url = URL_PREFIX + resource
@@ -210,7 +212,7 @@ class CommentsCreateTest(ApiTestCase):
 class ArticlesCreateTest(ApiTestCase):
     def test_articles_create(self):
         'oauth_post "articles/create" should return 200, and {"status":"ok"}'        
-        param = {'board_id': 'board_alumni99', 'title': 'title', 
+        param = {'board_id': 'board_alumni99', 'title': 'title',
                  'message': 'message'}
         resp, content = self.oauth_post("articles/create", self.consumer,
                                         self.access_token, param)

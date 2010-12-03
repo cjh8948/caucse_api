@@ -7,11 +7,11 @@ from modelwrap import Article, Board, Comment, User, Token
 @csrf_exempt
 @oauth_required
 def articles_create(request):
-    """This API posts an article. 
+    """This API posts an article.
     
     * resource: 'articles/create'
     ** method: POST, oauth required, rate limited
-    ** mandatory parameter: board_id, message"""
+    ** mandatory parameter: board_id, title, message"""
     try:
         board_id = request.POST['board_id']
         title = request.POST['title']

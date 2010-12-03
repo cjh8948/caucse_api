@@ -1,8 +1,6 @@
 import os, sys
 
-MODULE_PATH = ''
-PROJECT_PATH = ''
-sys.path.append(MODULE_PATH)
+PROJECT_PATH = '/path/to/caucse_api'
 sys.path.append(PROJECT_PATH)
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'apiprj.settings'

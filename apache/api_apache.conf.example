@@ -1,0 +1,12 @@
+# caucse api service setting
+<IfModule !wsgi_module>
+	LoadModule wsgi_module modules/mod_wsgi.so
+</IfModule>
+<VirtualHost *:80>
+    ServerAdmin john.doe@servername
+    DocumentRoot /path/to/apiroot
+    WSGIScriptAlias / /path/to/caucse_api/apache/apiprj.wsgi
+    ServerName api.server.name
+    ErrorLog /var/log/httpd/api-error_log
+    CustomLog /var/log/httpd/api-access_log common
+</VirtualHost>
