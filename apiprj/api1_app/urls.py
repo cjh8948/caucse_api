@@ -8,4 +8,5 @@ urlpatterns = patterns('apiprj.api1_app.views',
     (r'^users/show', 'users_show'),
     (r'^users/lookup', 'users_lookup'),
     (r'^boards/lookup', 'boards_lookup'),
+    (r'^$', 'index')
 )

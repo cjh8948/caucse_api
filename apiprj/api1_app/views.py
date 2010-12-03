@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from django.shortcuts import render_to_response
 from django.utils.simplejson import dumps
 from django.views.decorators.csrf import csrf_exempt
 from apiprj.oauth_app.utils.decorators import oauth_required
@@ -140,3 +141,6 @@ def users_show(request):
     user = User.get(id)
     ret = dumps(user, ensure_ascii=False)
     return HttpResponse(ret)
+
+def index(request):
+    return render_to_response('index.html',{})
