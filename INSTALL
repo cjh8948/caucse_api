@@ -1,32 +1,45 @@
-== 프로젝트 내려받기
+= 설치
+동네API의 설치 순서는 아래와 같습니다.
+== 1. 의존 모듈 설치
+동네API를 설치하고 실행하기 위해서는 아래와 같은 소프트웨어가 필요합니다.
+* python 2.6
+* Django 1.2.3
+* python-oauth2 1.2.1
+* python-mysqldb 1.2.3
+* mysql
+* git
+* apache (optional)
+== 2. 동네API 다운로드
+동네API 프로젝트를 개인적으로 돌려보고 싶은 경우, 아래와 같이 저장소에서 코드를 clone 합니다.
 ```sh
-# readonly mode
-git clone git://github.com/caucse-dev/caucse_api.git
+you@your_machine:~$ git clone git://github.com/caucse-dev/caucse_api.git
 ```
 
-== 설정파일편집하기
-=== apiprj/secure.py 편집
-```python
-DB_NAME = "api_database"
-DB_USER = "api_db_user"
-DB_PASSWORD = "api_db_password"
-
-SECRET_KEY = "django_project_unique_secret_key_string"
+동네API 프로젝트에 기여하고 싶은 경우, github에 가입 후, https://github.com/caucse-dev/caucse_api 프로젝트를 fork 하여 개인 저장소에서 코드를 clone 합니다.
+```sh
+you@your_machine:~$ git clone git@github.com:(github user id)/caucse_api.git
 ```
-apiprj/secure.py.example 을 apiprj/secure.py로 복사해 위와 같이 편집한다.
+== 3. 설정파일 작성
+=== 3.1. apiprj/settings.py
+동네API를 실행하기 위해 데이터베이스 계정 정보와 같은 설정이 필요합니다. setting.py 설정 방법은 여느 django 프로젝트와 크게 다르지 않습니다. apiprj/settings.py.example 파일을 참조하여 apiprj/settings.py 를 작성합니다.
+ 
+=== 3.2. autotest/secure.py
+동네API의 자동화된 테스트를 위해 autotest/secure.py.example 파일을 참조하여 autotest/secure.py 를 작성합니다.
 
-== 아파치 - mod_wsgi와 연동하기
-=== apache/apiprj.wsgi 파일 편집
-```python
-MODULE_PATH = '/path/to/caucse_api/apiprj/api1'
-PROJECT_PATH = '/path/to/caucse_api/apiprj'
+== 4. 픽스처 설치(dbsync 및 loaddata)
+```sh
+# django의 모델과 database를 일치시킵니다.
+you@your_machine:~/caucse_api/apiprj$ python manage.py syncdb
+# 인증 관련 테스트 데이터 픽스처를 로드합니다.
+you@your_machine:~/caucse_api/apiprj$ python manage.py loaddata fixture/oauth_test_fixture.json 
+# 동네 데이터 테스트 데이터 픽스처를 로드합니다. (픽스처 작성 예정)
+you@your_machine:~/caucse_api/apiprj$ python manage.py loaddata fixture/test_fixture.json 
 ```
-apache/apiprj.wsgi.example 파일을 apache/apiprj.wsgi로 변경해 위와 같이 설치된 경로로 설정해준다.
 
-=== 아파치 설정파일 추가
-```ini
-LoadModule wsgi_module modules/mod_wsgi.so
-WSGIScriptAlias /api /path/to/caucse_api/apiprj.wsgi
+== 5. 테스트 수행
+현재 동네API는 django 의 test 프레임워크를 사용하지 않습니다.
+```sh
+you@your_machine:~/caucse_api/apiprj$ python manage.py runserver
+you@your_machine:~/caucse_api/apiprj$ cd ../autotest
+you@your_machine:~/caucse_api/autotest$ python apitest.py -v
 ```
-mod_wsgi 설치 후, 위 내용을 아파치 설정 파일에 추가한다. 
-
