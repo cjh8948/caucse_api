@@ -75,7 +75,7 @@ def authorize(request):
 
         # check user_id, password
         member = Member.objects.get(id=user_id) 
-        if check_mysql_password(password, member.password):
+        if not check_mysql_password(password, member.password):
             raise Exception("wrong password")
 
         # make verifier 
