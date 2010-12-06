@@ -3,7 +3,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render_to_response
 from urllib import urlencode
-from utils import mysql_password
+from utils import check_mysql_password
 from utils.decorators import oauth_verify
 from apiprj.api1_app.models import Member
 from models import Token
@@ -75,7 +75,7 @@ def authorize(request):
 
         # check user_id, password
         member = Member.objects.get(id=user_id) 
-        if member.password != mysql_password(password):
+        if check_mysql_password(password, member.password):
             raise Exception("wrong password")
 
         # make verifier 
