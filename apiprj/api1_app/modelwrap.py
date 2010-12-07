@@ -1,5 +1,5 @@
 import os, datetime
-import models
+from apiprj.legacy_app import models
 from apiprj.oauth_app.models import Token as OauthToken
 from apiprj.settings import USER_IMG_PATH, USER_IMG_PREFIX
 from django.db.models.aggregates import Max

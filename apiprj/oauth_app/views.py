@@ -5,7 +5,7 @@ from django.shortcuts import render_to_response
 from urllib import urlencode
 from utils import check_mysql_password
 from utils.decorators import oauth_verify
-from apiprj.api1_app.models import Member
+from apiprj.legacy_app.models import Member
 from models import Token
 
 @oauth_verify 
