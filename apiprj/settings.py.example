@@ -93,6 +93,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
+    'apiprj.legacy_app',
     'apiprj.api1_app',
     'apiprj.oauth_app',
 )
