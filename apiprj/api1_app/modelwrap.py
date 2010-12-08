@@ -118,8 +118,19 @@ class Article(object):
         article_model = Article.eval(board_id)        
         max_idx = article_model.objects.all().aggregate(Max('idx'))['idx__max']
         user = models.Member.objects.get(id=user_id)
-        article = article_model(idx=max_idx + 1, user_id=user_id,
-                                name=user.name, email=user.email, category="",
+        
+        if board_id == 'board_anonymous':
+            article_user_id = ""
+            article_user_name = ""
+            article_user_email = ""
+        else:
+            article_user_id = user_id
+            article_user_name = user.name
+            article_user_email = user.email
+            
+        article = article_model(idx=max_idx + 1, user_id=article_user_id,
+                                name=article_user_name, 
+                                email=article_user_email, category="",
                                 notice_deadline=datetime.datetime.min,
                                 reg_date=datetime.datetime.now(),
                                 count=0, title=title, content=message,
