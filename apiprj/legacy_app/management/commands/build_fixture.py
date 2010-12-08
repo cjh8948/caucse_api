@@ -3,6 +3,7 @@ from django.core.management.base import BaseCommand
 from django.db.models import Q
 from apiprj.legacy_app import models
 from apiprj.api1_app import modelwrap
+import datetime
 
 def ask_continue(msg="Continue? (y/n) "):
     answer = ''
@@ -27,6 +28,20 @@ class Command(BaseCommand):
         print del_msg_format % (members, members.count())
         if ask_continue(): 
             members.delete()
+
+        # reset user             
+        members = models.Member.objects.all()
+        for member in members:
+            member.student_id = int(str(member.student_id)[:4])
+            member.email = member.id+'@caucse.net'
+            member.cell_phone = '123-4567-8900'
+            member.home_phone = '000-0000-0000'
+            member.home_addr_1 = 'somewhere'
+            member.home_addr_2 = 'over the rainbow'
+            member.job_addr_1 = 'foo'
+            member.job_addr_2 = 'bar'
+            member.save()
+            
 
         # organize boards            
         boards = ['board_alumni99', 'board_part_jungtong', 'board_part_plan',
@@ -71,6 +86,10 @@ class Command(BaseCommand):
                 comments = Comment.objects.filter(idx=article.id)
                 if (article.user_id in users) and (article.id % 20 == 0) :
                     comments.exclude(q).delete()
+                    article.email = article.user_id + "@caucse.net"
+                    article.notice_deadline = datetime.datetime.min
+                    article.save()
+                    
                 else:
                     comments.delete()
                     article.delete()
@@ -78,7 +97,7 @@ class Command(BaseCommand):
         # organize anonymous board
         Board = modelwrap.Article.eval('board_anonymous')
         for article in Board.objects.all():
-            if article.id % 300 != 0:
+            if article.id % 600 != 0:
                 article.delete()
         
         # organize cafeinfo
