@@ -9995,12 +9995,12 @@ class RssPersonal(models.Model):
     class Meta:
         db_table = u'rss_personal'
 
-class Zipcode(models.Model):
-    zipcode = models.CharField(max_length=21, db_column='ZIPCODE', blank=True) # Field name made lowercase.
-    sido = models.CharField(max_length=12, db_column='SIDO', blank=True) # Field name made lowercase.
-    gugun = models.CharField(max_length=39, db_column='GUGUN', blank=True) # Field name made lowercase.
-    dong = models.CharField(max_length=129, db_column='DONG', blank=True) # Field name made lowercase.
-    bunji = models.CharField(max_length=51, db_column='BUNJI', blank=True) # Field name made lowercase.
-    class Meta:
-        db_table = u'zipcode'
+#class Zipcode(models.Model):
+#    zipcode = models.CharField(max_length=21, db_column='ZIPCODE', blank=True) # Field name made lowercase.
+#    sido = models.CharField(max_length=12, db_column='SIDO', blank=True) # Field name made lowercase.
+#    gugun = models.CharField(max_length=39, db_column='GUGUN', blank=True) # Field name made lowercase.
+#    dong = models.CharField(max_length=129, db_column='DONG', blank=True) # Field name made lowercase.
+#    bunji = models.CharField(max_length=51, db_column='BUNJI', blank=True) # Field name made lowercase.
+#    class Meta:
+#        db_table = u'zipcode'
 

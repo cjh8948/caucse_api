@@ -20,9 +20,7 @@ class Command(BaseCommand):
         del_msg_format = "%s\n%d items will be DELETED."
         
         # organize users
-        users = ['gochi', 'jeppy', 'reset', 'unikth', 'napier', 'loslch',
-                 'anoymity', 'sakurats', 'anjae83', 'hipbrain', 'ageratum',
-                 'admin', 'perkytina']
+        users = ['gochi', 'jeppy', 'reset', 'unikth']
         q = reduce(Q.__or__ , (Q(id=user) for user in users))
         members = models.Member.objects.exclude(q)
 
@@ -61,3 +59,61 @@ class Command(BaseCommand):
                 Board.objects.all().delete()
                 Comment.objects.all().delete()
                 photoinfo.delete()
+        
+        # organize remain contents
+        boards = boards + photos
+        boards.remove('board_anonymous')
+        q = reduce(Q.__or__, (Q(user_id=user) for user in users))
+        for board in boards:
+            Board = modelwrap.Article.eval(board)
+            Comment = modelwrap.Comment.eval(board)
+            for article in Board.objects.all():
+                comments = Comment.objects.filter(idx=article.id)
+                if (article.user_id in users) and (article.id % 20 == 0) :
+                    comments.exclude(q).delete()
+                else:
+                    comments.delete()
+                    article.delete()
+        
+        # organize anonymous board
+        Board = modelwrap.Article.eval('board_anonymous')
+        for article in Board.objects.all():
+            if article.id % 300 != 0:
+                article.delete()
+        
+        # organize cafeinfo
+        for cafe in models.CafeInfo.objects.all():
+            members = cafe.member_list.split(',')
+            intersection = list(set(members).intersection(set(users)))
+            if intersection:
+                cafe.member_list = ",".join(intersection)
+                cafe.save()
+            else:
+                cafe.delete()
+        
+        # organize favorite
+        for favorite in models.Favorite.objects.all():
+            if favorite.user_id not in users:
+                favorite.delete()
+                    
+        # delete unused tables
+        models.CafeCalendarAdmin.objects.all().delete()
+        models.Calendar.objects.all().delete()
+        models.CalendarAdmin.objects.all().delete()
+        models.ClubInfo.objects.all().delete()
+        models.LoginStatistics.objects.all().delete()
+        models.MemberTest.objects.all().delete()
+        models.MemResearch.objects.all().delete()
+        models.Message.objects.all().delete()
+        models.PollData.objects.all().delete()
+        models.PollMain.objects.all().delete()
+        models.PollResult.objects.all().delete()
+        models.PopupNotice.objects.all().delete()
+        models.RssAdmin.objects.all().delete()
+        models.RssContent.objects.all().delete()
+        models.RssPersonal.objects.all().delete()
+        models.Nospam.objects.all().delete()
+
+
+        
+        
