@@ -40,9 +40,13 @@ class Board(object):
 class Comment(object):     
     @classmethod   
     def eval(self, board_id):
-        comment_classname = "Comment" + board_id.title().replace('_', '')[5:]
+        if board_id.startswith('board'):
+            prefix = "Comment"
+        else:
+            prefix = "Memo"
+        comment_classname = prefix + board_id.title().replace('_', '')[5:]
         if comment_classname not in dir(models):
-            raise ModelnameError
+            raise ModelnameError(comment_classname + ' ' + board_id)
         return eval("models." + comment_classname)
 
     @classmethod
@@ -79,7 +83,7 @@ class Article(object):
     def eval(self, board_id):
         board_classname = board_id.title().replace('_', '')
         if board_classname not in dir(models):
-            raise ModelnameError
+            raise ModelnameError(board_classname + ' ' + board_id)
         return eval("models." + board_classname)
 
     @classmethod
@@ -129,7 +133,7 @@ class Article(object):
             article_user_email = user.email
             
         article = article_model(idx=max_idx + 1, user_id=article_user_id,
-                                name=article_user_name, 
+                                name=article_user_name,
                                 email=article_user_email, category="",
                                 notice_deadline=datetime.datetime.min,
                                 reg_date=datetime.datetime.now(),
