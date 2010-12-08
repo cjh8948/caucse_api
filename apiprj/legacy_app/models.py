@@ -949,6 +949,86 @@ class BoardBug(models.Model):
     class Meta:
         db_table = u'board_bug'
 
+class BoardCafeAppellation(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    ip = models.CharField(max_length=51, blank=True)
+    email = models.CharField(max_length=120, blank=True)
+    category = models.CharField(max_length=72)
+    notice_deadline = models.DateField()
+    title = models.CharField(max_length=300)
+    count = models.IntegerField(null=True, blank=True)
+    reg_date = models.DateTimeField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    file_name = models.CharField(max_length=300, blank=True)
+    thread = models.CharField(max_length=765)
+    comment = models.IntegerField()
+    class Meta:
+        db_table = u'board_cafe_appellation'
+
+class BoardCafeAppellation2(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    ip = models.CharField(max_length=51, blank=True)
+    email = models.CharField(max_length=120, blank=True)
+    category = models.CharField(max_length=72)
+    notice_deadline = models.DateField()
+    title = models.CharField(max_length=300)
+    count = models.IntegerField(null=True, blank=True)
+    reg_date = models.DateTimeField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    file_name = models.CharField(max_length=300, blank=True)
+    thread = models.CharField(max_length=765)
+    comment = models.IntegerField()
+    class Meta:
+        db_table = u'board_cafe_appellation2'
+
+class BoardCafeAppellation3(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    ip = models.CharField(max_length=51, blank=True)
+    email = models.CharField(max_length=120, blank=True)
+    category = models.CharField(max_length=72)
+    notice_deadline = models.DateField()
+    title = models.CharField(max_length=300)
+    count = models.IntegerField(null=True, blank=True)
+    reg_date = models.DateTimeField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    file_name = models.CharField(max_length=300, blank=True)
+    thread = models.CharField(max_length=765)
+    comment = models.IntegerField()
+    class Meta:
+        db_table = u'board_cafe_appellation3'
+
+class BoardCafeBoard3(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    ip = models.CharField(max_length=51, blank=True)
+    email = models.CharField(max_length=120, blank=True)
+    category = models.CharField(max_length=72)
+    notice_deadline = models.DateField()
+    title = models.CharField(max_length=300)
+    count = models.IntegerField(null=True, blank=True)
+    reg_date = models.DateTimeField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    file_name = models.CharField(max_length=300, blank=True)
+    thread = models.CharField(max_length=765)
+    comment = models.IntegerField()
+    class Meta:
+        db_table = u'board_cafe_board3'
+
 class BoardCafeChuri(models.Model):
     id = models.IntegerField(primary_key=True)
     idx = models.IntegerField()
@@ -1149,6 +1229,26 @@ class BoardCafeHeukseoker2(models.Model):
     class Meta:
         db_table = u'board_cafe_heukseoker2'
 
+class BoardCafeHomesteal(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    ip = models.CharField(max_length=51, blank=True)
+    email = models.CharField(max_length=120, blank=True)
+    category = models.CharField(max_length=72)
+    notice_deadline = models.DateField()
+    title = models.CharField(max_length=300)
+    count = models.IntegerField(null=True, blank=True)
+    reg_date = models.DateTimeField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    file_name = models.CharField(max_length=300, blank=True)
+    thread = models.CharField(max_length=765)
+    comment = models.IntegerField()
+    class Meta:
+        db_table = u'board_cafe_homesteal'
+
 class BoardCafeIris(models.Model):
     id = models.IntegerField(primary_key=True)
     idx = models.IntegerField()
@@ -1188,6 +1288,26 @@ class BoardCafeItSecurity(models.Model):
     comment = models.IntegerField()
     class Meta:
         db_table = u'board_cafe_it_security'
+
+class BoardCafeJokbal(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    ip = models.CharField(max_length=51, blank=True)
+    email = models.CharField(max_length=120, blank=True)
+    category = models.CharField(max_length=72)
+    notice_deadline = models.DateField()
+    title = models.CharField(max_length=300)
+    count = models.IntegerField(null=True, blank=True)
+    reg_date = models.DateTimeField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    file_name = models.CharField(max_length=300, blank=True)
+    thread = models.CharField(max_length=765)
+    comment = models.IntegerField()
+    class Meta:
+        db_table = u'board_cafe_jokbal'
 
 class BoardCafeJstorm(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -1269,6 +1389,26 @@ class BoardCafeNote2(models.Model):
     class Meta:
         db_table = u'board_cafe_note2'
 
+class BoardCafePresent(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    ip = models.CharField(max_length=51, blank=True)
+    email = models.CharField(max_length=120, blank=True)
+    category = models.CharField(max_length=72)
+    notice_deadline = models.DateField()
+    title = models.CharField(max_length=300)
+    count = models.IntegerField(null=True, blank=True)
+    reg_date = models.DateTimeField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    file_name = models.CharField(max_length=300, blank=True)
+    thread = models.CharField(max_length=765)
+    comment = models.IntegerField()
+    class Meta:
+        db_table = u'board_cafe_present'
+
 class BoardCafeSecurelab(models.Model):
     id = models.IntegerField(primary_key=True)
     idx = models.IntegerField()
@@ -1328,6 +1468,66 @@ class BoardCafeSnsd(models.Model):
     comment = models.IntegerField()
     class Meta:
         db_table = u'board_cafe_snsd'
+
+class BoardCafeSteamers(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    ip = models.CharField(max_length=51, blank=True)
+    email = models.CharField(max_length=120, blank=True)
+    category = models.CharField(max_length=72)
+    notice_deadline = models.DateField()
+    title = models.CharField(max_length=300)
+    count = models.IntegerField(null=True, blank=True)
+    reg_date = models.DateTimeField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    file_name = models.CharField(max_length=300, blank=True)
+    thread = models.CharField(max_length=765)
+    comment = models.IntegerField()
+    class Meta:
+        db_table = u'board_cafe_steamers'
+
+class BoardCafeSteamers2(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    ip = models.CharField(max_length=51, blank=True)
+    email = models.CharField(max_length=120, blank=True)
+    category = models.CharField(max_length=72)
+    notice_deadline = models.DateField()
+    title = models.CharField(max_length=300)
+    count = models.IntegerField(null=True, blank=True)
+    reg_date = models.DateTimeField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    file_name = models.CharField(max_length=300, blank=True)
+    thread = models.CharField(max_length=765)
+    comment = models.IntegerField()
+    class Meta:
+        db_table = u'board_cafe_steamers2'
+
+class BoardCafeSteamers3(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    ip = models.CharField(max_length=51, blank=True)
+    email = models.CharField(max_length=120, blank=True)
+    category = models.CharField(max_length=72)
+    notice_deadline = models.DateField()
+    title = models.CharField(max_length=300)
+    count = models.IntegerField(null=True, blank=True)
+    reg_date = models.DateTimeField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    file_name = models.CharField(max_length=300, blank=True)
+    thread = models.CharField(max_length=765)
+    comment = models.IntegerField()
+    class Meta:
+        db_table = u'board_cafe_steamers3'
 
 class BoardCafeTspin(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -2289,6 +2489,26 @@ class BoardEnter(models.Model):
     class Meta:
         db_table = u'board_enter'
 
+class BoardEtc(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    ip = models.CharField(max_length=51, blank=True)
+    email = models.CharField(max_length=120, blank=True)
+    category = models.CharField(max_length=72)
+    notice_deadline = models.DateField()
+    title = models.CharField(max_length=300)
+    count = models.IntegerField(null=True, blank=True)
+    reg_date = models.DateTimeField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    file_name = models.CharField(max_length=300, blank=True)
+    thread = models.CharField(max_length=765)
+    comment = models.IntegerField()
+    class Meta:
+        db_table = u'board_etc'
+
 class BoardEvent(models.Model):
     id = models.IntegerField(primary_key=True)
     idx = models.IntegerField()
@@ -2368,6 +2588,26 @@ class BoardFacse2(models.Model):
     comment = models.IntegerField()
     class Meta:
         db_table = u'board_facse2'
+
+class BoardFishgrow(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    ip = models.CharField(max_length=51, blank=True)
+    email = models.CharField(max_length=120, blank=True)
+    category = models.CharField(max_length=72)
+    notice_deadline = models.DateField()
+    title = models.CharField(max_length=300)
+    count = models.IntegerField(null=True, blank=True)
+    reg_date = models.DateTimeField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    file_name = models.CharField(max_length=300, blank=True)
+    thread = models.CharField(max_length=765)
+    comment = models.IntegerField()
+    class Meta:
+        db_table = u'board_fishgrow'
 
 class BoardFreeboard(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -2628,6 +2868,26 @@ class BoardMemResearch(models.Model):
     comment = models.IntegerField()
     class Meta:
         db_table = u'board_mem_research'
+
+class BoardMenssmells(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    ip = models.CharField(max_length=51, blank=True)
+    email = models.CharField(max_length=120, blank=True)
+    category = models.CharField(max_length=72)
+    notice_deadline = models.DateField()
+    title = models.CharField(max_length=300)
+    count = models.IntegerField(null=True, blank=True)
+    reg_date = models.DateTimeField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    file_name = models.CharField(max_length=300, blank=True)
+    thread = models.CharField(max_length=765)
+    comment = models.IntegerField()
+    class Meta:
+        db_table = u'board_menssmells'
 
 class BoardNba(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -3069,6 +3329,26 @@ class BoardReload(models.Model):
     class Meta:
         db_table = u'board_reload'
 
+class BoardRevolution(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    ip = models.CharField(max_length=51, blank=True)
+    email = models.CharField(max_length=120, blank=True)
+    category = models.CharField(max_length=72)
+    notice_deadline = models.DateField()
+    title = models.CharField(max_length=300)
+    count = models.IntegerField(null=True, blank=True)
+    reg_date = models.DateTimeField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    file_name = models.CharField(max_length=300, blank=True)
+    thread = models.CharField(max_length=765)
+    comment = models.IntegerField()
+    class Meta:
+        db_table = u'board_revolution'
+
 class BoardSketch(models.Model):
     id = models.IntegerField(primary_key=True)
     idx = models.IntegerField()
@@ -3088,6 +3368,26 @@ class BoardSketch(models.Model):
     comment = models.IntegerField()
     class Meta:
         db_table = u'board_sketch'
+
+class BoardSyf(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    ip = models.CharField(max_length=51, blank=True)
+    email = models.CharField(max_length=120, blank=True)
+    category = models.CharField(max_length=72)
+    notice_deadline = models.DateField()
+    title = models.CharField(max_length=300)
+    count = models.IntegerField(null=True, blank=True)
+    reg_date = models.DateTimeField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    file_name = models.CharField(max_length=300, blank=True)
+    thread = models.CharField(max_length=765)
+    comment = models.IntegerField()
+    class Meta:
+        db_table = u'board_syf'
 
 class BoardTemp(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -3249,6 +3549,26 @@ class BoardTwistedlife(models.Model):
     class Meta:
         db_table = u'board_twistedlife'
 
+class BoardVeryrealtrue(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    ip = models.CharField(max_length=51, blank=True)
+    email = models.CharField(max_length=120, blank=True)
+    category = models.CharField(max_length=72)
+    notice_deadline = models.DateField()
+    title = models.CharField(max_length=300)
+    count = models.IntegerField(null=True, blank=True)
+    reg_date = models.DateTimeField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    file_name = models.CharField(max_length=300, blank=True)
+    thread = models.CharField(max_length=765)
+    comment = models.IntegerField()
+    class Meta:
+        db_table = u'board_veryrealtrue'
+
 class BoardVolunteers(models.Model):
     id = models.IntegerField(primary_key=True)
     idx = models.IntegerField()
@@ -3309,6 +3629,26 @@ class BoardWithweveData(models.Model):
     class Meta:
         db_table = u'board_withweve_data'
 
+class BoardWithweveFree(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    ip = models.CharField(max_length=51, blank=True)
+    email = models.CharField(max_length=120, blank=True)
+    category = models.CharField(max_length=72)
+    notice_deadline = models.DateField()
+    title = models.CharField(max_length=300)
+    count = models.IntegerField(null=True, blank=True)
+    reg_date = models.DateTimeField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    file_name = models.CharField(max_length=300, blank=True)
+    thread = models.CharField(max_length=765)
+    comment = models.IntegerField()
+    class Meta:
+        db_table = u'board_withweve_free'
+
 class Boardinfo(models.Model):
     no = models.IntegerField(primary_key=True)
     tablename = models.CharField(max_length=75)
@@ -3330,10 +3670,6 @@ class Boardinfo(models.Model):
     filter = models.TextField(blank=True)
     count = models.IntegerField(null=True, blank=True)
     random = models.IntegerField(null=True, blank=True)
-
-    def __unicode__(self):
-        return ", ".join([self.title, self.tablename])
-
     class Meta:
         db_table = u'boardinfo'
 
@@ -3356,10 +3692,6 @@ class CafeInfo(models.Model):
     front_photo = models.CharField(max_length=180, blank=True)
     front_text = models.TextField(blank=True)
     section = models.IntegerField(null=True, blank=True)
-
-    def __unicode__(self):
-        return ", ".join([self.cafe_name, self.cafe_nick])
-
     class Meta:
         db_table = u'cafe_info'
 
@@ -3389,10 +3721,6 @@ class ClubInfo(models.Model):
     board_table_name = models.CharField(max_length=150)
     homepage = models.CharField(max_length=120, blank=True)
     section = models.IntegerField(null=True, blank=True)
-
-    def __unicode__(self):
-        return ", ".join([self.club_name, self.club_nick])
-
     class Meta:
         db_table = u'club_info'
 
@@ -3913,6 +4241,50 @@ class CommentBug(models.Model):
     class Meta:
         db_table = u'comment_bug'
 
+class CommentCafeAppellation(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    reg_date = models.DateField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    class Meta:
+        db_table = u'comment_cafe_appellation'
+
+class CommentCafeAppellation2(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    reg_date = models.DateField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    class Meta:
+        db_table = u'comment_cafe_appellation2'
+
+class CommentCafeAppellation3(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    reg_date = models.DateField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    class Meta:
+        db_table = u'comment_cafe_appellation3'
+
+class CommentCafeBoard3(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    reg_date = models.DateField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    class Meta:
+        db_table = u'comment_cafe_board3'
+
 class CommentCafeChuri(models.Model):
     id = models.IntegerField(primary_key=True)
     idx = models.IntegerField()
@@ -4023,6 +4395,17 @@ class CommentCafeHeukseoker2(models.Model):
     class Meta:
         db_table = u'comment_cafe_heukseoker2'
 
+class CommentCafeHomesteal(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    reg_date = models.DateField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    class Meta:
+        db_table = u'comment_cafe_homesteal'
+
 class CommentCafeIris(models.Model):
     id = models.IntegerField(primary_key=True)
     idx = models.IntegerField()
@@ -4044,6 +4427,17 @@ class CommentCafeItSecurity(models.Model):
     content = models.TextField(blank=True)
     class Meta:
         db_table = u'comment_cafe_it_security'
+
+class CommentCafeJokbal(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    reg_date = models.DateField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    class Meta:
+        db_table = u'comment_cafe_jokbal'
 
 class CommentCafeJstorm(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -4089,6 +4483,17 @@ class CommentCafeNote2(models.Model):
     class Meta:
         db_table = u'comment_cafe_note2'
 
+class CommentCafePresent(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    reg_date = models.DateField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    class Meta:
+        db_table = u'comment_cafe_present'
+
 class CommentCafeSecurelab(models.Model):
     id = models.IntegerField(primary_key=True)
     idx = models.IntegerField()
@@ -4121,6 +4526,39 @@ class CommentCafeSnsd(models.Model):
     content = models.TextField(blank=True)
     class Meta:
         db_table = u'comment_cafe_snsd'
+
+class CommentCafeSteamers(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    reg_date = models.DateField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    class Meta:
+        db_table = u'comment_cafe_steamers'
+
+class CommentCafeSteamers2(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    reg_date = models.DateField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    class Meta:
+        db_table = u'comment_cafe_steamers2'
+
+class CommentCafeSteamers3(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    reg_date = models.DateField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    class Meta:
+        db_table = u'comment_cafe_steamers3'
 
 class CommentCafeTspin(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -4650,6 +5088,17 @@ class CommentEnter(models.Model):
     class Meta:
         db_table = u'comment_enter'
 
+class CommentEtc(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    reg_date = models.DateField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    class Meta:
+        db_table = u'comment_etc'
+
 class CommentEvent(models.Model):
     id = models.IntegerField(primary_key=True)
     idx = models.IntegerField()
@@ -4693,6 +5142,17 @@ class CommentFacse2(models.Model):
     content = models.TextField(blank=True)
     class Meta:
         db_table = u'comment_facse2'
+
+class CommentFishgrow(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    reg_date = models.DateField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    class Meta:
+        db_table = u'comment_fishgrow'
 
 class CommentFreeboard(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -4807,11 +5267,11 @@ class CommentLost(models.Model):
 class CommentMalboro2(models.Model):
     id = models.IntegerField(primary_key=True)
     idx = models.IntegerField()
-    user_id = models.CharField(max_length=30)
-    name = models.CharField(max_length=75)
-    password = models.CharField(max_length=48, blank=True)
+    user_id = models.CharField(max_length=90)
+    name = models.CharField(max_length=225)
+    password = models.CharField(max_length=144)
     reg_date = models.DateField(null=True, blank=True)
-    content = models.TextField(blank=True)
+    content = models.TextField()
     class Meta:
         db_table = u'comment_malboro2'
 
@@ -4826,6 +5286,17 @@ class CommentMarlboro(models.Model):
     class Meta:
         db_table = u'comment_marlboro'
 
+class CommentMarlboro2(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    reg_date = models.DateField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    class Meta:
+        db_table = u'comment_marlboro2'
+
 class CommentMemResearch(models.Model):
     id = models.IntegerField(primary_key=True)
     idx = models.IntegerField()
@@ -4836,6 +5307,17 @@ class CommentMemResearch(models.Model):
     content = models.TextField(blank=True)
     class Meta:
         db_table = u'comment_mem_research'
+
+class CommentMenssmells(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    reg_date = models.DateField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    class Meta:
+        db_table = u'comment_menssmells'
 
 class CommentNba(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -5079,6 +5561,17 @@ class CommentReload(models.Model):
     class Meta:
         db_table = u'comment_reload'
 
+class CommentRevolution(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    reg_date = models.DateField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    class Meta:
+        db_table = u'comment_revolution'
+
 class CommentSketch(models.Model):
     id = models.IntegerField(primary_key=True)
     idx = models.IntegerField()
@@ -5089,6 +5582,17 @@ class CommentSketch(models.Model):
     content = models.TextField(blank=True)
     class Meta:
         db_table = u'comment_sketch'
+
+class CommentSyf(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    reg_date = models.DateField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    class Meta:
+        db_table = u'comment_syf'
 
 class CommentTemp(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -5178,6 +5682,17 @@ class CommentTwistedlife(models.Model):
     class Meta:
         db_table = u'comment_twistedlife'
 
+class CommentVeryrealtrue(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    reg_date = models.DateField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    class Meta:
+        db_table = u'comment_veryrealtrue'
+
 class CommentVolunteers(models.Model):
     id = models.IntegerField(primary_key=True)
     idx = models.IntegerField()
@@ -5210,6 +5725,17 @@ class CommentWithweveData(models.Model):
     content = models.TextField(blank=True)
     class Meta:
         db_table = u'comment_withweve_data'
+
+class CommentWithweveFree(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    reg_date = models.DateField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    class Meta:
+        db_table = u'comment_withweve_free'
 
 class Favorite(models.Model):
     no = models.IntegerField(primary_key=True)
@@ -5272,10 +5798,6 @@ class Member(models.Model):
     favorite = models.IntegerField(null=True, blank=True)
     flag = models.IntegerField(null=True, blank=True)
     society_number = models.CharField(max_length=39, blank=True)
-
-    def __unicode__(self):
-        return ", ".join([self.name, self.id, str(self.student_id)])
-
     class Meta:
         db_table = u'member'
 
@@ -5835,6 +6357,19 @@ class MemoAlumni99(models.Model):
     class Meta:
         db_table = u'memo_alumni99'
 
+class MemoCafeAppellation(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField(null=True, blank=True)
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=60)
+    password = models.CharField(max_length=48, blank=True)
+    reg_date = models.DateField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    headnum = models.IntegerField(null=True, blank=True)
+    depth = models.IntegerField(null=True, blank=True)
+    class Meta:
+        db_table = u'memo_cafe_appellation'
+
 class MemoCafeChuri(models.Model):
     id = models.IntegerField(primary_key=True)
     idx = models.IntegerField(null=True, blank=True)
@@ -5926,6 +6461,19 @@ class MemoCafeHeukseoker(models.Model):
     class Meta:
         db_table = u'memo_cafe_heukseoker'
 
+class MemoCafeHomesteal(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField(null=True, blank=True)
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=60)
+    password = models.CharField(max_length=48, blank=True)
+    reg_date = models.DateField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    headnum = models.IntegerField(null=True, blank=True)
+    depth = models.IntegerField(null=True, blank=True)
+    class Meta:
+        db_table = u'memo_cafe_homesteal'
+
 class MemoCafeIris(models.Model):
     id = models.IntegerField(primary_key=True)
     idx = models.IntegerField(null=True, blank=True)
@@ -5951,6 +6499,19 @@ class MemoCafeItSecurity(models.Model):
     depth = models.IntegerField(null=True, blank=True)
     class Meta:
         db_table = u'memo_cafe_it_security'
+
+class MemoCafeJokbal(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField(null=True, blank=True)
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=60)
+    password = models.CharField(max_length=48, blank=True)
+    reg_date = models.DateField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    headnum = models.IntegerField(null=True, blank=True)
+    depth = models.IntegerField(null=True, blank=True)
+    class Meta:
+        db_table = u'memo_cafe_jokbal'
 
 class MemoCafeJstorm(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -5991,6 +6552,19 @@ class MemoCafeNote(models.Model):
     class Meta:
         db_table = u'memo_cafe_note'
 
+class MemoCafePresent(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField(null=True, blank=True)
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=60)
+    password = models.CharField(max_length=48, blank=True)
+    reg_date = models.DateField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    headnum = models.IntegerField(null=True, blank=True)
+    depth = models.IntegerField(null=True, blank=True)
+    class Meta:
+        db_table = u'memo_cafe_present'
+
 class MemoCafeSecurelab(models.Model):
     id = models.IntegerField(primary_key=True)
     idx = models.IntegerField(null=True, blank=True)
@@ -6016,6 +6590,19 @@ class MemoCafeSnsd(models.Model):
     depth = models.IntegerField(null=True, blank=True)
     class Meta:
         db_table = u'memo_cafe_snsd'
+
+class MemoCafeSteamers(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField(null=True, blank=True)
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=60)
+    password = models.CharField(max_length=48, blank=True)
+    reg_date = models.DateField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    headnum = models.IntegerField(null=True, blank=True)
+    depth = models.IntegerField(null=True, blank=True)
+    class Meta:
+        db_table = u'memo_cafe_steamers'
 
 class MemoCafeTspin(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -6251,6 +6838,19 @@ class MemoDongneteam(models.Model):
     class Meta:
         db_table = u'memo_dongneteam'
 
+class MemoEtc(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField(null=True, blank=True)
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=60)
+    password = models.CharField(max_length=48, blank=True)
+    reg_date = models.DateField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    headnum = models.IntegerField(null=True, blank=True)
+    depth = models.IntegerField(null=True, blank=True)
+    class Meta:
+        db_table = u'memo_etc'
+
 class MemoExtreamsport(models.Model):
     id = models.IntegerField(primary_key=True)
     idx = models.IntegerField(null=True, blank=True)
@@ -6276,6 +6876,19 @@ class MemoFacse(models.Model):
     depth = models.IntegerField(null=True, blank=True)
     class Meta:
         db_table = u'memo_facse'
+
+class MemoFishgrow(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField(null=True, blank=True)
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=60)
+    password = models.CharField(max_length=48, blank=True)
+    reg_date = models.DateField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    headnum = models.IntegerField(null=True, blank=True)
+    depth = models.IntegerField(null=True, blank=True)
+    class Meta:
+        db_table = u'memo_fishgrow'
 
 class MemoGamemoney(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -6472,6 +7085,19 @@ class MemoMemory(models.Model):
     class Meta:
         db_table = u'memo_memory'
 
+class MemoMenssmells(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField(null=True, blank=True)
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=60)
+    password = models.CharField(max_length=48, blank=True)
+    reg_date = models.DateField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    headnum = models.IntegerField(null=True, blank=True)
+    depth = models.IntegerField(null=True, blank=True)
+    class Meta:
+        db_table = u'memo_menssmells'
+
 class MemoNba(models.Model):
     id = models.IntegerField(primary_key=True)
     idx = models.IntegerField(null=True, blank=True)
@@ -6641,6 +7267,19 @@ class MemoReload(models.Model):
     class Meta:
         db_table = u'memo_reload'
 
+class MemoRevolution(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField(null=True, blank=True)
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=60)
+    password = models.CharField(max_length=48, blank=True)
+    reg_date = models.DateField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    headnum = models.IntegerField(null=True, blank=True)
+    depth = models.IntegerField(null=True, blank=True)
+    class Meta:
+        db_table = u'memo_revolution'
+
 class MemoSketch(models.Model):
     id = models.IntegerField(primary_key=True)
     idx = models.IntegerField(null=True, blank=True)
@@ -6666,6 +7305,19 @@ class MemoStudyBook(models.Model):
     depth = models.IntegerField(null=True, blank=True)
     class Meta:
         db_table = u'memo_study_book'
+
+class MemoSyf(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField(null=True, blank=True)
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=60)
+    password = models.CharField(max_length=48, blank=True)
+    reg_date = models.DateField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    headnum = models.IntegerField(null=True, blank=True)
+    depth = models.IntegerField(null=True, blank=True)
+    class Meta:
+        db_table = u'memo_syf'
 
 class MemoTrash(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -6704,6 +7356,19 @@ class MemoUnited(models.Model):
     depth = models.IntegerField(null=True, blank=True)
     class Meta:
         db_table = u'memo_united'
+
+class MemoVeryrealtrue(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField(null=True, blank=True)
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=60)
+    password = models.CharField(max_length=48, blank=True)
+    reg_date = models.DateField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    headnum = models.IntegerField(null=True, blank=True)
+    depth = models.IntegerField(null=True, blank=True)
+    class Meta:
+        db_table = u'memo_veryrealtrue'
 
 class MemoVolunteers(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -7589,6 +8254,26 @@ class PhotoAlumni99(models.Model):
     class Meta:
         db_table = u'photo_alumni99'
 
+class PhotoCafeAppellation(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    ip = models.CharField(max_length=51, blank=True)
+    email = models.CharField(max_length=120, blank=True)
+    category = models.CharField(max_length=72)
+    notice_deadline = models.DateField()
+    title = models.CharField(max_length=300)
+    count = models.IntegerField(null=True, blank=True)
+    reg_date = models.DateTimeField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    file_name = models.CharField(max_length=135, blank=True)
+    thread = models.CharField(max_length=765)
+    comment = models.IntegerField()
+    class Meta:
+        db_table = u'photo_cafe_appellation'
+
 class PhotoCafeChuri(models.Model):
     id = models.IntegerField(primary_key=True)
     idx = models.IntegerField()
@@ -7729,6 +8414,26 @@ class PhotoCafeHeukseoker(models.Model):
     class Meta:
         db_table = u'photo_cafe_heukseoker'
 
+class PhotoCafeHomesteal(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    ip = models.CharField(max_length=51, blank=True)
+    email = models.CharField(max_length=120, blank=True)
+    category = models.CharField(max_length=72)
+    notice_deadline = models.DateField()
+    title = models.CharField(max_length=300)
+    count = models.IntegerField(null=True, blank=True)
+    reg_date = models.DateTimeField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    file_name = models.CharField(max_length=135, blank=True)
+    thread = models.CharField(max_length=765)
+    comment = models.IntegerField()
+    class Meta:
+        db_table = u'photo_cafe_homesteal'
+
 class PhotoCafeIris(models.Model):
     id = models.IntegerField(primary_key=True)
     idx = models.IntegerField()
@@ -7768,6 +8473,26 @@ class PhotoCafeItSecurity(models.Model):
     comment = models.IntegerField()
     class Meta:
         db_table = u'photo_cafe_it_security'
+
+class PhotoCafeJokbal(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    ip = models.CharField(max_length=51, blank=True)
+    email = models.CharField(max_length=120, blank=True)
+    category = models.CharField(max_length=72)
+    notice_deadline = models.DateField()
+    title = models.CharField(max_length=300)
+    count = models.IntegerField(null=True, blank=True)
+    reg_date = models.DateTimeField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    file_name = models.CharField(max_length=135, blank=True)
+    thread = models.CharField(max_length=765)
+    comment = models.IntegerField()
+    class Meta:
+        db_table = u'photo_cafe_jokbal'
 
 class PhotoCafeJstorm(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -7829,6 +8554,26 @@ class PhotoCafeNote(models.Model):
     class Meta:
         db_table = u'photo_cafe_note'
 
+class PhotoCafePresent(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    ip = models.CharField(max_length=51, blank=True)
+    email = models.CharField(max_length=120, blank=True)
+    category = models.CharField(max_length=72)
+    notice_deadline = models.DateField()
+    title = models.CharField(max_length=300)
+    count = models.IntegerField(null=True, blank=True)
+    reg_date = models.DateTimeField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    file_name = models.CharField(max_length=135, blank=True)
+    thread = models.CharField(max_length=765)
+    comment = models.IntegerField()
+    class Meta:
+        db_table = u'photo_cafe_present'
+
 class PhotoCafeSecurelab(models.Model):
     id = models.IntegerField(primary_key=True)
     idx = models.IntegerField()
@@ -7868,6 +8613,26 @@ class PhotoCafeSnsd(models.Model):
     comment = models.IntegerField()
     class Meta:
         db_table = u'photo_cafe_snsd'
+
+class PhotoCafeSteamers(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    ip = models.CharField(max_length=51, blank=True)
+    email = models.CharField(max_length=120, blank=True)
+    category = models.CharField(max_length=72)
+    notice_deadline = models.DateField()
+    title = models.CharField(max_length=300)
+    count = models.IntegerField(null=True, blank=True)
+    reg_date = models.DateTimeField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    file_name = models.CharField(max_length=135, blank=True)
+    thread = models.CharField(max_length=765)
+    comment = models.IntegerField()
+    class Meta:
+        db_table = u'photo_cafe_steamers'
 
 class PhotoCafeTspin(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -8229,6 +8994,26 @@ class PhotoDongneteam(models.Model):
     class Meta:
         db_table = u'photo_dongneteam'
 
+class PhotoEtc(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    ip = models.CharField(max_length=51, blank=True)
+    email = models.CharField(max_length=120, blank=True)
+    category = models.CharField(max_length=72)
+    notice_deadline = models.DateField()
+    title = models.CharField(max_length=300)
+    count = models.IntegerField(null=True, blank=True)
+    reg_date = models.DateTimeField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    file_name = models.CharField(max_length=135, blank=True)
+    thread = models.CharField(max_length=765)
+    comment = models.IntegerField()
+    class Meta:
+        db_table = u'photo_etc'
+
 class PhotoExtreamsport(models.Model):
     id = models.IntegerField(primary_key=True)
     idx = models.IntegerField()
@@ -8268,6 +9053,26 @@ class PhotoFacse(models.Model):
     comment = models.IntegerField()
     class Meta:
         db_table = u'photo_facse'
+
+class PhotoFishgrow(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    ip = models.CharField(max_length=51, blank=True)
+    email = models.CharField(max_length=120, blank=True)
+    category = models.CharField(max_length=72)
+    notice_deadline = models.DateField()
+    title = models.CharField(max_length=300)
+    count = models.IntegerField(null=True, blank=True)
+    reg_date = models.DateTimeField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    file_name = models.CharField(max_length=135, blank=True)
+    thread = models.CharField(max_length=765)
+    comment = models.IntegerField()
+    class Meta:
+        db_table = u'photo_fishgrow'
 
 class PhotoGamemoney(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -8569,6 +9374,26 @@ class PhotoMemory(models.Model):
     class Meta:
         db_table = u'photo_memory'
 
+class PhotoMenssmells(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    ip = models.CharField(max_length=51, blank=True)
+    email = models.CharField(max_length=120, blank=True)
+    category = models.CharField(max_length=72)
+    notice_deadline = models.DateField()
+    title = models.CharField(max_length=300)
+    count = models.IntegerField(null=True, blank=True)
+    reg_date = models.DateTimeField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    file_name = models.CharField(max_length=135, blank=True)
+    thread = models.CharField(max_length=765)
+    comment = models.IntegerField()
+    class Meta:
+        db_table = u'photo_menssmells'
+
 class PhotoNba(models.Model):
     id = models.IntegerField(primary_key=True)
     idx = models.IntegerField()
@@ -8829,6 +9654,26 @@ class PhotoReload(models.Model):
     class Meta:
         db_table = u'photo_reload'
 
+class PhotoRevolution(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    ip = models.CharField(max_length=51, blank=True)
+    email = models.CharField(max_length=120, blank=True)
+    category = models.CharField(max_length=72)
+    notice_deadline = models.DateField()
+    title = models.CharField(max_length=300)
+    count = models.IntegerField(null=True, blank=True)
+    reg_date = models.DateTimeField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    file_name = models.CharField(max_length=135, blank=True)
+    thread = models.CharField(max_length=765)
+    comment = models.IntegerField()
+    class Meta:
+        db_table = u'photo_revolution'
+
 class PhotoSketch(models.Model):
     id = models.IntegerField(primary_key=True)
     idx = models.IntegerField()
@@ -8868,6 +9713,26 @@ class PhotoStudyBook(models.Model):
     comment = models.IntegerField()
     class Meta:
         db_table = u'photo_study_book'
+
+class PhotoSyf(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    ip = models.CharField(max_length=51, blank=True)
+    email = models.CharField(max_length=120, blank=True)
+    category = models.CharField(max_length=72)
+    notice_deadline = models.DateField()
+    title = models.CharField(max_length=300)
+    count = models.IntegerField(null=True, blank=True)
+    reg_date = models.DateTimeField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    file_name = models.CharField(max_length=135, blank=True)
+    thread = models.CharField(max_length=765)
+    comment = models.IntegerField()
+    class Meta:
+        db_table = u'photo_syf'
 
 class PhotoTrash(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -8922,6 +9787,26 @@ class PhotoUnited(models.Model):
     comment = models.IntegerField()
     class Meta:
         db_table = u'photo_united'
+
+class PhotoVeryrealtrue(models.Model):
+    id = models.IntegerField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    password = models.CharField(max_length=48, blank=True)
+    ip = models.CharField(max_length=51, blank=True)
+    email = models.CharField(max_length=120, blank=True)
+    category = models.CharField(max_length=72)
+    notice_deadline = models.DateField()
+    title = models.CharField(max_length=300)
+    count = models.IntegerField(null=True, blank=True)
+    reg_date = models.DateTimeField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    file_name = models.CharField(max_length=135, blank=True)
+    thread = models.CharField(max_length=765)
+    comment = models.IntegerField()
+    class Meta:
+        db_table = u'photo_veryrealtrue'
 
 class PhotoVolunteers(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -9043,10 +9928,6 @@ class Photoinfo(models.Model):
     use_filtering = models.IntegerField(null=True, blank=True)
     filter = models.TextField(blank=True)
     count = models.IntegerField(null=True, blank=True)
-
-    def __unicode__(self):
-        return ", ".join([self.title, self.tablename])
-
     class Meta:
         db_table = u'photoinfo'
 
