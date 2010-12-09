@@ -36,7 +36,7 @@ class ApiTestCase(unittest.TestCase):
     def assertUserGochi(self, obj):
         self.assertEqual(obj['id'], 'gochi')
         self.assertEqual(obj['name'], u'\uc774\ub355\uc900')
-        self.assertEqual(obj['email'], 'gochist@gmail.com')
+        self.assertEqual(obj['email'], 'gochi@caucse.net')
         self.assertEqual(obj['entrance_year'], 99)
 
         # validate keys
