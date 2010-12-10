@@ -8,14 +8,14 @@ class ApiTestCase(unittest.TestCase):
         self.consumer = oauth2.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
         self.access_token = oauth2.Token(ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET) 
     
-    def get_url(self, resource, param=None):
+    def _get_url(self, resource, param=None):
         url = URL_PREFIX + resource
         if param: 
             url += '?' + urllib.urlencode(param)
         return url
 
     def oauth_get(self, resource, consumer, token, param=None, callback=None):
-        url = self.get_url(resource, param)
+        url = self._get_url(resource, param)
         client = ClientAlpha(consumer, token)
         if callback: client.set_callback(callback)
         resp, content = client.request(url, "GET")
@@ -29,7 +29,7 @@ class ApiTestCase(unittest.TestCase):
         return resp, content
 
     def plain_get(self, resource, param):
-        url = self.get_url(resource, param)
+        url = self._get_url(resource, param)
         client = Http()
         resp, content = client.request(url, "GET")
         return resp, content
@@ -44,19 +44,11 @@ class ApiTestCase(unittest.TestCase):
         keys = ['name', 'mobile', 'id', 'img_url', 'email', 'entrance_year']
         self.assertEqual(obj.keys(), keys)
 
-class RequestTokenTestCase(ApiTestCase):
-    resource = "oauth/request_token"
-    
-    def test_case_nocallback(self):
-        'oauth_get "oauth/request_token" without oauth_callback should return 400(Bad Request)'
-        resp, content = self.oauth_get(self.resource, consumer=self.consumer,
-                                       token=None, param=None)
-        self.assertEquals(resp['status'], '400')
-        self.assertEquals(content, "")
-
-    def test_good_case(self):
+class OauthTestCase(ApiTestCase):
+    def test_request_token(self):
         'oauth_get "oauth/request_token" should return oauth_token, oauth_secret, oauth_callback_confirmed'
-        resp, content = self.oauth_get(resource=self.resource,
+        resource = "oauth/request_token"
+        resp, content = self.oauth_get(resource=resource,
                                        consumer=self.consumer,
                                        token=None, param=None,
                                        callback="http://callback.net")
@@ -66,18 +58,26 @@ class RequestTokenTestCase(ApiTestCase):
         self.assertTrue(request_token.has_key('oauth_token_secret'))
         self.assertTrue(request_token.has_key('oauth_callback_confirmed'))
 
-    def test_wrong_consumer_secret(self):
+    def test_request_token_nocallback(self):
+        'oauth_get "oauth/request_token" without oauth_callback should return 400(Bad Request)'
+        resource = "oauth/request_token"
+        resp, content = self.oauth_get(resource, consumer=self.consumer,
+                                       token=None, param=None)
+        self.assertEquals(resp['status'], '400')
+        self.assertEquals(content, "")
+
+    def test_request_token_wrong_consumer_secret(self):
         'oauth_get "oauth/request_token" with bad consumer secret should return 400(Bad Request)'
+        resource = "oauth/request_token"
         consumer = oauth2.Consumer(CONSUMER_KEY, "wrong_secret")
-        resp, content = self.oauth_get(resource=self.resource,
+        resp, content = self.oauth_get(resource=resource,
                                        consumer=consumer, token=None,
                                        param=None, callback="oob")
         # status code 400 is bad request
         self.assertEquals(resp['status'], '400') 
         self.assertEquals(content, "")
 
-class OauthAuthorizeTestCase(ApiTestCase):
-    def test_oauth_authorize(self):
+    def test_three_legged_oauth_authorize(self):
         'Three legged oauth authentication 1.0a flow'
         # request token
         resp, content = self.oauth_get(resource="oauth/request_token",
