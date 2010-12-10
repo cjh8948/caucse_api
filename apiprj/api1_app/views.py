@@ -3,7 +3,7 @@ from django.shortcuts import render_to_response
 from django.utils.simplejson import dumps
 from django.views.decorators.csrf import csrf_exempt
 from apiprj.oauth_app.utils.decorators import oauth_required
-from modelwrap import Article, Board, Comment, User, Token
+from modelwrap import Article, Board, Comment, User, Token, Favorite
 
 @csrf_exempt
 @oauth_required
@@ -59,7 +59,7 @@ def articles_list(request):
                            'page': page,
                            'per_page': per_page},
                 'articles': articles}
-    ret = dumps(ret_item, ensure_ascii=False)
+    ret = dumps(ret_item)
 
     return HttpResponse(ret)
 
@@ -73,7 +73,7 @@ def articles_show(request):
     board_id = request.GET['board_id']
     article_id = int(request.GET['article_id'])
     article = Article.get(board_id, article_id)
-    ret = dumps(article, ensure_ascii=False) 
+    ret = dumps(article) 
     return HttpResponse(ret)
 
 def boards_lookup(request):
@@ -84,7 +84,7 @@ def boards_lookup(request):
     ** mandatory parameter: board_id (comma separated)"""
     board_list = request.GET['board_id'].split(',')
     boards = map(Board.get, board_list)
-    ret = dumps(boards, ensure_ascii=False)
+    ret = dumps(boards)
     return HttpResponse(ret)
 
 @csrf_exempt
@@ -127,7 +127,7 @@ def users_lookup(request):
     ** mandatory parameter: user_id (comma separated)"""
     id_list = request.GET['user_id'].split(',')
     users = map(User.get, id_list)
-    ret = dumps(users, ensure_ascii=False)
+    ret = dumps(users)
     return HttpResponse(ret)
 
 @oauth_required
@@ -139,8 +139,17 @@ def users_show(request):
     ** mandatory parameter: user_id"""
     id = request.GET['user_id']
     user = User.get(id)
-    ret = dumps(user, ensure_ascii=False)
+    ret = dumps(user)
     return HttpResponse(ret)
 
+@oauth_required
+def favorites_list(request):
+    oauth_token = request.REQUEST['oauth_token']
+    user_id = Token.get_user_id(oauth_token)
+    favorites = Favorite.get_by_user(user_id)
+    ret = dumps(favorites)
+    return HttpResponse(ret)
+    
+    
 def index(request):
-    return render_to_response('index.html',{})
+    return render_to_response('index.html', {})

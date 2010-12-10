@@ -174,6 +174,20 @@ class Token(object):
     @classmethod
     def get_user_id(self, oauth_token):
         return OauthToken.objects.get(key=oauth_token).user
+    
+class Favorite(object):
+    @classmethod
+    def pack(self, favorite_model):
+        packed_favorite = {'no': favorite_model.no,
+                           'priority': favorite_model.priority,
+                           'board_id': favorite_model.tablename}
+        return packed_favorite
+        
+    @classmethod
+    def get_by_user(self, user_id):
+        favorites = models.Favorite.objects.filter(user_id=user_id)\
+                                           .order_by('priority')
+        return map(self.pack, favorites) 
 
 
     

@@ -238,6 +238,15 @@ class CommentsTest(ApiTestCase):
         self.assertEqual(resp['status'], '200')
         obj = json.loads(content)
         self.assertEqual(obj['status'].lower(), 'error')
+
+class FavoriteTest(ApiTestCase):
+    def test_list(self):
+        """oauth_get "favorties/list" should return user's favorites boards."""
+        resp, content = self.oauth_get('favorites/list', self.consumer,
+                                       self.access_token)        
+        self.assertEqual(resp['status'], '200')
+        obj = json.loads(content)
+        self.assertEqual(obj[0]['board_id'], 'board_part_plan')
         
         
 if __name__ == '__main__':
