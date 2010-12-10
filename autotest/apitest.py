@@ -1,4 +1,3 @@
-#! -*- coding:utf8 -*-
 from secure import *
 from oauthclient import ClientAlpha
 import unittest, re, json, urllib, urlparse, oauth2
@@ -219,8 +218,8 @@ class ArticlesTest(ApiTestCase):
         self.assertEqual(obj['status'].lower(), 'ok')
         
         
-class CommentsCreateTest(ApiTestCase):
-    def test_comment_update(self):
+class CommentsTest(ApiTestCase):
+    def test_create(self):
         'oauth_post "comments/update" should return 200, and {"status":"ok"}'
         param = {'board_id':'board_alumni99', 'article_id':'20',
                  'message':'comment test'}
@@ -230,7 +229,7 @@ class CommentsCreateTest(ApiTestCase):
         obj = json.loads(content)
         self.assertEqual(obj['status'].lower(), 'ok')
 
-    def test_wrong_board(self):
+    def test_create_wrong_board(self):
         'oauth_post "comments/update" with board_id = board_not_registered, should return {"status":"error"}'
         param = {'board_id':'board_not_registered', 'article_id':'20',
                  'message':'comment test'}
