@@ -73,7 +73,7 @@ class Comment(object):
     def post(self, board_id, article_id, user_id, content):
         # check if article exists
         article_model = Article.eval(board_id)
-        article = article_model.objects.get(id=article_id)
+        article_model.objects.get(id=article_id)
 
         # add comment            
         comment_model = Comment.eval(board_id)

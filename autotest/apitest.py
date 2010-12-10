@@ -1,9 +1,10 @@
+#! -*- coding:utf8 -*-
 from secure import *
 from oauthclient import ClientAlpha
-import unittest, re, json, urllib, urllib2, urlparse, oauth2
+import unittest, re, json, urllib, urlparse, oauth2
+from httplib2 import Http
 
 class ApiTestCase(unittest.TestCase): 
-    
     def setUp(self):
         self.consumer = oauth2.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
         self.access_token = oauth2.Token(ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET) 
@@ -30,8 +31,9 @@ class ApiTestCase(unittest.TestCase):
 
     def plain_get(self, resource, param):
         url = self.get_url(resource, param)
-        f = urllib2.urlopen(url)
-        return f.read()
+        client = Http()
+        resp, content = client.request(url, "GET")
+        return resp, content
     
     def assertUserGochi(self, obj):
         self.assertEqual(obj['id'], 'gochi')
@@ -124,9 +126,9 @@ class OauthAuthorizeTestCase(ApiTestCase):
         # validate result
         obj = json.loads(content)
         self.assertUserGochi(obj)
-        
-class UsersShowTest(ApiTestCase):
-    def test_best_case(self):
+
+class UsersTest(ApiTestCase):
+    def test_show(self):
         'oauth_get "users/show?user_id=gochi" should return user gochi in json format'
         # make request
         param = {'user_id': 'gochi'}
@@ -140,16 +142,13 @@ class UsersShowTest(ApiTestCase):
         obj = json.loads(content)
         self.assertUserGochi(obj)
         
-    def test_plain_get_case(self):
+    def test_show_plain_get(self):
         'plain_get "users/show?user_id=gochi" should return 403(Forbidden)'
+        param = {'user_id': 'gochi'}
+        resp, content = self.plain_get('users/show', param)
+        self.assertEqual(resp['status'], '403')
 
-        plain_get_param = {'resource': "users/show",
-                           'param': {'user_id': 'gochi'}}
-        
-        self.assertRaises(urllib2.HTTPError, self.plain_get, **plain_get_param)        
-
-class UsersLookupTest(ApiTestCase):
-    def test_best_case(self):
+    def test_lookup(self):
         'oauth_get "users/lookup?user_id=gochi,reset" should return users(gochi, reset) in json format'
         # make request
         param = {'user_id':'gochi,reset'}
@@ -165,15 +164,13 @@ class UsersLookupTest(ApiTestCase):
         self.assertUserGochi(obj[0])
         self.assertEqual(obj[1]['id'], 'reset')
     
-    def test_plain_get_case(self):
+    def test_lookup_plain_get(self):
         'plain_get "users/lookup?user_id=gochi,reset" should return 403(Forbidden)'
-
-        plain_get_param = {'resource': "users/lookup",
-                           'param': {'user_id': 'gochi,reset'}}
+        param = {'user_id': 'gochi,reset'}
+        resp, content = self.plain_get('users/lookup', param)
+        self.assertEqual(resp['status'], '403')
         
-        self.assertRaises(urllib2.HTTPError, self.plain_get, **plain_get_param)
-
-    def test_bad_token_secret(self):
+    def test_lookup_bad_token_secret(self):
         'oauth_get "users/lookup" with bad token secret should return 403(Forbidden)'
         # build oauth parameters
         token = oauth2.Token(ACCESS_TOKEN_KEY, "im_bad_secret")
@@ -187,6 +184,40 @@ class UsersLookupTest(ApiTestCase):
         # validate result - status code 403 is "Forbidden"
         self.assertEqual(resp['status'], '403')
         self.assertEqual(content, "")
+        
+class ArticlesTest(ApiTestCase):
+    def test_list(self):
+        'oauth_get "articles/list"'
+        param = {'board_id': 'board_alumni99'}
+        resp, content = self.oauth_get('articles/list', self.consumer,
+                                       self.access_token, param)
+        self.assertEqual(resp['status'], '200')
+        obj = json.loads(content)
+        option = obj['option']
+        self.assertEqual(option['board_id'], 'board_alumni99')
+        self.assertEqual(option['per_page'], len(obj['articles']))
+    
+    def test_show(self):
+        'test oauth_get "articles/show"'
+        param = {'board_id': 'board_alumni99',
+                 'article_id': '100'}
+        resp, content = self.oauth_get('articles/show', self.consumer,
+                                       self.access_token, param)
+        self.assertEqual(resp['status'], '200')
+        obj = json.loads(content)
+        self.assertEqual(obj['id'], 100)
+        self.assertEqual(obj['author']['id'], 'gochi')
+
+    def test_create(self):
+        'oauth_post "articles/create" should return 200, and {"status":"ok"}'        
+        param = {'board_id': 'board_alumni99', 'title': 'title',
+                 'message': 'message'}
+        resp, content = self.oauth_post("articles/create", self.consumer,
+                                        self.access_token, param)
+        self.assertEqual(resp['status'], '200')
+        obj = json.loads(content)
+        self.assertEqual(obj['status'].lower(), 'ok')
+        
         
 class CommentsCreateTest(ApiTestCase):
     def test_comment_update(self):
@@ -209,17 +240,6 @@ class CommentsCreateTest(ApiTestCase):
         obj = json.loads(content)
         self.assertEqual(obj['status'].lower(), 'error')
         
-class ArticlesCreateTest(ApiTestCase):
-    def test_articles_create(self):
-        'oauth_post "articles/create" should return 200, and {"status":"ok"}'        
-        param = {'board_id': 'board_alumni99', 'title': 'title',
-                 'message': 'message'}
-        resp, content = self.oauth_post("articles/create", self.consumer,
-                                        self.access_token, param)
-        print content
-        self.assertEqual(resp['status'], '200')
-        obj = json.loads(content)
-        self.assertEqual(obj['status'].lower(), 'ok')
         
 if __name__ == '__main__':
     unittest.main()
