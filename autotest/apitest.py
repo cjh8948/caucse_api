@@ -141,6 +141,15 @@ class UsersTest(ApiTestCase):
         # validate result
         obj = json.loads(content)
         self.assertUserGochi(obj)
+    
+    def test_show_restful(self):
+        'GET users/show/gochi '
+        resp, content = self.oauth_get(resource='users/show/gochi',
+                                       consumer=self.consumer,
+                                       token=self.access_token)
+        self.assertEqual(resp['status'], '200')
+        obj = json.loads(content)
+        self.assertUserGochi(obj)
         
     def test_show_plain_get(self):
         'plain_get "users/show?user_id=gochi" should return 403(Forbidden)'

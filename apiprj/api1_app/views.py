@@ -132,14 +132,15 @@ def users_lookup(request):
     return HttpResponse(ret)
 
 @oauth_required
-def users_show(request):
+def users_show(request, user_id=None):
     """This API returns user
     
     * resource: 'users/show'
     ** method: GET, oauth required, rate limited
     ** mandatory parameter: user_id"""
-    id = request.GET['user_id']
-    user = User.get(id)
+    if not user_id:
+        user_id = request.GET['user_id']
+    user = User.get(user_id)
     ret = dumps(user)
     return HttpResponse(ret)
 
