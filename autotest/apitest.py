@@ -41,7 +41,8 @@ class ApiTestCase(unittest.TestCase):
         self.assertEqual(obj['entrance_year'], 99)
 
         # validate keys
-        keys = ['name', 'mobile', 'id', 'img_url', 'email', 'entrance_year']
+        keys = [u'name', u'mobile', u'img_url', u'introduce', u'id',
+                u'birthday', u'messenger', u'homepage', u'email', u'entrance_year']
         self.assertEqual(obj.keys(), keys)
 
 class OauthTestCase(ApiTestCase):

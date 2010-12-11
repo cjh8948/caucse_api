@@ -147,14 +147,38 @@ class Article(object):
         article.save()
 
 class User(object):
+    OPEN_FLAG = ((0, 'email'),
+                 (1, 'homepage'),
+                 (2, 'birthday'),
+                 #(3, 'homeaddress'),
+                 #(4, 'homephone'),
+                 (5, 'mobile'),
+                 #(6, 'jobcategory'),
+                 (7, 'messenger'),
+                 (8, 'introduce'),
+                 #(9, 'department'),
+                 #(10, 'workaddress'),
+                 #(11, 'workphone'),
+                 ) 
+    
     @classmethod
     def pack(self, user_model):
         packed_user = {'id': user_model.id,
                        'name': user_model.name,
                        'entrance_year': user_model.id_number,
+                       'img_url': self.get_img_url(user_model.id),
                        'mobile': user_model.cell_phone,
+                       'homepage': user_model.homepage,
+                       'birthday': user_model.birthday.isoformat(),
                        'email': user_model.email,
-                       'img_url': self.get_img_url(user_model.id)}
+                       'introduce': user_model.introduce,
+                       'messenger': user_model.messenger}
+        
+        # mask unopened informations 
+        for i, field in self.OPEN_FLAG:
+            if not (user_model.open_close & (2 ^ i)):
+                packed_user[field] = None
+
         return packed_user
 
     @classmethod
