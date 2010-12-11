@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.utils.simplejson import dumps
 from django.views.decorators.csrf import csrf_exempt
+from apiprj.oauth_app.models import Consumer
 from apiprj.oauth_app.utils.decorators import oauth_required
 from modelwrap import Article, Board, Comment, User, Token, Favorite
 
@@ -152,4 +153,5 @@ def favorites_list(request):
     
     
 def index(request):
-    return render_to_response('index.html', {})
+    consumers = Consumer.objects.all()
+    return render_to_response('index.html', {'consumers': consumers})
