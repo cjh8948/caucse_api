@@ -5,9 +5,11 @@ from django.utils.simplejson import dumps
 from django.views.decorators.csrf import csrf_exempt
 from apiprj.oauth_app.models import Consumer
 from apiprj.oauth_app.utils.decorators import oauth_required
+from utils.decorators import api_exception
 from modelwrap import Article, Board, Comment, User, Token, Favorite, Cafe
 
-@csrf_exempt
+@csrf_exempt 
+@api_exception
 @oauth_required
 def articles_create(request, board_id=None):
     """This API posts an article.
@@ -15,15 +17,14 @@ def articles_create(request, board_id=None):
     * resource: 'articles/create'
     ** method: POST, oauth required, rate limited
     ** mandatory parameter: board_id, title, message"""
-    try:
-        if not board_id:
-            board_id = request.POST['board_id']
-        title = request.POST['title']
-        message = request.POST['message']
-        oauth_token = request.POST['oauth_token']
-    except KeyError as e:
-        ret = dumps({'status':'error', 'message':e.message})
-        return HttpResponse(ret)
+    if not board_id:
+        board_id = request.POST['board_id']
+    title = request.POST['title']
+    message = request.POST['message']
+    oauth_token = request.POST['oauth_token']
+    
+    if board_id.startswith('photo'):
+        raise Exception('사진게시판 게시 기능은 지원하지 않습니다.')
     
     user_id = Token.get_user_id(oauth_token)
     Article.post(board_id=board_id, user_id=user_id, title=title,
@@ -33,6 +34,7 @@ def articles_create(request, board_id=None):
     ret = dumps({'status':'ok'})    
     return HttpResponse(ret)
 
+@api_exception
 @oauth_required
 def articles_list(request, board_id=None):
     """This API returns array of articles and list option. 
@@ -45,12 +47,8 @@ def articles_list(request, board_id=None):
     per_page = 20
     
     # get request parameter
-    try: 
-        if not board_id:
-            board_id = request.GET['board_id']
-    except KeyError as e:
-        ret = dumps({'status':'error', 'message':e.message})
-        return HttpResponse(ret)
+    if not board_id:
+        board_id = request.GET['board_id']
 
     if request.GET.has_key('page'):
         page = int(request.GET['page'])
@@ -67,6 +65,7 @@ def articles_list(request, board_id=None):
 
     return HttpResponse(ret)
 
+@api_exception
 @oauth_required
 def articles_show(request, board_id=None, article_id=None):
     """This API returns array of articles
@@ -82,6 +81,8 @@ def articles_show(request, board_id=None, article_id=None):
     ret = dumps(article) 
     return HttpResponse(ret)
 
+@api_exception
+@oauth_required
 def boards_favorite(request):
     """이 API는 자유게시판, user의 Favorite 게시판, user의 cafe 게시판의 
     배열을 반환한다."""
@@ -108,7 +109,8 @@ def boards_favorite(request):
     boards = filter(None, map(Board.get_or_none, board_list))
     ret = dumps(boards)
     return HttpResponse(ret)
-     
+
+@api_exception     
 def boards_lookup(request):
     """This API returns array of boards
     
@@ -121,6 +123,7 @@ def boards_lookup(request):
     return HttpResponse(ret)
 
 @csrf_exempt
+@api_exception
 @oauth_required
 def comments_create(request, board_id=None, article_id=None):
     """This API posts a comment. 
@@ -129,30 +132,23 @@ def comments_create(request, board_id=None, article_id=None):
     ** method: POST, oauth required, rate limited
     ** mandatory parameter: board_id, article_id, message"""
     # read parameter
-    try:
-        if not board_id:
-            board_id = request.POST['board_id']
-        if not article_id:
-            article_id = request.POST['article_id']
-        message = request.POST['message']
-        oauth_token = request.POST['oauth_token']
-    except KeyError as e:
-        ret = dumps({'status':'error', 'message':e.message})
-        return HttpResponse(ret)
+    if not board_id:
+        board_id = request.POST['board_id']
+    if not article_id:
+        article_id = request.POST['article_id']
+    message = request.POST['message']
+    oauth_token = request.POST['oauth_token']
     
     # update comment
-    try:
-        user_id = Token.get_user_id(oauth_token)
-        Comment.post(board_id=board_id, article_id=article_id,
-                               user_id=user_id, content=message)
-    except Exception as e:
-        ret = dumps({'status':'error', 'message':e.message})
-        return HttpResponse(ret)
+    user_id = Token.get_user_id(oauth_token)
+    Comment.post(board_id=board_id, article_id=article_id,
+                           user_id=user_id, content=message)
     
     # return result
     ret = dumps({'status':'ok'})    
     return HttpResponse(ret)
 
+@api_exception
 @oauth_required
 def users_lookup(request):
     """This API returns array of users
@@ -165,6 +161,7 @@ def users_lookup(request):
     ret = dumps(users)
     return HttpResponse(ret)
 
+@api_exception
 @oauth_required
 def users_show(request, user_id=None):
     """This API returns user
@@ -178,6 +175,7 @@ def users_show(request, user_id=None):
     ret = dumps(user)
     return HttpResponse(ret)
 
+@api_exception
 @oauth_required
 def favorites_list(request):
     oauth_token = request.REQUEST['oauth_token']

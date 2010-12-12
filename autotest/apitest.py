@@ -1,3 +1,4 @@
+#!-*-coding:utf8-*-
 from secure import *
 from oauthclient import ClientAlpha
 import unittest, re, json, urllib, urlparse, oauth2
@@ -113,7 +114,8 @@ class ArticlesTest(ApiTestCase):
                                         self.consumer, self.access_token, param)
         self.assertEqual(resp['status'], '200')
         obj = json.loads(content)
-        self.assertEqual(obj['status'].lower(), 'ok')
+        self.assertEqual(obj['status'].lower(), 'error')
+        self.assertTrue('지원하지 않습니다.' in obj['message'])
         
 class BoardsTest(ApiTestCase):
     def test_lookup(self):
@@ -282,7 +284,9 @@ class UsersTest(ApiTestCase):
         'GET users/show?user_id=gochi without oauth'
         param = {'user_id': 'gochi'}
         resp, content = self.plain_get('users/show', param)
-        self.assertEqual(resp['status'], '403')
+        self.assertEqual(resp['status'], '200')
+        obj = json.loads(content)
+        self.assertEqual(obj['status'], 'error')
 
     def test_lookup(self):
         'GET users/lookup?user_id=gochi,reset with oauth'
@@ -304,7 +308,9 @@ class UsersTest(ApiTestCase):
         'GET users/lookup?user_id=gochi,reset without oauth'
         param = {'user_id': 'gochi,reset'}
         resp, content = self.plain_get('users/lookup', param)
-        self.assertEqual(resp['status'], '403')
+        self.assertEqual(resp['status'], '200')
+        obj = json.loads(content)
+        self.assertEqual(obj['status'], 'error')
         
     def test_lookup_bad_token_secret(self):
         'GET users/lookup with bad token secret'
@@ -317,9 +323,11 @@ class UsersTest(ApiTestCase):
                                        consumer=self.consumer, token=token,
                                        param=param)
         
-        # validate result - status code 403 is "Forbidden"
-        self.assertEqual(resp['status'], '403')
-        self.assertEqual(content, "")
+        # validate result - "Invalid signature"
+        self.assertEqual(resp['status'], '200')
+        obj = json.loads(content)
+        self.assertEqual(obj['status'], "error")
+        self.assertTrue("Invalid signature" in obj['message'])
         
         
 if __name__ == '__main__':

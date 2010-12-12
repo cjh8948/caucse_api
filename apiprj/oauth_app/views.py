@@ -5,9 +5,11 @@ from django.shortcuts import render_to_response
 from urllib import urlencode
 from utils import check_mysql_password
 from utils.decorators import oauth_verify
+from apiprj.api1_app.utils.decorators import api_exception
 from apiprj.legacy_app.models import Member
 from models import Token
 
+@api_exception
 @oauth_verify 
 def request_token(request):
     """This API grants request_token
@@ -24,6 +26,7 @@ def request_token(request):
     return HttpResponse(token.to_oauth().to_string())
 
 @csrf_exempt
+@api_exception
 @oauth_verify 
 def access_token(request):
     """This API grants access_token
@@ -51,6 +54,7 @@ def access_token(request):
     access_token = token.to_oauth()
     return HttpResponse(access_token.to_string())
 
+@api_exception
 @csrf_exempt
 def authorize(request):
     """This API asks the user for granting the consumer access protected 

@@ -1,3 +1,4 @@
+#!-*-coding:utf8-*-
 """Functions in this module mark view functions and verify requests are vaild 
 under oauth protocol."""
 from oauthserver import ServerAlpha
@@ -7,15 +8,9 @@ from functools import wraps
 def oauth_required(view_func):
     """Marks view function to verify that the request is valid for 
     oauth required resources. 
-    
-    If the request is not valid, HttpResponseForbidden(403 status code) 
-    will be returned.
     """
     def verify_request(request, *arg, **keywords):
-        try:
-            ServerAlpha().verify_access_request(request)
-        except:
-            return HttpResponseForbidden()
+        ServerAlpha().verify_access_request(request)
         return view_func(request, *arg, **keywords)
     
     return wraps(view_func)(verify_request)
