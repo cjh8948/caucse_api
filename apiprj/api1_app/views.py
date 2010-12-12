@@ -8,14 +8,15 @@ from modelwrap import Article, Board, Comment, User, Token, Favorite
 
 @csrf_exempt
 @oauth_required
-def articles_create(request):
+def articles_create(request, board_id=None):
     """This API posts an article.
     
     * resource: 'articles/create'
     ** method: POST, oauth required, rate limited
     ** mandatory parameter: board_id, title, message"""
     try:
-        board_id = request.POST['board_id']
+        if not board_id:
+            board_id = request.POST['board_id']
         title = request.POST['title']
         message = request.POST['message']
         oauth_token = request.POST['oauth_token']
@@ -32,7 +33,7 @@ def articles_create(request):
     return HttpResponse(ret)
 
 @oauth_required
-def articles_list(request):
+def articles_list(request, board_id=None):
     """This API returns array of articles and list option. 
     
     * resource: 'articles/list'
@@ -44,7 +45,8 @@ def articles_list(request):
     
     # get request parameter
     try: 
-        board_id = request.GET['board_id']
+        if not board_id:
+            board_id = request.GET['board_id']
     except KeyError as e:
         ret = dumps({'status':'error', 'message':e.message})
         return HttpResponse(ret)
@@ -65,14 +67,16 @@ def articles_list(request):
     return HttpResponse(ret)
 
 @oauth_required
-def articles_show(request):
+def articles_show(request, board_id=None, article_id=None):
     """This API returns array of articles
     
     * resource: 'articles/show'
     ** method: GET, oauth required, rate limited
     ** mandatory parameter: board_id, article_id"""
-    board_id = request.GET['board_id']
-    article_id = int(request.GET['article_id'])
+    if not board_id:
+        board_id = request.GET['board_id']
+    if not article_id:
+        article_id = int(request.GET['article_id'])
     article = Article.get(board_id, article_id)
     ret = dumps(article) 
     return HttpResponse(ret)
@@ -90,7 +94,7 @@ def boards_lookup(request):
 
 @csrf_exempt
 @oauth_required
-def comments_create(request):
+def comments_create(request, board_id=None, article_id=None):
     """This API posts a comment. 
     
     * resource: 'comments/create'
@@ -98,8 +102,10 @@ def comments_create(request):
     ** mandatory parameter: board_id, article_id, message"""
     # read parameter
     try:
-        board_id = request.POST['board_id']
-        article_id = request.POST['article_id']
+        if not board_id:
+            board_id = request.POST['board_id']
+        if not article_id:
+            article_id = request.POST['article_id']
         message = request.POST['message']
         oauth_token = request.POST['oauth_token']
     except KeyError as e:
