@@ -45,6 +45,124 @@ class ApiTestCase(unittest.TestCase):
                 u'birthday', u'messenger', u'homepage', u'email', u'entrance_year']
         self.assertEqual(obj.keys(), keys)
 
+class ArticlesTest(ApiTestCase):
+    def test_list(self):
+        'GET articles/list with oauth'
+        param = {'board_id': 'board_alumni99'}
+        resp, content = self.oauth_get('articles/list', self.consumer,
+                                       self.access_token, param)
+        self.assertEqual(resp['status'], '200')
+        obj = json.loads(content)
+        option = obj['option']
+        self.assertEqual(option['board_id'], 'board_alumni99')
+        self.assertEqual(option['per_page'], len(obj['articles']))
+
+    def test_list_restful(self):
+        'GET articles/list/board_alumni99 with oauth'
+        resp, content = self.oauth_get('articles/list/board_alumni99',
+                                       self.consumer, self.access_token)
+        self.assertEqual(resp['status'], '200')
+        obj = json.loads(content)
+        option = obj['option']
+        self.assertEqual(option['board_id'], 'board_alumni99')
+        self.assertEqual(option['per_page'], len(obj['articles']))
+    
+    def test_show(self):
+        'GET articles/show with oauth'
+        param = {'board_id': 'board_alumni99',
+                 'article_id': '100'}
+        resp, content = self.oauth_get('articles/show', self.consumer,
+                                       self.access_token, param)
+        self.assertEqual(resp['status'], '200')
+        obj = json.loads(content)
+        self.assertEqual(obj['id'], 100)
+        self.assertEqual(obj['author']['id'], 'gochi')
+
+    def test_show_restful(self):
+        'GET articles/show/board_alumni99/100 with oauth'
+        resp, content = self.oauth_get('articles/show/board_alumni99/100',
+                                       self.consumer, self.access_token)
+        self.assertEqual(resp['status'], '200')
+        obj = json.loads(content)
+        self.assertEqual(obj['id'], 100)
+        self.assertEqual(obj['author']['id'], 'gochi')
+
+    def test_create(self):
+        'POST articles/create with oauth'        
+        param = {'board_id': 'board_alumni99', 'title': 'title',
+                 'message': 'message'}
+        resp, content = self.oauth_post("articles/create", self.consumer,
+                                        self.access_token, param)
+        self.assertEqual(resp['status'], '200')
+        obj = json.loads(content)
+        self.assertEqual(obj['status'].lower(), 'ok')
+
+    def test_create_restful(self):
+        'POST articles/create/board_alumni99 with oauth'        
+        param = {'title': 'title restful', 'message': 'message restful'}
+        resp, content = self.oauth_post("articles/create/board_alumni99",
+                                        self.consumer, self.access_token, param)
+        self.assertEqual(resp['status'], '200')
+        obj = json.loads(content)
+        self.assertEqual(obj['status'].lower(), 'ok')
+        
+class BoardsTest(ApiTestCase):
+    def test_lookup(self):
+        'GET boards/lookup without oauth'
+        param = {'board_id': 'board_alumni99,photo_alumni99'}
+        resp, content = self.plain_get('boards/lookup', param)
+        self.assertEqual(resp['status'], '200')
+        obj = json.loads(content)
+        self.assertEqual(len(obj), 2)
+        
+    def test_favorite(self):
+        'GET boards/favorite with oauth'
+        resp, content = self.oauth_get('boards/favorite', self.consumer,
+                                       self.access_token)
+        self.assertEqual(resp['status'], '200')
+        obj = json.loads(content)
+        self.assertTrue(obj)
+        
+class CommentsTest(ApiTestCase):
+    def test_create(self):
+        'POST comments/create with oauth'
+        param = {'board_id':'board_alumni99', 'article_id':'20',
+                 'message':'comment test'}
+        resp, content = self.oauth_post("comments/create", self.consumer,
+                                        self.access_token, param)
+        self.assertEqual(resp['status'], '200')
+        obj = json.loads(content)
+        self.assertEqual(obj['status'].lower(), 'ok')
+
+    def test_create_restful(self):
+        'POST comments/create/board_alumni99/20 with oauth'
+        param = {'message':'comment test'}
+        resp, content = self.oauth_post("comments/create/board_alumni99/20",
+                                        self.consumer, self.access_token, param)
+        self.assertEqual(resp['status'], '200')
+        obj = json.loads(content)
+        self.assertEqual(obj['status'].lower(), 'ok')
+
+    def test_create_wrong_board(self):
+        'POST comments/create on wrong board with oauth'
+        param = {'board_id':'board_not_registered', 'article_id':'20',
+                 'message':'comment test'}
+        resp, content = self.oauth_post("comments/create", self.consumer,
+                                        self.access_token, param)
+        self.assertEqual(resp['status'], '200')
+        obj = json.loads(content)
+        self.assertEqual(obj['status'].lower(), 'error')
+
+class FavoriteTest(ApiTestCase):
+    def test_list(self):
+        "GET favorties/list with oauth"
+        resp, content = self.oauth_get('favorites/list', self.consumer,
+                                       self.access_token)        
+        self.assertEqual(resp['status'], '200')
+        obj = json.loads(content)
+        self.assertEqual(obj[0]['board_id'], 'board_part_plan')
+
+
 class OauthTestCase(ApiTestCase):
     def test_request_token(self):
         'GET oauth/request_token'
@@ -193,107 +311,6 @@ class UsersTest(ApiTestCase):
         # validate result - status code 403 is "Forbidden"
         self.assertEqual(resp['status'], '403')
         self.assertEqual(content, "")
-        
-class ArticlesTest(ApiTestCase):
-    def test_list(self):
-        'GET articles/list with oauth'
-        param = {'board_id': 'board_alumni99'}
-        resp, content = self.oauth_get('articles/list', self.consumer,
-                                       self.access_token, param)
-        self.assertEqual(resp['status'], '200')
-        obj = json.loads(content)
-        option = obj['option']
-        self.assertEqual(option['board_id'], 'board_alumni99')
-        self.assertEqual(option['per_page'], len(obj['articles']))
-
-    def test_list_restful(self):
-        'GET articles/list/board_alumni99 with oauth'
-        resp, content = self.oauth_get('articles/list/board_alumni99',
-                                       self.consumer, self.access_token)
-        self.assertEqual(resp['status'], '200')
-        obj = json.loads(content)
-        option = obj['option']
-        self.assertEqual(option['board_id'], 'board_alumni99')
-        self.assertEqual(option['per_page'], len(obj['articles']))
-    
-    def test_show(self):
-        'GET articles/show with oauth'
-        param = {'board_id': 'board_alumni99',
-                 'article_id': '100'}
-        resp, content = self.oauth_get('articles/show', self.consumer,
-                                       self.access_token, param)
-        self.assertEqual(resp['status'], '200')
-        obj = json.loads(content)
-        self.assertEqual(obj['id'], 100)
-        self.assertEqual(obj['author']['id'], 'gochi')
-
-    def test_show_restful(self):
-        'GET articles/show/board_alumni99/100 with oauth'
-        resp, content = self.oauth_get('articles/show/board_alumni99/100',
-                                       self.consumer, self.access_token)
-        self.assertEqual(resp['status'], '200')
-        obj = json.loads(content)
-        self.assertEqual(obj['id'], 100)
-        self.assertEqual(obj['author']['id'], 'gochi')
-
-    def test_create(self):
-        'POST articles/create with oauth'        
-        param = {'board_id': 'board_alumni99', 'title': 'title',
-                 'message': 'message'}
-        resp, content = self.oauth_post("articles/create", self.consumer,
-                                        self.access_token, param)
-        self.assertEqual(resp['status'], '200')
-        obj = json.loads(content)
-        self.assertEqual(obj['status'].lower(), 'ok')
-
-    def test_create_restful(self):
-        'POST articles/create/board_alumni99 with oauth'        
-        param = {'title': 'title restful', 'message': 'message restful'}
-        resp, content = self.oauth_post("articles/create/board_alumni99",
-                                        self.consumer, self.access_token, param)
-        self.assertEqual(resp['status'], '200')
-        obj = json.loads(content)
-        self.assertEqual(obj['status'].lower(), 'ok')
-        
-        
-class CommentsTest(ApiTestCase):
-    def test_create(self):
-        'POST comments/create with oauth'
-        param = {'board_id':'board_alumni99', 'article_id':'20',
-                 'message':'comment test'}
-        resp, content = self.oauth_post("comments/create", self.consumer,
-                                        self.access_token, param)
-        self.assertEqual(resp['status'], '200')
-        obj = json.loads(content)
-        self.assertEqual(obj['status'].lower(), 'ok')
-
-    def test_create_restful(self):
-        'POST comments/create/board_alumni99/20 with oauth'
-        param = {'message':'comment test'}
-        resp, content = self.oauth_post("comments/create/board_alumni99/20",
-                                        self.consumer, self.access_token, param)
-        self.assertEqual(resp['status'], '200')
-        obj = json.loads(content)
-        self.assertEqual(obj['status'].lower(), 'ok')
-
-    def test_create_wrong_board(self):
-        'POST comments/create on wrong board with oauth'
-        param = {'board_id':'board_not_registered', 'article_id':'20',
-                 'message':'comment test'}
-        resp, content = self.oauth_post("comments/create", self.consumer,
-                                        self.access_token, param)
-        self.assertEqual(resp['status'], '200')
-        obj = json.loads(content)
-        self.assertEqual(obj['status'].lower(), 'error')
-
-class FavoriteTest(ApiTestCase):
-    def test_list(self):
-        "GET favorties/list with oauth"
-        resp, content = self.oauth_get('favorites/list', self.consumer,
-                                       self.access_token)        
-        self.assertEqual(resp['status'], '200')
-        obj = json.loads(content)
-        self.assertEqual(obj[0]['board_id'], 'board_part_plan')
         
         
 if __name__ == '__main__':

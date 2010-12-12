@@ -1,10 +1,11 @@
+#! -*- coding: utf8 -*- 
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.utils.simplejson import dumps
 from django.views.decorators.csrf import csrf_exempt
 from apiprj.oauth_app.models import Consumer
 from apiprj.oauth_app.utils.decorators import oauth_required
-from modelwrap import Article, Board, Comment, User, Token, Favorite
+from modelwrap import Article, Board, Comment, User, Token, Favorite, Cafe
 
 @csrf_exempt
 @oauth_required
@@ -81,6 +82,33 @@ def articles_show(request, board_id=None, article_id=None):
     ret = dumps(article) 
     return HttpResponse(ret)
 
+def boards_favorite(request):
+    """이 API는 자유게시판, user의 Favorite 게시판, user의 cafe 게시판의 
+    배열을 반환한다."""
+    def join_list(list1, list2):
+        return list1 + [item for item in list2 if item not in list1]
+    
+    oauth_token = request.REQUEST['oauth_token']
+    user_id = Token.get_user_id(oauth_token)
+
+    # add default
+    default_list = ['board_freeboard']
+    # add favorites
+    favorites = Favorite.get_by_user(user_id)
+    favorite_list = map(lambda x: x.get('board_id'), favorites)
+    # add cafe
+    cafe_boards = [Cafe.get_boards(cafe_id) for cafe_id 
+                   in User.get_cafe(user_id)]
+    cafe_board_list = reduce(lambda x, y: x + y, cafe_boards)
+    
+    # merge default, favorite, cafe list
+    board_list = reduce(join_list, (default_list, favorite_list,
+                                    cafe_board_list))
+    # get boards
+    boards = filter(None, map(Board.get_or_none, board_list))
+    ret = dumps(boards)
+    return HttpResponse(ret)
+     
 def boards_lookup(request):
     """This API returns array of boards
     

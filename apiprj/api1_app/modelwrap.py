@@ -15,7 +15,14 @@ class Board(object):
                         'admin': boardinfo_model.admin_id,
                         'count': count,
                         'count24h': count24h}
-        return packed_board    
+        return packed_board
+    
+    @classmethod
+    def get_or_none(self, board_id):
+        try:
+            return self.get(board_id)
+        except Exception:
+            return None    
     
     @classmethod
     def get(self, board_id):
@@ -193,6 +200,11 @@ class User(object):
     def get(self, user_id):
         user = models.Member.objects.get(id=user_id)
         return self.pack(user)
+    
+    @classmethod
+    def get_cafe(self, user_id):
+        user = models.Member.objects.get(id=user_id)
+        return user.cafe_name.split(',')
 
 class Token(object):
     @classmethod
@@ -206,12 +218,20 @@ class Favorite(object):
                            'priority': favorite_model.priority,
                            'board_id': favorite_model.tablename}
         return packed_favorite
-        
+    
     @classmethod
     def get_by_user(self, user_id):
         favorites = models.Favorite.objects.filter(user_id=user_id)\
                                            .order_by('priority')
-        return map(self.pack, favorites) 
+        return map(self.pack, favorites)
 
-
-    
+class Cafe(object):
+    @classmethod
+    def get_boards(self, cafe_id):
+        cafe = models.CafeInfo.objects.get(cafe_name=cafe_id)
+        return cafe.board_list.split(',') + cafe.photo_board_list.split(',')
+        
+    @classmethod
+    def get_members(self, cafe_id):
+        cafe = models.CafeInfo.objects.get(cafe_name=cafe_id)
+        return cafe.member_list.split(',')
