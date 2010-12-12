@@ -133,6 +133,8 @@ class Article(object):
     def post(self, board_id, user_id, title, message):
         article_model = Article.eval(board_id)        
         max_idx = article_model.objects.all().aggregate(Max('idx'))['idx__max']
+        if not max_idx:
+            max_idx = 0
         user = models.Member.objects.get(id=user_id)
         
         if board_id == 'board_anonymous':

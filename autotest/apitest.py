@@ -105,6 +105,15 @@ class ArticlesTest(ApiTestCase):
         self.assertEqual(resp['status'], '200')
         obj = json.loads(content)
         self.assertEqual(obj['status'].lower(), 'ok')
+
+    def test_create_on_photo_restful(self):
+        'POST articles/create/photo_alumni99 with oauth'        
+        param = {'title': 'title restful', 'message': 'message restful'}
+        resp, content = self.oauth_post("articles/create/photo_alumni99",
+                                        self.consumer, self.access_token, param)
+        self.assertEqual(resp['status'], '200')
+        obj = json.loads(content)
+        self.assertEqual(obj['status'].lower(), 'ok')
         
 class BoardsTest(ApiTestCase):
     def test_lookup(self):
@@ -136,7 +145,7 @@ class CommentsTest(ApiTestCase):
 
     def test_create_restful(self):
         'POST comments/create/board_alumni99/20 with oauth'
-        param = {'message':'comment test'}
+        param = {'message':'restful comment test'}
         resp, content = self.oauth_post("comments/create/board_alumni99/20",
                                         self.consumer, self.access_token, param)
         self.assertEqual(resp['status'], '200')
