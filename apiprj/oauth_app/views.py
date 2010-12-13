@@ -70,7 +70,7 @@ def authorize(request):
     """
     if request.method == "GET":
         params = {'oauth_token' : request.REQUEST['oauth_token']}
-        return render_to_response('auth_form.html', params)
+        return render_to_response('oauth/auth_form.html', params)
 
     elif request.method == "POST":
         user_id = request.REQUEST['user_id']
@@ -90,7 +90,7 @@ def authorize(request):
         # callback processing
         if token.callback == "oob": # pin processing
             params = {'verifier': token.verifier}
-            return render_to_response('auth_verifier.html', params)
+            return render_to_response('oauth/auth_verifier.html', params)
         else:
             params = {'oauth_token': token.key,
                       'oauth_verifier': token.verifier}

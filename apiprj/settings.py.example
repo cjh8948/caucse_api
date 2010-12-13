@@ -97,6 +97,8 @@ INSTALLED_APPS = (
     'apiprj.api1_app',
     'apiprj.oauth_app',
 )
+# custom authentication setting
+AUTHENTICATION_BACKENDS = ('apiprj.oauth_app.backend.AuthBackend', )
 
 USER_IMG_PATH = "" # SECURE 
 USER_IMG_PREFIX = "" # SECURE 
