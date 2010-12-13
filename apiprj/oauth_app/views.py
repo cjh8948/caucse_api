@@ -1,4 +1,5 @@
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseForbidden
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render_to_response
@@ -7,7 +8,7 @@ from utils import check_mysql_password
 from utils.decorators import oauth_verify
 from apiprj.api1_app.utils.decorators import api_exception
 from apiprj.legacy_app.models import Member
-from models import Token
+from models import Token, Consumer
 
 @api_exception
 @oauth_verify 
@@ -96,3 +97,11 @@ def authorize(request):
                       'oauth_verifier': token.verifier}
             callback_url = token.callback + "?" + urlencode(params)
             return HttpResponseRedirect(callback_url)
+        
+
+@login_required  
+def consumer_show(request, consumer_key):
+    c = Consumer.objects.get(key=consumer_key)
+    if request.user.username != c.user_id:
+        return HttpResponseForbidden()
+    return render_to_response('consumer/show.html', {'consumer':c})        
