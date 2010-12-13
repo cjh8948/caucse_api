@@ -1,0 +1,18 @@
+<h1>{{consumer.name|escape}} 정보</h1>
+<ul>
+    <li>
+        consumer key: {{consumer.key|escape}}
+    </li>
+    <li>
+        consumer secret: {{consumer.secret|escape}}
+    </li>
+    <li>
+        consumer type:{{consumer.type}} 
+    </li>
+    <li>
+        consumer created: {{consumer.created|timesince}} 전
+    </li>
+    <li>
+        consumer description: {{consumer.description|escape}}
+    </li>
+</ul>
