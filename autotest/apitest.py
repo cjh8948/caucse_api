@@ -115,7 +115,7 @@ class ArticlesTest(ApiTestCase):
         self.assertEqual(resp['status'], '200')
         obj = json.loads(content)
         self.assertEqual(obj['status'].lower(), 'error')
-        self.assertTrue('지원하지 않습니다.' in obj['message'])
+        self.assertTrue(u'지원하지 않습니다.' in obj['message'])
         
 class BoardsTest(ApiTestCase):
     def test_lookup(self):
