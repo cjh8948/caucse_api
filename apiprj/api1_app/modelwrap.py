@@ -183,7 +183,7 @@ class User(object):
                        'img_url': self.get_img_url(user_model.id),
                        'mobile': user_model.cell_phone,
                        'homepage': user_model.homepage,
-                       'birthday': user_model.birthday.isoformat(),
+                       'birthday': birthday,
                        'email': user_model.email,
                        'introduce': user_model.introduce,
                        'messenger': user_model.messenger}
