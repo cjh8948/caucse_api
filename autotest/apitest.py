@@ -330,7 +330,7 @@ class UsersTest(ApiTestCase):
         self.assertTrue("Invalid signature" in obj['message'])
     
     def test_search_name(self):
-        'GET users/search?q=천'
+        u'GET users/search?q=천'
         param = {"q":u"e 천"}
         resp, content = self.oauth_get(resource="users/search",
                                        consumer=self.consumer,
@@ -377,7 +377,7 @@ class UsersTest(ApiTestCase):
         self.assertEqual(map(lambda x: x['id'], obj), ['jeppy', 'reset'])        
 
     def test_search_two_names(self):   
-        'GET users/search?q=석천+준'     
+        u'GET users/search?q=석천+준'     
         param = {"q":u"석천 준"}
         resp, content = self.oauth_get(resource="users/search",
                                        consumer=self.consumer,
