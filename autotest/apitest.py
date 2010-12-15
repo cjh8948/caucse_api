@@ -350,7 +350,8 @@ class UsersTest(ApiTestCase):
                                        param=param)
         self.assertEqual(resp['status'], '200')
         obj = json.loads(content)
-        self.assertEqual(map(lambda x: x['id'], obj), ['jeppy', 'reset'])
+        id_list = map(lambda x: x['id'], obj)
+        self.assertTrue(set(('jeppy', 'reset')).issubset(id_list))
 
     def test_search_enterance_year(self):   
         'GET users/search?q=99'     
@@ -361,8 +362,8 @@ class UsersTest(ApiTestCase):
                                        param=param)
         self.assertEqual(resp['status'], '200')
         obj = json.loads(content)
-        self.assertEqual(map(lambda x: x['id'], obj), ['jeppy', 'gochi',
-                                                       'reset'])
+        id_list = map(lambda x: x['id'], obj)
+        self.assertTrue(set(('gochi', 'jeppy','reset')).issubset(id_list))
 
 
     def test_search_enterance_year_and_id(self):   
@@ -374,7 +375,8 @@ class UsersTest(ApiTestCase):
                                        param=param)
         self.assertEqual(resp['status'], '200')
         obj = json.loads(content)
-        self.assertEqual(map(lambda x: x['id'], obj), ['jeppy', 'reset'])        
+        id_list = map(lambda x: x['id'], obj)
+        self.assertTrue(set(('jeppy', 'reset')).issubset(id_list))
 
     def test_search_two_names(self):   
         u'GET users/search?q=+'     
@@ -385,7 +387,8 @@ class UsersTest(ApiTestCase):
                                        param=param)
         self.assertEqual(resp['status'], '200')
         obj = json.loads(content)
-        self.assertEqual(map(lambda x: x['id'], obj), ['gochi', 'reset']) 
+        id_list = map(lambda x: x['id'], obj)
+        self.assertTrue(set(('gochi', 'reset')).issubset(id_list))
         
 if __name__ == '__main__':
     unittest.main()
