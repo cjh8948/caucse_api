@@ -173,6 +173,10 @@ class User(object):
     
     @classmethod
     def pack(self, user_model):
+        if user_model.birthday:
+            birthday = user_model.birthday.isoformat()
+        else:
+            birthday = ""
         packed_user = {'id': user_model.id,
                        'name': user_model.name,
                        'entrance_year': user_model.id_number,
