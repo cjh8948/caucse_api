@@ -15,7 +15,7 @@ urlpatterns = patterns('',
     (r'^admin/', include(admin.site.urls)),
     # consumer
     (r'^consumer/show/(?P<consumer_key>.+)',
-     'apiprj.oauth.views.consumer_show'),
+     'apiprj.oauth_app.views.consumer_show'),
     # oauth
     (r'^oauth/', include('apiprj.oauth_app.urls')),
     # api
