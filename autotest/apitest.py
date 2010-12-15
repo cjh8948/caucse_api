@@ -338,8 +338,8 @@ class UsersTest(ApiTestCase):
                                        param=param)
         self.assertEqual(resp['status'], '200')
         obj = json.loads(content)
-        self.assertEqual(len(obj), 1)
-        self.assertEqual(obj[0]['id'], 'reset')
+        id_list = map(lambda x: x['id'], obj)
+        self.assertTrue('reset' in id_list)
         
     def test_search_id(self):   
         'GET users/search?q=e'     
