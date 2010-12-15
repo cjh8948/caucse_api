@@ -1,8 +1,9 @@
-import os, datetime
+import os, datetime, re
 from apiprj.legacy_app import models
 from apiprj.oauth_app.models import Token as OauthToken
 from apiprj.settings import USER_IMG_PATH, USER_IMG_PREFIX
 from django.db.models.aggregates import Max
+from django.db.models import Q
 
 class ModelnameError(Exception):pass
 
@@ -208,6 +209,38 @@ class User(object):
         user = models.Member.objects.get(id=user_id)
         return user.cafe_name.split(',')
 
+    @classmethod
+    def search(self, q):
+        years, ids, names = [], [], []
+        re_entrance_year = re.compile(r"(\d+)")
+        re_id = re.compile(r"(\w+)")
+
+        # simple natural language processing
+        for token in q.split():
+            if re_entrance_year.match(token):
+                years.append(token)
+            elif re_id.match(token):
+                ids.append(token)
+            else:
+                names.append(token)
+        
+        # make result
+        Qs = []
+        if years:
+            Qs.append(reduce(Q.__or__, map(lambda x: Q(id_number=x), years)))
+        if ids:
+            Qs.append(reduce(Q.__or__, map(lambda x: Q(id__contains=x), ids)))
+        if names:
+            Qs.append(reduce(Q.__or__, map(lambda x: Q(name__contains=x), names)))
+        if Qs:
+            users = models.Member.objects.filter(reduce(Q.__and__, Qs))[:300]
+            if users:
+                return map(self.pack, users)
+            else:
+                raise Exception("No matching")
+        else:
+            raise Exception("No Query")
+        
 class Token(object):
     @classmethod
     def get_user_id(self, oauth_token):

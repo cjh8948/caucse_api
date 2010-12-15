@@ -178,6 +178,14 @@ def users_show(request, user_id=None):
 
 @api_exception
 @oauth_required
+def users_search(request):
+    q = request.GET['q']
+    users = User.search(q)
+    ret = dumps(users)
+    return HttpResponse(ret)
+
+@api_exception
+@oauth_required
 def favorites_list(request):
     oauth_token = request.REQUEST['oauth_token']
     user_id = Token.get_user_id(oauth_token)

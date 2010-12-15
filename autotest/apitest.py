@@ -328,7 +328,64 @@ class UsersTest(ApiTestCase):
         obj = json.loads(content)
         self.assertEqual(obj['status'], "error")
         self.assertTrue("Invalid signature" in obj['message'])
+    
+    def test_search_name(self):
+        'GET users/search?q=천'
+        param = {"q":u"e 천"}
+        resp, content = self.oauth_get(resource="users/search",
+                                       consumer=self.consumer,
+                                       token=self.access_token,
+                                       param=param)
+        self.assertEqual(resp['status'], '200')
+        obj = json.loads(content)
+        self.assertEqual(len(obj), 1)
+        self.assertEqual(obj[0]['id'], 'reset')
         
+    def test_search_id(self):   
+        'GET users/search?q=e'     
+        param = {"q":u"e"}
+        resp, content = self.oauth_get(resource="users/search",
+                                       consumer=self.consumer,
+                                       token=self.access_token,
+                                       param=param)
+        self.assertEqual(resp['status'], '200')
+        obj = json.loads(content)
+        self.assertEqual(map(lambda x: x['id'], obj), ['jeppy', 'reset'])
+
+    def test_search_enterance_year(self):   
+        'GET users/search?q=99'     
+        param = {"q":u"99"}
+        resp, content = self.oauth_get(resource="users/search",
+                                       consumer=self.consumer,
+                                       token=self.access_token,
+                                       param=param)
+        self.assertEqual(resp['status'], '200')
+        obj = json.loads(content)
+        self.assertEqual(map(lambda x: x['id'], obj), ['jeppy', 'gochi',
+                                                       'reset'])
+
+
+    def test_search_enterance_year_and_id(self):   
+        'GET users/search?q=99+e'     
+        param = {"q":u"99 e"}
+        resp, content = self.oauth_get(resource="users/search",
+                                       consumer=self.consumer,
+                                       token=self.access_token,
+                                       param=param)
+        self.assertEqual(resp['status'], '200')
+        obj = json.loads(content)
+        self.assertEqual(map(lambda x: x['id'], obj), ['jeppy', 'reset'])        
+
+    def test_search_two_names(self):   
+        'GET users/search?q=석천+준'     
+        param = {"q":u"석천 준"}
+        resp, content = self.oauth_get(resource="users/search",
+                                       consumer=self.consumer,
+                                       token=self.access_token,
+                                       param=param)
+        self.assertEqual(resp['status'], '200')
+        obj = json.loads(content)
+        self.assertEqual(map(lambda x: x['id'], obj), ['gochi', 'reset']) 
         
 if __name__ == '__main__':
     unittest.main()
