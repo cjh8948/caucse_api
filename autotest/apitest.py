@@ -181,7 +181,7 @@ class OauthTestCase(ApiTestCase):
         resp, content = self.oauth_get(resource=resource,
                                        consumer=self.consumer,
                                        token=None, param=None,
-                                       callback="http://callback.net")
+                                       callback="oob")
         self.assertEquals(resp['status'], '200')
         request_token = dict(urlparse.parse_qsl(content))
         self.assertTrue(request_token.has_key('oauth_token'))

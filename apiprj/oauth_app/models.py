@@ -1,5 +1,5 @@
 from django.db import models
-import oauth2, random, uuid
+import oauth2, random, uuid, datetime
 
 class Consumer(models.Model):
     TYPE_CHOICES = (('C', 'CLIENT'), ('B', 'BROWSER'))
@@ -43,6 +43,16 @@ class Token(models.Model):
         token = cls(key=cls.generate_token(), secret=cls.generate_token(),
                     consumer=consumer, type="R", callback=callback)
         token.save()
+        
+        # delete old request token (3min)
+        three_min_ago = datetime.datetime.now() - datetime.timedelta(minutes=3)
+        try: 
+            cls.objects.filter(type="R")\
+                       .filter(modified__lte=three_min_ago)\
+                       .delete()
+        except Exception as e:
+            print e
+        
         return token
     
     def new_verifier(self, user):
@@ -53,8 +63,19 @@ class Token(models.Model):
         self.save()
 
     def promote_to_access(self):
+        # delete user's old access token
+        try:
+            objs = Token.objects.filter(consumer=self.consumer)\
+                                .filter(type='A')\
+                                .filter(user=self.user)\
+                                .exclude(key='access_token_key')
+            objs.delete()
+        except Exception as e:
+            print e
+                    
+        # promote
         if self.type == 'A':
-            raise Exception
+            raise Exception('Access token cannot be promoted')
         self.key = self.generate_token()
         self.secret = self.generate_token()
         self.type = 'A'
