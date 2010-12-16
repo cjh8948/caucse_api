@@ -54,9 +54,9 @@ class ArticlesTest(ApiTestCase):
                                        self.access_token, param)
         self.assertEqual(resp['status'], '200')
         obj = json.loads(content)
-        option = obj['option']
-        self.assertEqual(option['board_id'], 'board_alumni99')
-        self.assertEqual(option['per_page'], len(obj['articles']))
+        listinfo = obj['listinfo']
+        self.assertEqual(listinfo['board_id'], 'board_alumni99')
+        self.assertEqual(listinfo['per_page'], len(obj['articles']))
 
     def test_list_restful(self):
         'GET articles/list/board_alumni99 with oauth'
@@ -64,9 +64,28 @@ class ArticlesTest(ApiTestCase):
                                        self.consumer, self.access_token)
         self.assertEqual(resp['status'], '200')
         obj = json.loads(content)
-        option = obj['option']
-        self.assertEqual(option['board_id'], 'board_alumni99')
-        self.assertEqual(option['per_page'], len(obj['articles']))
+        listinfo = obj['listinfo']
+        self.assertEqual(listinfo['board_id'], 'board_alumni99')
+        self.assertEqual(listinfo['per_page'], len(obj['articles']))
+    
+    def test_list_restful_with_q(self):
+        'GET articles/list/board_alumni99;q=gochi'
+        param = {'q':u'gochi'}
+        resp, content = self.oauth_get("articles/list/board_alumni99",
+                                       self.consumer, self.access_token,
+                                       param)
+        self.assertEqual(resp['status'], '200')
+        obj = json.loads(content)
+        listinfo = obj['listinfo']
+        articles = obj['articles']
+        self.assertEqual(listinfo['board_title'], u'99학번 게시판')
+        self.assertEqual(listinfo['page'], 0)
+        for article in articles:
+            check = ((u'gochi' in article['author']['id']) or 
+                     (u'gochi' in article['content']) or
+                     (u'gochi' in article['title']) or
+                     (u'gochi' in article['author']['name']))
+            self.assertTrue(check)
     
     def test_show(self):
         'GET articles/show with oauth'
@@ -102,7 +121,8 @@ class ArticlesTest(ApiTestCase):
         'POST articles/create/board_alumni99 with oauth'        
         param = {'title': 'title restful', 'message': 'message restful'}
         resp, content = self.oauth_post("articles/create/board_alumni99",
-                                        self.consumer, self.access_token, param)
+                                        self.consumer, self.access_token,
+                                        param)
         self.assertEqual(resp['status'], '200')
         obj = json.loads(content)
         self.assertEqual(obj['status'].lower(), 'ok')
@@ -111,11 +131,13 @@ class ArticlesTest(ApiTestCase):
         'POST articles/create/photo_alumni99 with oauth'        
         param = {'title': 'title restful', 'message': 'message restful'}
         resp, content = self.oauth_post("articles/create/photo_alumni99",
-                                        self.consumer, self.access_token, param)
+                                        self.consumer, self.access_token,
+                                        param)
         self.assertEqual(resp['status'], '200')
         obj = json.loads(content)
         self.assertEqual(obj['status'].lower(), 'error')
         self.assertTrue(u'지원하지 않습니다.' in obj['message'])
+        
         
 class BoardsTest(ApiTestCase):
     def test_lookup(self):
@@ -363,7 +385,7 @@ class UsersTest(ApiTestCase):
         self.assertEqual(resp['status'], '200')
         obj = json.loads(content)
         id_list = map(lambda x: x['id'], obj)
-        self.assertTrue(set(('gochi', 'jeppy','reset')).issubset(id_list))
+        self.assertTrue(set(('gochi', 'jeppy', 'reset')).issubset(id_list))
 
 
     def test_search_enterance_year_and_id(self):   

@@ -46,6 +46,7 @@ def articles_list(request, board_id=None):
     ** optional parameter: page(default=0), per_page(default=20)"""
     page = 0
     per_page = 20
+    q = ""
     
     # get request parameter
     if not board_id:
@@ -55,13 +56,13 @@ def articles_list(request, board_id=None):
         page = int(request.GET['page'])
     if request.GET.has_key('per_page'):
         per_page = int(request.GET['per_page'])
+    if request.GET.has_key('q'):
+        q = request.GET['q']
 
     # make json object to return
-    articles = Article.get_list(board_id, page, per_page)
-    ret_item = {'option': {'board_id': board_id,
-                           'page': page,
-                           'per_page': per_page},
-                'articles': articles}
+    listinfo, articles = Article.get_list(board_id, page, per_page, q)
+
+    ret_item = {'listinfo': listinfo, 'articles': articles}
     ret = dumps(ret_item)
 
     return HttpResponse(ret)
