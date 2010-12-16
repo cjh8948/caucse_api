@@ -165,7 +165,7 @@ class Article(object):
                     'board_title': Board.get(board_id)['title'],
                     'page': page,
                     'per_page': per_page,
-                    'total_pages': (total_matched_articles / per_page) + 1,
+                    'total_pages': (total_matched_articles / per_page),
                     'q': q,
                     'total_matched_articles': total_matched_articles,
                     'total_articles': total_articles}        
