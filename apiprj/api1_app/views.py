@@ -22,8 +22,7 @@ def articles_create(request, board_id=None):
         board_id = request.POST['board_id']
     title = request.POST['title']
     message = request.POST['message']
-    oauth_token = request.POST['oauth_token']
-    
+    oauth_token = request.POST['oauth_token']    
     if board_id.startswith('photo'):
         raise Exception('사진게시판 게시 기능은 지원하지 않습니다.')
     

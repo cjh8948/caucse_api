@@ -1,3 +1,4 @@
+#!-*-coding:utf-8-*-
 import os, datetime, re
 from apiprj.legacy_app import models
 from apiprj.oauth_app.models import Token as OauthToken
@@ -111,7 +112,8 @@ class Article(object):
                           'reg_date': article_model.reg_date.isoformat(),
                           'content': article_model.content,
                           'file': article_model.file_name,
-                          'comments': comments}
+                          'comments': comments,
+                          'total_comments': article_model.comment}
         return packed_article
 
     @classmethod
@@ -123,52 +125,37 @@ class Article(object):
         return article
     
     @classmethod
-    def _get_query_from_natual_language(self, q):
-        ids, titles, contents, names = [], [], [], []
-        for token in q.split():
-            ids.append(Q(user_id__contains=token))
-            contents.append(Q(content__contains=token))
-            titles.append(Q(title__contains=token))
-            names.append(Q(name__contains=token))
-
-        if ids: ids = reduce(Q.__or__, ids)
-        if titles: titles = reduce(Q.__or__, titles)
-        if contents: contents = reduce(Q.__or__, contents)
-        if names: names = reduce(Q.__or__, names)
-
-        Qs = filter(None, [ids, titles, contents, names])
-        if Qs:
-            return reduce(Q.__or__, Qs)
-        else:
-            return None
-
+    def _build_query(self, q):
+        q = q.strip()
+        if len(q) < 2 : return None 
+        
+        return (Q(content__icontains=q) | Q(title__icontains=q) | 
+                Q(user_id__icontains=q) | Q(name__icontains=q))
+        
     @classmethod
-    def get_list(self, board_id, page=0, per_page=20, q=None):
+    def get_list(self, board_id, page=0, per_page=20, q=""):
         s = page * per_page
         e = s + per_page
+        q = q.strip()
         board_model = Article.eval(board_id)
-        all_articles = board_model.objects.all().order_by('-reg_date')
-        if q:
-            query = self._get_query_from_natual_language(q) 
-            if query:
-                matched_articles = board_model.objects.filter(query)
-            else:
-                matched_articles = all_articles
-        else:
-            matched_articles = all_articles
+        articles = board_model.objects.all()
+        total_articles = articles.count()
         
-        total_articles = all_articles.count()
-        total_matched_articles = matched_articles.count()
-        paged_articles = matched_articles[s:e]
+        query = self._build_query(q) 
+        if query:
+            articles = articles.filter(query)
+        
+        total_matched_articles = articles.count()
+        paged_articles = articles.order_by('-reg_date')[s:e]
         
         listinfo = {'board_id': board_id,
                     'board_title': Board.get(board_id)['title'],
                     'page': page,
                     'per_page': per_page,
                     'total_pages': (total_matched_articles / per_page),
-                    'q': q,
                     'total_matched_articles': total_matched_articles,
-                    'total_articles': total_articles}        
+                    'total_articles': total_articles,
+                    'q': q}
         
         packed_articles = map(lambda article: Article.pack(article, board_id),
                               paged_articles)
