@@ -110,7 +110,7 @@ class ArticlesTest(ApiTestCase):
     def test_create(self):
         'POST articles/create with oauth'        
         param = {'board_id': 'board_alumni99', 'title': 'title',
-                 'message': 'message'}
+                 'message': u'message 한글 메시지 테스트.'.encode('utf8')}
         resp, content = self.oauth_post("articles/create", self.consumer,
                                         self.access_token, param)
         self.assertEqual(resp['status'], '200')
