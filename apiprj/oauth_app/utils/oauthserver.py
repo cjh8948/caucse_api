@@ -1,4 +1,4 @@
-import oauth2
+from apiprj.ext import oauth2
 from apiprj.oauth_app import models
 
 class ServerAlpha(oauth2.Server):
