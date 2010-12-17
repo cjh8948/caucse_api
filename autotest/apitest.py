@@ -12,7 +12,7 @@ class ApiTestCase(unittest.TestCase):
     def _get_url(self, resource, param=None):
         url = URL_PREFIX + resource
         if param: 
-            url += '?' + urllib.urlencode(param)
+            url += '?' + urllib.urlencode(param).replace('+', '%20')
         return url
 
     def oauth_get(self, resource, consumer, token, param=None, callback=None):
