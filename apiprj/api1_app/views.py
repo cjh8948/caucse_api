@@ -27,11 +27,11 @@ def articles_create(request, board_id=None):
         raise Exception('사진게시판 게시 기능은 지원하지 않습니다.')
     
     user_id = Token.get_user_id(oauth_token)
-    Article.post(board_id=board_id, user_id=user_id, title=title,
-                 message=message)
+    article = Article.post(board_id=board_id, user_id=user_id, title=title,
+                           message=message)
 
     # return result
-    ret = dumps({'status':'ok'})    
+    ret = dumps({'status':'ok', 'article': article})    
     return HttpResponse(ret)
 
 @api_exception
@@ -142,11 +142,11 @@ def comments_create(request, board_id=None, article_id=None):
     
     # update comment
     user_id = Token.get_user_id(oauth_token)
-    Comment.post(board_id=board_id, article_id=article_id,
-                           user_id=user_id, content=message)
+    cmt = Comment.post(board_id=board_id, article_id=article_id,
+                       user_id=user_id, content=message)
     
     # return result
-    ret = dumps({'status':'ok'})    
+    ret = dumps({'status':'ok', 'comment':cmt})    
     return HttpResponse(ret)
 
 @api_exception

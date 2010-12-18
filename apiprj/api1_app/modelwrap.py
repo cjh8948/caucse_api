@@ -91,6 +91,8 @@ class Comment(object):
                             content=content,
                             reg_date=datetime.datetime.today())
         cmt.save()
+        
+        return self.pack(cmt, board_id)
 
 class Article(object):
     @classmethod
@@ -186,6 +188,7 @@ class Article(object):
                                 count=0, title=title, content=message,
                                 thread="A", comment=0)
         article.save()
+        return self.pack(article, board_id)
 
 class User(object):
     OPEN_FLAG = ((0, 'email'),

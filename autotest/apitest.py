@@ -115,7 +115,11 @@ class ArticlesTest(ApiTestCase):
                                         self.access_token, param)
         self.assertEqual(resp['status'], '200')
         obj = json.loads(content)
-        self.assertEqual(obj['status'].lower(), 'ok')
+        status = obj['status']
+        article = obj['article']
+        self.assertEqual(status, 'ok')
+        self.assertEqual(article['title'], param['title'])
+        self.assertEqual(article['content'].encode('utf8'), param['message'])
 
     def test_create_restful(self):
         'POST articles/create/board_alumni99 with oauth'        
@@ -165,7 +169,10 @@ class CommentsTest(ApiTestCase):
                                         self.access_token, param)
         self.assertEqual(resp['status'], '200')
         obj = json.loads(content)
+        status = obj['status']
+        comment = obj['comment']
         self.assertEqual(obj['status'].lower(), 'ok')
+        self.assertEqual(comment['content'], param['message'])
 
     def test_create_restful(self):
         'POST comments/create/board_alumni99/20 with oauth'
