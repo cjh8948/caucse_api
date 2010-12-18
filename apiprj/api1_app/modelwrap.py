@@ -127,6 +127,14 @@ class Article(object):
         return article
     
     @classmethod
+    def delete(self, board_id, article_id, user_id):
+        board_model = Article.eval(board_id)
+        article_model = board_model.objects.get(id=article_id)
+        if user_id != article_model.user_id:
+            raise Exception("%s doesn't have permission" % user_id)
+        article_model.delete()
+    
+    @classmethod
     def _build_query(self, q):
         q = q.strip()
         if len(q) < 2 : return None 

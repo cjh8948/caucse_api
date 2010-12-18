@@ -3,6 +3,8 @@ from django.conf.urls.defaults import patterns
 urlpatterns = patterns('apiprj.api1_app.views',
     (r'^articles/create/(?P<board_id>(board|photo)_.+)', 'articles_create'),
     (r'^articles/create', 'articles_create'),
+    (r'^articles/delete/(?P<board_id>(board|photo)_.+)/(?P<article_id>\d+)', 'articles_delete'),
+    (r'^articles/delete', 'articles_delete'),
     (r'^articles/list/(?P<board_id>(board|photo)_.+)', 'articles_list'),
     (r'^articles/list', 'articles_list'),
     (r'^articles/show/(?P<board_id>(board|photo)_.+)/(?P<article_id>\d+)', 'articles_show'),

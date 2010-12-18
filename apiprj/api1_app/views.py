@@ -36,6 +36,22 @@ def articles_create(request, board_id=None):
 
 @api_exception
 @oauth_required
+def articles_delete(request, board_id=None, article_id=None):
+    if not board_id:
+        board_id = request.GET['board_id']
+    if not article_id:
+        article_id = int(request.GET['article_id'])
+    oauth_token = request.REQUEST['oauth_token']
+    if board_id.startswith('photo'):
+        raise Exception('사진게시판 게시물 삭제 기능은 지원하지 않습니다.')
+    
+    user_id = Token.get_user_id(oauth_token)
+    Article.delete(board_id, article_id, user_id)
+    ret = dumps({'status':'ok'})
+    return HttpResponse(ret)
+    
+@api_exception
+@oauth_required
 def articles_list(request, board_id=None):
     """This API returns array of articles and list option. 
     

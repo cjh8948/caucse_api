@@ -142,6 +142,24 @@ class ArticlesTest(ApiTestCase):
         self.assertEqual(obj['status'].lower(), 'error')
         self.assertTrue(u'지원하지 않습니다.' in obj['message'])
         
+    def test_delete(self):
+        'GET articles/delete/board_alumni99/:id'
+        # create something to delete
+        param = {'title': 'title? ...?', 'message': 'message is...'}
+        resp, content = self.oauth_post('articles/create/board_alumni99',
+                                        self.consumer, self.access_token,
+                                        param)
+        self.assertEqual(resp['status'], '200')
+        obj = json.loads(content)
+        article_id = obj['article']['id']
+        
+        # delete it
+        delete_url = 'articles/delete/board_alumni99/%d' % article_id
+        resp, content = self.oauth_get(delete_url, self.consumer,
+                                       self.access_token)
+        obj = json.loads(content)
+        self.assertEqual(resp['status'], '200')
+        
         
 class BoardsTest(ApiTestCase):
     def test_lookup(self):
