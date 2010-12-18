@@ -165,6 +165,20 @@ def comments_create(request, board_id=None, article_id=None):
     ret = dumps({'status':'ok', 'comment':cmt})    
     return HttpResponse(ret)
 
+
+@api_exception
+@oauth_required
+def comments_delete(request, board_id=None, comment_id=None):
+    if not board_id:
+        board_id = request.GET['board_id']
+    if not comment_id:
+        comment_id = int(request.GET['comment_id'])
+    oauth_token = request.REQUEST['oauth_token']
+    user_id = Token.get_user_id(oauth_token)
+    Comment.delete(board_id, comment_id, user_id)
+    ret = dumps({'status':'ok'})
+    return HttpResponse(ret)
+
 @api_exception
 @oauth_required
 def users_lookup(request):

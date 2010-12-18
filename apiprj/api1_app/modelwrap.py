@@ -93,6 +93,12 @@ class Comment(object):
         cmt.save()
         
         return self.pack(cmt, board_id)
+    
+    @classmethod
+    def delete(self, board_id, comment_id, user_id):
+        comment_model = Comment.eval(board_id).objects.get(id=comment_id)
+        if comment_model.user_id == user_id:
+            comment_model.delete() 
 
 class Article(object):
     @classmethod

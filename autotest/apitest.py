@@ -210,6 +210,30 @@ class CommentsTest(ApiTestCase):
         self.assertEqual(resp['status'], '200')
         obj = json.loads(content)
         self.assertEqual(obj['status'].lower(), 'error')
+    
+    def test_delete(self):
+        'GET comments/delete/board_alumni99/:comment_id'
+        # create first
+        param = {'board_id':'board_alumni99', 'article_id':'20',
+                 'message':'comment test'}
+        resp, content = self.oauth_post("comments/create", self.consumer,
+                                        self.access_token, param)
+        self.assertEqual(resp['status'], '200')
+        obj = json.loads(content)
+        status = obj['status']
+        comment = obj['comment']
+        self.assertEqual(status, 'ok')
+        self.assertEqual(comment['content'], param['message'])
+        comment_id = comment['id']
+        
+        # and then delete
+        comment_url = 'comments/delete/board_alumni99/%d' % comment_id
+        resp, content = self.oauth_get(comment_url, self.consumer,
+                                      self.access_token)
+        self.assertEqual(resp['status'], '200')
+        obj = json.loads(content)
+        status = obj['status']
+        self.assertEqual(status, 'ok')
 
 class FavoriteTest(ApiTestCase):
     def test_list(self):
