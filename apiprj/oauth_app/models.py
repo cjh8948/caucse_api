@@ -1,5 +1,6 @@
 from django.db import models
-import oauth2, random, uuid, datetime
+import random, uuid, datetime
+from apiprj.ext import oauth2
 
 class Consumer(models.Model):
     TYPE_CHOICES = (('C', 'CLIENT'), ('B', 'BROWSER'))
