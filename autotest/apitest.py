@@ -342,6 +342,14 @@ class UsersTest(ApiTestCase):
         obj = json.loads(content)
         self.assertUserGochi(obj)
     
+    def test_show_no_user_id(self):
+        'GET users/show with oauth'
+        resp, content = self.oauth_get('users/show', self.consumer, 
+                                       self.access_token)
+        self.assertEqual(resp['status'],'200')
+        obj = json.loads(content)
+        self.assertUserGochi(obj)
+    
     def test_show_restful(self):
         'GET users/show/gochi with oauth'
         resp, content = self.oauth_get(resource='users/show/gochi',

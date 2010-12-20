@@ -198,10 +198,13 @@ def users_show(request, user_id=None):
     """This API returns user
     
     * resource: 'users/show'
-    ** method: GET, oauth required, rate limited
-    ** mandatory parameter: user_id"""
+    ** method: GET, oauth required, rate limited"""
     if not user_id:
-        user_id = request.GET['user_id']
+        if request.GET.has_key('user_id'):
+            user_id = request.GET['user_id']
+        else:
+            oauth_token = request.REQUEST['oauth_token']
+            user_id = Token.get_user_id(oauth_token)
     user = User.get(user_id)
     ret = dumps(user)
     return HttpResponse(ret)
