@@ -9,6 +9,7 @@ from utils.decorators import oauth_verify
 from apiprj.api1_app.utils.decorators import api_exception
 from apiprj.legacy_app.models import Member
 from models import Token, Consumer
+from urlparse import parse_qsl, urlparse, urlunparse 
 
 @api_exception
 @oauth_verify 
@@ -70,7 +71,9 @@ def authorize(request):
     ** mandatory parameter: see [[OauthAuthentication]]
     """
     if request.method == "GET":
-        params = {'oauth_token' : request.REQUEST['oauth_token']}
+        oauth_token = request.REQUEST['oauth_token']
+        token = Token.objects.get(key=oauth_token)
+        params = {'oauth_token' : oauth_token, 'consumer' : token.consumer}
         return render_to_response('oauth/auth_form.html', params)
 
     elif request.method == "POST":
@@ -95,7 +98,10 @@ def authorize(request):
         else:
             params = {'oauth_token': token.key,
                       'oauth_verifier': token.verifier}
-            callback_url = token.callback + "?" + urlencode(params)
+            parsed_callback = list(urlparse(token.callback))
+            params.update(dict(parse_qsl(parsed_callback[4])))
+            parsed_callback[4] = urlencode(params)
+            callback_url = urlunparse(parsed_callback)
             return HttpResponseRedirect(callback_url)
         
 
