@@ -115,7 +115,7 @@ def boards_favorite(request):
     favorites = Favorite.get_by_user(user_id)
     favorite_list = map(lambda x: x.get('board_id'), favorites)
     # add cafe
-    cafe_boards_list = []
+    cafe_board_list = []
     cafe_boards = [Cafe.get_boards(cafe_id) for cafe_id 
                    in User.get_cafe(user_id)]
     if cafe_boards:
