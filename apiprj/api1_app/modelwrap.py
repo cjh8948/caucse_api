@@ -259,7 +259,10 @@ class User(object):
     @classmethod
     def get_cafe(self, user_id):
         user = models.Member.objects.get(id=user_id)
-        return user.cafe_name.split(',')
+        if user.cafe_name:
+            return user.cafe_name.split(',')
+        else:
+            return []
 
     @classmethod
     def search(self, q):
