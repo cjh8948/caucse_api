@@ -246,6 +246,8 @@ class User(object):
     @classmethod
     def get_img_url(self, user_id):
         img_path = os.path.join(USER_IMG_PATH, user_id)
+        if type(img_path) is unicode:
+            img_path = img_path.encode('utf-8')
         if os.path.isfile(img_path):
             return USER_IMG_PREFIX + user_id
         else:
