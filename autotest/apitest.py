@@ -242,7 +242,8 @@ class FavoriteTest(ApiTestCase):
                                        self.access_token)        
         self.assertEqual(resp['status'], '200')
         obj = json.loads(content)
-        self.assertEqual(obj[0]['board_id'], 'board_part_plan')
+        ids = [board['board_id'] for board in obj]
+        self.assertTrue('board_part_plan' in ids)
 
 
 class OauthTestCase(ApiTestCase):
@@ -344,9 +345,9 @@ class UsersTest(ApiTestCase):
     
     def test_show_no_user_id(self):
         'GET users/show with oauth'
-        resp, content = self.oauth_get('users/show', self.consumer, 
+        resp, content = self.oauth_get('users/show', self.consumer,
                                        self.access_token)
-        self.assertEqual(resp['status'],'200')
+        self.assertEqual(resp['status'], '200')
         obj = json.loads(content)
         self.assertUserGochi(obj)
     
