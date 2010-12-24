@@ -440,7 +440,6 @@ class Request(dict):
                 except:
                     raise Error('Unable to parse OAuth parameters from '
                         'Authorization header.')
- 
         # GET or POST query string.
         if query_string:
             query_params = cls._split_url_string(query_string)
@@ -604,11 +603,10 @@ class Server(object):
 
     def verify_request(self, request, consumer, token):
         """Verifies an api call and checks all the parameters."""
-
         version = self._get_version(request)
         self._check_signature(request, consumer, token)
         parameters = request.get_nonoauth_parameters()
-        return parameters
+        return dict(request)#parameters
 
     def build_authenticate_header(self, realm=''):
         """Optional support for the authenticate header."""

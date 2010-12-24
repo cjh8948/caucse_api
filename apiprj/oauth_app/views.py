@@ -13,15 +13,15 @@ from urlparse import parse_qsl, urlparse, urlunparse
 
 @api_exception
 @oauth_verify 
-def request_token(request):
+def request_token(request, oauth_params):
     """This API grants request_token
     
     * resource: 'oauth/request_token'
     ** method: oauth
-    ** mandatory parameter: see [[OauthAuthentication]]"""    
+    ** mandatory parameter: see [[OauthAuthentication]]"""
     try:
-        consumer_key = request.REQUEST['oauth_consumer_key']
-        callback = request.REQUEST['oauth_callback']
+        consumer_key = oauth_params['oauth_consumer_key']
+        callback = oauth_params['oauth_callback']
     except KeyError:
         return HttpResponseBadRequest()
     token = Token.new_request_token(consumer_key, callback)
@@ -30,7 +30,7 @@ def request_token(request):
 @csrf_exempt
 @api_exception
 @oauth_verify 
-def access_token(request):
+def access_token(request, oauth_params):
     """This API grants access_token
     
     * resource: 'oauth/access_token'
@@ -38,8 +38,8 @@ def access_token(request):
     ** mandatory parameter: see [[OauthAuthentication]]"""    
     # need to verify verifier
     try:
-        request_token = request.REQUEST['oauth_token']
-        verifier = request.REQUEST['oauth_verifier']
+        request_token = oauth_params['oauth_token']
+        verifier = oauth_params['oauth_verifier']
     except KeyError:
         return HttpResponseBadRequest()
 

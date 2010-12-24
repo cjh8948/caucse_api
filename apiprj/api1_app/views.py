@@ -12,7 +12,7 @@ from modelwrap import Article, Board, Comment, User, Token, Favorite, Cafe
 @csrf_exempt 
 @api_exception
 @oauth_required
-def articles_create(request, board_id=None):
+def articles_create(request, oauth_params, board_id=None):
     """This API posts an article.
     
     * resource: 'articles/create'
@@ -36,7 +36,7 @@ def articles_create(request, board_id=None):
 
 @api_exception
 @oauth_required
-def articles_delete(request, board_id=None, article_id=None):
+def articles_delete(request, oauth_params, board_id=None, article_id=None):
     if not board_id:
         board_id = request.GET['board_id']
     if not article_id:
@@ -52,7 +52,7 @@ def articles_delete(request, board_id=None, article_id=None):
     
 @api_exception
 @oauth_required
-def articles_list(request, board_id=None):
+def articles_list(request, oauth_params, board_id=None):
     """This API returns array of articles and list option. 
     
     * resource: 'articles/list'
@@ -84,7 +84,7 @@ def articles_list(request, board_id=None):
 
 @api_exception
 @oauth_required
-def articles_show(request, board_id=None, article_id=None):
+def articles_show(request, oauth_params, board_id=None, article_id=None):
     """This API returns array of articles
     
     * resource: 'articles/show'
@@ -100,7 +100,7 @@ def articles_show(request, board_id=None, article_id=None):
 
 @api_exception
 @oauth_required
-def boards_favorite(request):
+def boards_favorite(request, oauth_params):
     """이 API는 자유게시판, user의 Favorite 게시판, user의 cafe 게시판의 
     배열을 반환한다."""
     def join_list(list1, list2):
@@ -130,7 +130,7 @@ def boards_favorite(request):
     return HttpResponse(ret)
 
 @api_exception     
-def boards_lookup(request):
+def boards_lookup(request, **kw):
     """This API returns array of boards
     
     * resource: 'boards/lookup'
@@ -144,7 +144,7 @@ def boards_lookup(request):
 @csrf_exempt
 @api_exception
 @oauth_required
-def comments_create(request, board_id=None, article_id=None):
+def comments_create(request, oauth_params, board_id=None, article_id=None):
     """This API posts a comment. 
     
     * resource: 'comments/create'
@@ -170,7 +170,7 @@ def comments_create(request, board_id=None, article_id=None):
 
 @api_exception
 @oauth_required
-def comments_delete(request, board_id=None, comment_id=None):
+def comments_delete(request, oauth_params, board_id=None, comment_id=None):
     if not board_id:
         board_id = request.GET['board_id']
     if not comment_id:
@@ -183,7 +183,7 @@ def comments_delete(request, board_id=None, comment_id=None):
 
 @api_exception
 @oauth_required
-def users_lookup(request):
+def users_lookup(request, oauth_params):
     """This API returns array of users
     
     * resource: 'users/lookup'
@@ -196,7 +196,7 @@ def users_lookup(request):
 
 @api_exception
 @oauth_required
-def users_show(request, user_id=None):
+def users_show(request, oauth_params, user_id=None):
     """This API returns user
     
     * resource: 'users/show'
@@ -213,7 +213,7 @@ def users_show(request, user_id=None):
 
 @api_exception
 @oauth_required
-def users_search(request):
+def users_search(request, oauth_params):
     q = request.GET['q']
     users = User.search(q)
     ret = dumps(users)
@@ -221,7 +221,7 @@ def users_search(request):
 
 @api_exception
 @oauth_required
-def favorites_list(request):
+def favorites_list(request, oauth_params):
     oauth_token = request.REQUEST['oauth_token']
     user_id = Token.get_user_id(oauth_token)
     favorites = Favorite.get_by_user(user_id)
