@@ -9,7 +9,7 @@ def api_exception(view_func):
         except Exception as e:
             return HttpResponse(json.dumps({'status': 'error',
                                             'type': str(type(e)),
-                                            'message': e.message}))
+                                            'message': str(e)}))
     
     return wraps(view_func)(handle_exception)
 
