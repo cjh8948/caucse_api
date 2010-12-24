@@ -34,6 +34,33 @@ def articles_create(request, oauth_params, board_id=None):
     ret = dumps({'status':'ok', 'article': article})    
     return HttpResponse(ret)
 
+@csrf_exempt 
+@api_exception
+@oauth_required
+def articles_update(request, oauth_params, board_id=None, article_id=None):
+    """This API posts an article.
+    
+    * resource: 'articles/create'
+    ** method: POST, oauth required, rate limited
+    ** mandatory parameter: board_id, title, message"""
+    if not board_id:
+        board_id = request.POST['board_id']
+    if not article_id:
+        article_id = request.POST['article_id']
+    title = request.POST['title']
+    message = request.POST['message']
+    oauth_token = request.POST['oauth_token']    
+    if board_id.startswith('photo'):
+        raise Exception('사진게시판 게시 기능은 지원하지 않습니다.')
+    
+    user_id = Token.get_user_id(oauth_token)
+    article = Article.update(board_id=board_id, article_id=article_id,
+                             user_id=user_id, title=title, message=message)
+
+    # return result
+    ret = dumps({'status':'ok', 'article': article})    
+    return HttpResponse(ret)
+
 @api_exception
 @oauth_required
 def articles_delete(request, oauth_params, board_id=None, article_id=None):

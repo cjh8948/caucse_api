@@ -130,6 +130,32 @@ class ArticlesTest(ApiTestCase):
         self.assertEqual(resp['status'], '200')
         obj = json.loads(content)
         self.assertEqual(obj['status'].lower(), 'ok')
+    
+    def test_update(self):
+        'POST articles/update/board_alumni99/:article_id'
+        # create first
+        param = {'title': 'title!', 'message': 'message!'}
+        resp, content = self.oauth_post('articles/create/board_alumni99',
+                                        self.consumer, self.access_token,
+                                        param)
+        self.assertEqual(resp['status'], '200')
+        obj = json.loads(content)
+        status = obj['status']
+        self.assertEqual(status, 'ok')
+        article_id = obj['article']['id']
+        
+        # and then update
+        new_message = 'message changed!!!!!'
+        param = {'title': 'title!!!', 'message': new_message}
+        url = 'articles/update/board_alumni99/%d' % article_id
+        resp, content = self.oauth_post(url, self.consumer, self.access_token,
+                                        param)
+        self.assertEqual(resp['status'], '200')
+        obj = json.loads(content)
+        status = obj['status']
+        self.assertEqual(status, 'ok')
+        article = obj['article']
+        self.assertEqual(article['content'], new_message)
 
     def test_create_on_photo_restful(self):
         'POST articles/create/photo_alumni99 with oauth'        

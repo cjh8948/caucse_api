@@ -178,6 +178,21 @@ class Article(object):
         return listinfo, packed_articles
     
     @classmethod
+    def update(self, board_id, article_id, user_id, title, message):
+        article_model = Article.eval(board_id)
+        article = article_model.objects.get(id=article_id)
+        
+        if (board_id in ['board_anonymous', 'board_freeboard'] or 
+            article.user_id != user_id):
+            raise Exception("")
+
+        article.title = title
+        article.content = message
+        article.save()
+        return self.pack(article, board_id)
+            
+        
+    @classmethod
     def post(self, board_id, user_id, title, message):
         article_model = Article.eval(board_id)        
         max_idx = article_model.objects.all().aggregate(Max('idx'))['idx__max']
