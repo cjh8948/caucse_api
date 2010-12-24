@@ -8,6 +8,7 @@ from django.utils.simplejson import dumps
 from django.views.decorators.csrf import csrf_exempt
 from utils.decorators import api_exception
 from modelwrap import Article, Board, Comment, User, Token, Favorite, Cafe
+from apiprj.exceptions import NotImplementedYet
 
 @csrf_exempt 
 @api_exception
@@ -24,7 +25,7 @@ def articles_create(request, oauth_params, board_id=None):
     message = request.POST['message']
     oauth_token = request.POST['oauth_token']    
     if board_id.startswith('photo'):
-        raise Exception('사진게시판 게시 기능은 지원하지 않습니다.')
+        raise NotImplementedYet('사진게시판 게시 기능은 지원하지 않습니다.')
     
     user_id = Token.get_user_id(oauth_token)
     article = Article.post(board_id=board_id, user_id=user_id, title=title,
@@ -51,7 +52,7 @@ def articles_update(request, oauth_params, board_id=None, article_id=None):
     message = request.POST['message']
     oauth_token = request.POST['oauth_token']    
     if board_id.startswith('photo'):
-        raise Exception('사진게시판 게시 기능은 지원하지 않습니다.')
+        raise NotImplementedYet('사진게시판 게시 기능은 지원하지 않습니다.')
     
     user_id = Token.get_user_id(oauth_token)
     article = Article.update(board_id=board_id, article_id=article_id,
@@ -70,7 +71,7 @@ def articles_delete(request, oauth_params, board_id=None, article_id=None):
         article_id = int(request.GET['article_id'])
     oauth_token = request.REQUEST['oauth_token']
     if board_id.startswith('photo'):
-        raise Exception('사진게시판 게시물 삭제 기능은 지원하지 않습니다.')
+        raise NotImplementedYet('사진게시판 게시물 삭제 기능은 지원하지 않습니다.')
     
     user_id = Token.get_user_id(oauth_token)
     Article.delete(board_id, article_id, user_id)

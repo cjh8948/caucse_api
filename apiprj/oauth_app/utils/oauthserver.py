@@ -1,5 +1,6 @@
 from apiprj.ext import oauth2
 from apiprj.oauth_app import models
+from apiprj.exceptions import *
 
 class ServerAlpha(oauth2.Server):
     """Caucse API version implementation of an oauth service provider, based 
@@ -68,8 +69,13 @@ class ServerAlpha(oauth2.Server):
         will raise Exception.
         """
         request = self._to_oauth_request(django_request)
+        try:
+            consumer_key = request['oauth_consumer_key']
+            oauth_token = request['oauth_token']
+        except KeyError as e:
+            raise RequiredParameterDoesNotExist(str(e))
         consumer = self._fetch_consumer(request['oauth_consumer_key'])
         token = models.Token.objects.get(key=request['oauth_token'])
         if token.type != "A":
-            raise Exception("no access token")
+            raise AuthError("no access token")
         return self.verify_request(request, consumer, token)

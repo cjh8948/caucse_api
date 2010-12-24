@@ -5,8 +5,7 @@ from apiprj.oauth_app.models import Token as OauthToken
 from apiprj.settings import USER_IMG_PATH, USER_IMG_PREFIX
 from django.db.models.aggregates import Max
 from django.db.models import Q
-
-class ModelnameError(Exception):pass
+from apiprj.exceptions import *
 
 class Board(object):
     @classmethod
@@ -49,13 +48,15 @@ class Board(object):
 class Comment(object):     
     @classmethod   
     def eval(self, board_id):
+        # 일반 게시판의 경우 board_* 의 커멘트 table은 comment_* 
         if board_id.startswith('board'):
             prefix = "Comment"
-        else:
+        # 사진 게시판의 경우 photo_* 의 커멘트 table은 memo_*
+        elif board_id.startswith('photo'):
             prefix = "Memo"
         comment_classname = prefix + board_id.title().replace('_', '')[5:]
         if comment_classname not in dir(models):
-            raise ModelnameError(comment_classname + ' ' + board_id)
+            raise DatabaseTableDoesNotExist(comment_classname)
         return eval("models." + comment_classname)
 
     @classmethod
@@ -105,7 +106,7 @@ class Article(object):
     def eval(self, board_id):
         board_classname = board_id.title().replace('_', '')
         if board_classname not in dir(models):
-            raise ModelnameError(board_classname + ' ' + board_id)
+            raise DatabaseTableDoesNotExist(board_classname)
         return eval("models." + board_classname)
 
     @classmethod
@@ -137,7 +138,7 @@ class Article(object):
         board_model = Article.eval(board_id)
         article_model = board_model.objects.get(id=article_id)
         if user_id != article_model.user_id:
-            raise Exception("%s doesn't have permission" % user_id)
+            raise PermissionDenied(user_id)
         article_model.delete()
     
     @classmethod
@@ -184,7 +185,7 @@ class Article(object):
         
         if (board_id in ['board_anonymous', 'board_freeboard'] or 
             article.user_id != user_id):
-            raise Exception("")
+            raise PermissionDenied(user_id)
 
         article.title = title
         article.content = message
@@ -304,14 +305,13 @@ class User(object):
             Qs.append(reduce(Q.__or__, map(lambda x: Q(id__contains=x), ids)))
         if names:
             Qs.append(reduce(Q.__or__, map(lambda x: Q(name__contains=x), names)))
-        if Qs:
-            users = models.Member.objects.filter(reduce(Q.__and__, Qs))[:300]
-            if users:
-                return map(self.pack, users)
-            else:
-                raise Exception("No matching")
+        users = models.Member.objects.filter(reduce(Q.__and__, Qs))[:300]
+        if users:
+            return map(self.pack, users)
         else:
-            raise Exception("No Query")
+            # TODO: make it returns empty list, define proper exception
+            raise Exception("No matching")
+
         
 class Token(object):
     @classmethod

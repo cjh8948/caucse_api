@@ -10,6 +10,7 @@ from apiprj.api1_app.utils.decorators import api_exception
 from apiprj.legacy_app.models import Member
 from models import Token, Consumer
 from urlparse import parse_qsl, urlparse, urlunparse 
+from apiprj.exceptions import * 
 
 @api_exception
 @oauth_verify 
@@ -84,7 +85,7 @@ def authorize(request):
         # check user_id, password
         member = Member.objects.get(id=user_id) 
         if not check_mysql_password(password, member.password):
-            raise Exception("wrong password")
+            raise AuthError("wrong password")
 
         # make verifier 
         token = Token.objects.get(key=oauth_token)

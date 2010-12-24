@@ -58,7 +58,7 @@ class Token(models.Model):
     
     def new_verifier(self, user):
         if self.type == 'A':
-            raise Exception
+            raise AuthError
         self.user = user
         self.verifier = "%06d" % random.randint(0, 999999)
         self.save()
@@ -76,7 +76,7 @@ class Token(models.Model):
                     
         # promote
         if self.type == 'A':
-            raise Exception('Access token cannot be promoted')
+            raise AuthError('Access token cannot be promoted')
         self.key = self.generate_token()
         self.secret = self.generate_token()
         self.type = 'A'
