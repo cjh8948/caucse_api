@@ -8,16 +8,20 @@
 <form method="post" action="/oauth/authorize">
     {%csrf_token%} 
     {% if user.is_authenticated %}
-    <p>
-        ...
-    </p>
+	    <p>
+	        {{ user.username }}님이 아니신 경우... 
+	    </p>
     {% else %}
-    <p>
-        아이디: <input name='user_id'/>
-    </p>
-    <p>
-        비밀 번호: <input name='password' type='password'/>
-    </p>{% endif %}
+		<p>
+			{{ message }}
+		</p>
+	    <p>
+	        아이디: <input name='user_id'/>
+	    </p>
+	    <p>
+	        비밀 번호: <input name='password' type='password'/>
+	    </p>
+	{% endif %}
     <p>
         <input type='submit' value='Allow'/><input type='hidden' name='oauth_token' value='{{ oauth_token }}'/>
     </p>

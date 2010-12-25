@@ -1,3 +1,4 @@
+#-*- coding:utf-8 -*-
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
@@ -13,6 +14,7 @@ from models import Token, Consumer
 from urlparse import parse_qsl, urlparse, urlunparse 
 from apiprj.exceptions import * 
 from django.core.context_processors import csrf
+from urllib2 import HTTPRedirectHandler
 
 @api_exception
 @oauth_verify 
@@ -94,10 +96,20 @@ def authorize(request):
             # check user_id, password
             user_id = request.REQUEST['user_id']
             password = request.REQUEST['password']
+            oauth_token = request.REQUEST['oauth_token']
             user = authenticate(username=user_id, password=password)
             if user:
                 if user.is_active:
                     login(request, user)
+            else:
+                token = Token.objects.get(key=oauth_token)
+                message = u"사용자 아이디와 비밀번호가 일치하지 않습니다."
+                params = {'oauth_token' : oauth_token,
+                          'consumer' : token.consumer,
+                          'user': request.user,
+                          'message': message}
+                params.update(csrf(request))
+                return render_to_response('oauth/auth_form.html', params)
                     
         # make verifier 
         oauth_token = request.REQUEST['oauth_token']
