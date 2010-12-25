@@ -279,17 +279,3 @@ def myapp(request):
     return render_to_response('myapp.html', {'user': request.user,
                                              'consumer_token': consumer_token})
   
-@login_required  
-def consumer_show(request, consumer_key):
-    c = Consumer.objects.get(key=consumer_key)
-    try:
-        token = TokenModel.objects.filter(type='A')\
-                                  .filter(consumer=c)\
-                                  .filter(user=c.user_id)[0]
-    except ObjectDoesNotExist:
-        token = None
-    if request.user.username != c.user_id:
-        return HttpResponseForbidden()
-    return render_to_response('consumer/show.html',
-                              {'consumer':c, 'user':request.user,
-                               'token': token})
