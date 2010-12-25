@@ -269,7 +269,7 @@ class FavoriteTest(ApiTestCase):
         self.assertEqual(resp['status'], '200')
         obj = json.loads(content)
         ids = [board['board_id'] for board in obj]
-        self.assertTrue('board_part_plan' in ids)
+        self.assertTrue('board_alumni99' in ids)
 
 
 class OauthTestCase(ApiTestCase):
@@ -305,54 +305,6 @@ class OauthTestCase(ApiTestCase):
         self.assertEquals(resp['status'], '400') 
         self.assertEquals(content, "")
 
-    def test_three_legged_oauth_authorize(self):
-        'Three legged oauth authentication 1.0a flow'
-        # request token
-        resp, content = self.oauth_get(resource="oauth/request_token",
-                                       consumer=self.consumer, token=None,
-                                       param=None, callback="oob")
-        self.assertEquals(resp['status'], '200')
-        content_dict = dict(urlparse.parse_qsl(content))
-        token = oauth2.Token(content_dict['oauth_token'],
-                             content_dict['oauth_token_secret'])
-
-        # user authorize leg
-        params = {'user_id': TEST_USER, 'password': TEST_USER_PASSWORD}
-        resp, content = self.oauth_post(resource="oauth/authorize",
-                                        consumer=self.consumer,
-                                        token=token,
-                                        param=params)
-        self.assertEquals(resp['status'], '200')
-
-        # parse verifier
-        re_pin = re.compile("PIN: (\d*)")
-        matched_obj = re_pin.search(content)
-        self.assertNotEquals(matched_obj, None)
-        verifier = matched_obj.groups()[0]
-
-        # request access token
-        token.set_verifier(verifier)
-        resp, content = self.oauth_post(resource="oauth/access_token",
-                                        consumer=self.consumer,
-                                        token=token)
-        self.assertEquals(resp['status'], '200')
-        access_token = dict(urlparse.parse_qsl(content))
-        self.assertTrue(access_token.has_key('oauth_token'))
-        self.assertTrue(access_token.has_key('oauth_token_secret'))
-
-        # request protected resource
-        param = {'user_id': 'gochi'}
-        access_token = oauth2.Token(access_token['oauth_token'],
-                                    access_token['oauth_token_secret'])
-        resp, content = self.oauth_get(resource="users/show",
-                                       consumer=self.consumer,
-                                       token=access_token,
-                                       param=param)
-        self.assertEqual(resp['status'], '200')
-
-        # validate result
-        obj = json.loads(content)
-        self.assertUserGochi(obj)
 
 class UsersTest(ApiTestCase):
     def test_show(self):
