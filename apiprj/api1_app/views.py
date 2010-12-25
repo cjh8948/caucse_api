@@ -1,5 +1,6 @@
 #! -*- coding: utf8 -*- 
 from apiprj.oauth_app.models import Consumer
+from apiprj.oauth_app.models import Token as TokenModel
 from apiprj.oauth_app.utils.decorators import oauth_required
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseForbidden
@@ -9,6 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from utils.decorators import api_exception
 from modelwrap import Article, Board, Comment, User, Token, Favorite, Cafe
 from apiprj.exceptions import NotImplementedYet
+from django.core.exceptions import ObjectDoesNotExist
 
 @csrf_exempt 
 @api_exception
@@ -256,15 +258,38 @@ def favorites_list(request, oauth_params):
     ret = dumps(favorites)
     return HttpResponse(ret)
 
-@login_required    
 def index(request):
-    consumers = Consumer.objects.all()
-    return render_to_response('index.html', {'consumers': consumers,
-                                             'user': request.user})
+    return render_to_response('index.html', {'user': request.user})
+
+def apistatus(request):
+    return render_to_response('apistatus.html', {'user': request.user})
+
+@login_required
+def myapp(request):
+    consumers = Consumer.objects.filter(user_id=request.user.username)
+    consumer_token = []
+    for consumer in consumers:
+        try:
+            token = TokenModel.objects.filter(type='A')\
+                                      .filter(consumer=consumer)\
+                                      .filter(user=consumer.user_id)[0]
+        except ObjectDoesNotExist:
+            token = None
+        consumer_token.append((consumer, token))
+    return render_to_response('myapp.html', {'user': request.user,
+                                             'consumer_token': consumer_token})
   
 @login_required  
 def consumer_show(request, consumer_key):
     c = Consumer.objects.get(key=consumer_key)
+    try:
+        token = TokenModel.objects.filter(type='A')\
+                                  .filter(consumer=c)\
+                                  .filter(user=c.user_id)[0]
+    except ObjectDoesNotExist:
+        token = None
     if request.user.username != c.user_id:
         return HttpResponseForbidden()
-    return render_to_response('consumer/show.html', {'consumer':c})        
+    return render_to_response('consumer/show.html',
+                              {'consumer':c, 'user':request.user,
+                               'token': token})

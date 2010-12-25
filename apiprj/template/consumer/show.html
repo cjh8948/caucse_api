@@ -1,18 +1,31 @@
-<h1>{{consumer.name|escape}} 정보</h1>
+{% extends "base.html" %}
+{% block content %}<h1>{{consumer.name|escape}} 애플리케이션 등록 정보</h1>
 <ul>
+    <li>
+        관리자: {{consumer.user_id}}
+    </li>
+    <li>
+        생성일: {{consumer.created|timesince}} 전
+    </li>
+    <li>
+        설명: {{consumer.description|escape}}
+    </li>
+    <li>
+        consumer type:{{consumer.type}} 
+    </li>
     <li>
         consumer key: {{consumer.key|escape}}
     </li>
     <li>
         consumer secret: {{consumer.secret|escape}}
     </li>
+    {% if token %}
     <li>
-        consumer type:{{consumer.type}} 
+        access token key: {{token.key}}
     </li>
     <li>
-        consumer created: {{consumer.created|timesince}} 전
+        access token key: {{token.secret}}
     </li>
-    <li>
-        consumer description: {{consumer.description|escape}}
-    </li>
+    {% endif %}
 </ul>
+{% endblock %}

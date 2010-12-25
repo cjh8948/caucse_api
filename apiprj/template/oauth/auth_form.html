@@ -1,18 +1,25 @@
 {%extends "base.html"%}
-{% block content %}<h1>{{ consumer.name }}이 동문 네트워크 서비스 계정으로의 접근을 요청하고 있습니다.</h1>
+{% block content %}
+<h1>{{ consumer.name }} 애플리케이션이 동문님의 동문 네트워크 서비스 계정으로의 접근을 요청하고 있습니다.</h1>
 <p>
-    The application {{ consumer.name }} by {{ consumer.user_id }} would 
-    like the ability to access and update your data on caucse.net. 
+    {{ consumer.user_id }} 동문이 작성한 {{ consumer.name }} 애플리케이션이 
+    동문님의 동문 네트워크 데이터를 사용하도록 허용하시겠습니까? 
 </p>
 <form method="post" action="/oauth/authorize">
-    {%csrf_token%}
+    {%csrf_token%} 
+    {% if user.is_authenticated %}
     <p>
-        ID: <input name='user_id'/>
+        ...
+    </p>
+    {% else %}
+    <p>
+        아이디: <input name='user_id'/>
     </p>
     <p>
-        PW: <input name='password' type='password'/>
-    </p>
+        비밀 번호: <input name='password' type='password'/>
+    </p>{% endif %}
     <p>
         <input type='submit' value='Allow'/><input type='hidden' name='oauth_token' value='{{ oauth_token }}'/>
     </p>
-</form>{% endblock %}
+</form>
+{% endblock %} 

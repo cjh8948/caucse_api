@@ -1,5 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render_to_response
@@ -81,28 +82,32 @@ def authorize(request):
             token = Token.objects.get(key=oauth_token)
         except ObjectDoesNotExist:
             return HttpResponseForbidden()
-        params = {'oauth_token' : oauth_token, 'consumer' : token.consumer}
+        params = {'oauth_token' : oauth_token, 'consumer' : token.consumer,
+                  'user': request.user}
         params.update(csrf(request))
         return render_to_response('oauth/auth_form.html', params)
 
     elif request.method == "POST":
-        user_id = request.REQUEST['user_id']
-        password = request.REQUEST['password']
-        oauth_token = request.REQUEST['oauth_token']
-
-        # check user_id, password
-        member = Member.objects.get(id=user_id) 
-        if not check_mysql_password(password, member.password):
-            raise AuthError("wrong password")
-
+        if request.user.is_authenticated():
+            user_id = request.user.username
+        else:
+            # check user_id, password
+            user_id = request.REQUEST['user_id']
+            password = request.REQUEST['password']
+            user = authenticate(username=user_id, password=password)
+            if user:
+                if user.is_active:
+                    login(request, user)
+                    
         # make verifier 
+        oauth_token = request.REQUEST['oauth_token']
         token = Token.objects.get(key=oauth_token)
         token.new_verifier(user_id)
         oauth_token = token.to_oauth()
 
         # callback processing
         if token.callback == "oob": # pin processing
-            params = {'verifier': token.verifier}
+            params = {'verifier': token.verifier, 'user': request.user}
             return render_to_response('oauth/auth_verifier.html', params)
         else:
             params = {'oauth_token': token.key,

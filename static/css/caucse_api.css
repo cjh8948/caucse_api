@@ -1,3 +1,56 @@
 body {
+    background-color: #aaaaaa;
+}
+
+ul.nav {
+    display: inline;
+    list-style-type: none;
+}
+
+li.nav {
+    display: inline;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+#container {
+    clear: both;
+    width: 980px;
+    display: block;
+    margin: 0px auto;
+}
+
+#header {
+    clear: both;
+    display: block;
+    height: 30px;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #eeeeee;
+}
+
+#logo {
+    float: left;
+    display: block;
+    margin: 0px auto;
+}
+
+#nav {
+    float: right;
+    margin: 0px auto;
+}
+
+#content {
+    clear: both;
+    display: block;
+    padding: 10px;
+    background-color: #eeeeee;
+}
+
+#footer {
+    clear: both;
+    display: block;
+    margin-top: 10px;
+    padding: 10px;
     background-color: #eeeeee;
 }
