@@ -4,8 +4,6 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # index
-    (r'^$', 'apiprj.api1_app.views.index'),
     # accounts
     (r'^accounts/$', 'apiprj.api1_app.views.index'),
     (r'^accounts/login/$', 'django.contrib.auth.views.login'),
@@ -13,9 +11,6 @@ urlpatterns = patterns('',
     # admin
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
     (r'^admin/', include(admin.site.urls)),
-    # consumer
-    (r'^consumer/show/(?P<consumer_key>.+)',
-     'apiprj.oauth_app.views.consumer_show'),
     # oauth
     (r'^oauth/', include('apiprj.oauth_app.urls')),
     # api

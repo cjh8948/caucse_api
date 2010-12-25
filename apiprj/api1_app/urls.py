@@ -1,6 +1,7 @@
 from django.conf.urls.defaults import patterns
 
 urlpatterns = patterns('apiprj.api1_app.views',
+    # json resources
     (r'^articles/create/(?P<board_id>(board|photo)_.+)', 'articles_create'),
     (r'^articles/create', 'articles_create'),
     (r'^articles/delete/(?P<board_id>(board|photo)_.+)/(?P<article_id>\d+)', 'articles_delete'),
@@ -22,4 +23,8 @@ urlpatterns = patterns('apiprj.api1_app.views',
     (r'^users/show', 'users_show'),
     (r'^users/lookup', 'users_lookup'),
     (r'^users/search', 'users_search'),
+
+    # html pages    
+    (r'^consumer/show/(?P<consumer_key>.+)', 'consumer_show'),
+    (r'^$', 'index'),
 )

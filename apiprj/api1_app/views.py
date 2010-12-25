@@ -2,7 +2,7 @@
 from apiprj.oauth_app.models import Consumer
 from apiprj.oauth_app.utils.decorators import oauth_required
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import render_to_response
 from django.utils.simplejson import dumps
 from django.views.decorators.csrf import csrf_exempt
@@ -262,3 +262,9 @@ def index(request):
     return render_to_response('index.html', {'consumers': consumers,
                                              'user': request.user})
   
+@login_required  
+def consumer_show(request, consumer_key):
+    c = Consumer.objects.get(key=consumer_key)
+    if request.user.username != c.user_id:
+        return HttpResponseForbidden()
+    return render_to_response('consumer/show.html', {'consumer':c})        

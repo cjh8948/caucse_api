@@ -1,23 +1,18 @@
-<html>
-    <head>
-        <title>caucse api</title>
-    </head>
-    <body>
-        <h1>{{ consumer.name }} would like to connect to your account</h1>
-        <p>
-            The application {{ consumer.name }} by {{ consumer.user_id }} would 
-            like the ability to access and update your data on caucse.net. 
-        </p>
-        <form method="POST">
-            <p>
-                ID: <input name='user_id'/>
-            </p>
-            <p>
-                PW: <input name='password' type='password'/>
-            </p>
-            <p>
-                <input type='submit' value='Allow'/><input type='hidden' name='oauth_token' value='{{ oauth_token }}'/>
-            </p>
-        </form>
-    </body>
-</html>
+{%extends "base.html"%}
+{% block content %}<h1>{{ consumer.name }}이 동문 네트워크 서비스 계정으로의 접근을 요청하고 있습니다.</h1>
+<p>
+    The application {{ consumer.name }} by {{ consumer.user_id }} would 
+    like the ability to access and update your data on caucse.net. 
+</p>
+<form method="post" action="/oauth/authorize">
+    {%csrf_token%}
+    <p>
+        ID: <input name='user_id'/>
+    </p>
+    <p>
+        PW: <input name='password' type='password'/>
+    </p>
+    <p>
+        <input type='submit' value='Allow'/><input type='hidden' name='oauth_token' value='{{ oauth_token }}'/>
+    </p>
+</form>{% endblock %}

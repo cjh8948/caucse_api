@@ -11,6 +11,7 @@ from apiprj.legacy_app.models import Member
 from models import Token, Consumer
 from urlparse import parse_qsl, urlparse, urlunparse 
 from apiprj.exceptions import * 
+from django.core.context_processors import csrf
 
 @api_exception
 @oauth_verify 
@@ -58,7 +59,6 @@ def access_token(request, oauth_params):
     return HttpResponse(access_token.to_string())
 
 @api_exception
-@csrf_exempt
 def authorize(request):
     """This API asks the user for granting the consumer access protected 
     resources. 
@@ -72,9 +72,17 @@ def authorize(request):
     ** mandatory parameter: see [[OauthAuthentication]]
     """
     if request.method == "GET":
-        oauth_token = request.REQUEST['oauth_token']
-        token = Token.objects.get(key=oauth_token)
+        try:
+            oauth_token = request.REQUEST['oauth_token']
+        except KeyError as e:
+            raise RequiredParameterDoesNotExist(str(e))
+         
+        try:
+            token = Token.objects.get(key=oauth_token)
+        except ObjectDoesNotExist:
+            return HttpResponseForbidden()
         params = {'oauth_token' : oauth_token, 'consumer' : token.consumer}
+        params.update(csrf(request))
         return render_to_response('oauth/auth_form.html', params)
 
     elif request.method == "POST":
@@ -104,11 +112,3 @@ def authorize(request):
             parsed_callback[4] = urlencode(params)
             callback_url = urlunparse(parsed_callback)
             return HttpResponseRedirect(callback_url)
-        
-
-@login_required  
-def consumer_show(request, consumer_key):
-    c = Consumer.objects.get(key=consumer_key)
-    if request.user.username != c.user_id:
-        return HttpResponseForbidden()
-    return render_to_response('consumer/show.html', {'consumer':c})        
