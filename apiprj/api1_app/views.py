@@ -264,6 +264,9 @@ def index(request):
 def apistatus(request):
     return render_to_response('apistatus.html', {'user': request.user})
 
+def apireference(request):
+    return render_to_response('apireference.html', {'user': request.user})
+
 @login_required
 def myapp(request):
     consumers = Consumer.objects.filter(user_id=request.user.username)
