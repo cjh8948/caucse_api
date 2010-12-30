@@ -276,7 +276,7 @@ def myapp(request):
             token = TokenModel.objects.filter(type='A')\
                                       .filter(consumer=consumer)\
                                       .filter(user=consumer.user_id)[0]
-        except ObjectDoesNotExist:
+        except IndexError:
             token = None
         consumer_token.append((consumer, token))
     return render_to_response('myapp.html', {'user': request.user,
