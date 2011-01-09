@@ -1,6 +1,7 @@
 from django.db import models
 import random, uuid, datetime
 from apiprj.ext import oauth2
+from apiprj.exceptions import AuthError
 
 class Consumer(models.Model):
     TYPE_CHOICES = (('C', 'CLIENT'), ('B', 'BROWSER'))
