@@ -26,7 +26,7 @@
                         </li>
                         <li class='nav'>
                             {% if oauth_token %}<a href='/accounts/logout?next=/oauth/authorize?oauth_token={{oauth_token}}'>logout</a>
-                            {%else%}<a href='/accounts/logout_then_login'>로그아웃</a>
+                            {% else %}<a href='/accounts/logout_then_login'>로그아웃</a>
                             {% endif %}
                         </li>
                         {% else %}
