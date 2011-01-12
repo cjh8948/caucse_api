@@ -24,14 +24,20 @@ class AbstractBoard(models.Model):
 class AbstractBoardShortPassword(AbstractBoard):
     password = models.CharField(max_length=48, blank=True)
     file_name = models.CharField(max_length=300, blank=True)
+    class Meta:
+        abstract = True        
         
 class AbstractBoardLongPassword(AbstractBoard):
     password = models.CharField(max_length=123, blank=True)
     file_name = models.CharField(max_length=300, blank=True)
+    class Meta:
+        abstract = True        
     
 class AbstractPhotoBoard(AbstractBoard):
     password = models.CharField(max_length=48, blank=True)
     file_name = models.CharField(max_length=135, blank=True)    
+    class Meta:
+        abstract = True        
     
 # =====================    
 #  classes for Comment
@@ -48,11 +54,15 @@ class AbstractComment1(AbstractComment):
     user_id = models.CharField(max_length=30)
     name = models.CharField(max_length=75)
     password = models.CharField(max_length=48, blank=True)
+    class Meta:
+        abstract = True        
 
 class AbstractComment2(AbstractComment):        
     user_id = models.CharField(max_length=90)
     name = models.CharField(max_length=225)
     password = models.CharField(max_length=144)
+    class Meta:
+        abstract = True        
 
 # ==================    
 #  classes for Memo
@@ -62,7 +72,6 @@ class AbstractMemo(models.Model):
     idx = models.IntegerField(null=True, blank=True)
     user_id = models.CharField(max_length=30)
     name = models.CharField(max_length=60)
-    reg_date = models.DateField(null=True, blank=True)
     content = models.TextField(blank=True)
     headnum = models.IntegerField(null=True, blank=True)
     depth = models.IntegerField(null=True, blank=True)        
@@ -70,7 +79,12 @@ class AbstractMemo(models.Model):
         abstract = True
         
 class AbstractMemo1(AbstractMemo):
+    reg_date = models.DateField(null=True, blank=True)
     password = models.CharField(max_length=48, blank=True)
+    class Meta:
+        abstract = True        
 
 class AbstractMemo2(AbstractMemo):  
-    pass
+    reg_date = models.DateTimeField(null=True, blank=True)
+    class Meta:
+        abstract = True        
