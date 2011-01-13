@@ -17,6 +17,7 @@ import sys, os
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 sys.path.append(os.path.abspath('.'))
+sys.path.append(os.path.abspath('..'))
 sys.path.append(os.path.abspath('../apiprj'))
 
 # -- General configuration -----------------------------------------------------
@@ -38,7 +39,7 @@ source_encoding = 'utf-8'
 master_doc = 'index'
 
 # General information about the project.
-project = u'caucse_api'
+project = u'동네API'
 copyright = u'2011, 동네팀'
 
 # The version info for the project you're documenting, acts as replacement for

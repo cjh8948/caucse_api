@@ -1,7 +1,7 @@
 from django.db import models
 from abstract_models import (AbstractBoardShortPassword,
                              AbstractBoardLongPassword, AbstractPhotoBoard,
-                             AbstractMemo1, AbstractMemo2,
+                             AbstractMemo,
                              AbstractComment1, AbstractComment2)
 
 class BoardAlumni(AbstractBoardLongPassword):
@@ -1917,617 +1917,617 @@ class MemberTest(models.Model):
     class Meta:
         db_table = u'member_test'
 
-class MemoAllaplus(AbstractMemo1):
-# AbstractMemo1
+class MemoAllaplus(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_allaplus'
 
-class MemoAlumni00(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni00(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni00'
 
-class MemoAlumni01(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni01(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni01'
 
-class MemoAlumni02(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni02(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni02'
 
-class MemoAlumni03(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni03(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni03'
 
-class MemoAlumni04(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni04(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni04'
 
-class MemoAlumni05(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni05(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni05'
 
-class MemoAlumni06(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni06(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni06'
 
-class MemoAlumni07(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni07(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni07'
 
-class MemoAlumni08(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni08(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni08'
 
-class MemoAlumni09(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni09(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni09'
 
-class MemoAlumni10(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni10(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni10'
 
-class MemoAlumni72(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni72(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni72'
 
-class MemoAlumni73(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni73(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni73'
 
-class MemoAlumni74(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni74(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni74'
 
-class MemoAlumni75(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni75(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni75'
 
-class MemoAlumni76(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni76(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni76'
 
-class MemoAlumni77(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni77(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni77'
 
-class MemoAlumni78(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni78(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni78'
 
-class MemoAlumni79(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni79(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni79'
 
-class MemoAlumni80(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni80(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni80'
 
-class MemoAlumni81(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni81(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni81'
 
-class MemoAlumni82(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni82(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni82'
 
-class MemoAlumni83(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni83(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni83'
 
-class MemoAlumni84(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni84(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni84'
 
-class MemoAlumni85(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni85(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni85'
 
-class MemoAlumni86(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni86(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni86'
 
-class MemoAlumni87(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni87(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni87'
 
-class MemoAlumni88(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni88(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni88'
 
-class MemoAlumni89(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni89(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni89'
 
-class MemoAlumni90(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni90(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni90'
 
-class MemoAlumni91(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni91(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni91'
 
-class MemoAlumni92(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni92(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni92'
 
-class MemoAlumni93(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni93(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni93'
 
-class MemoAlumni94(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni94(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni94'
 
-class MemoAlumni95(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni95(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni95'
 
-class MemoAlumni96(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni96(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni96'
 
-class MemoAlumni97(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni97(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni97'
 
-class MemoAlumni98(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni98(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni98'
 
-class MemoAlumni99(AbstractMemo1):
-# AbstractMemo1
+class MemoAlumni99(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_alumni99'
 
-class MemoCafeAppellation(AbstractMemo1):
-# AbstractMemo1
+class MemoCafeAppellation(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_cafe_appellation'
 
-class MemoCafeChuri(AbstractMemo1):
-# AbstractMemo1
+class MemoCafeChuri(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_cafe_churi'
 
-class MemoCafeCuti(AbstractMemo1):
-# AbstractMemo1
+class MemoCafeCuti(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_cafe_cuti'
 
-class MemoCafeForum(AbstractMemo1):
-# AbstractMemo1
+class MemoCafeForum(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_cafe_forum'
 
-class MemoCafeGirlStudent(AbstractMemo1):
-# AbstractMemo1
+class MemoCafeGirlStudent(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_cafe_girl_student'
 
-class MemoCafeGutter(AbstractMemo1):
-# AbstractMemo1
+class MemoCafeGutter(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_cafe_gutter'
 
-class MemoCafeHandtruth(AbstractMemo1):
-# AbstractMemo1
+class MemoCafeHandtruth(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_cafe_handtruth'
 
-class MemoCafeHeukseoker(AbstractMemo1):
-# AbstractMemo1
+class MemoCafeHeukseoker(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_cafe_heukseoker'
 
-class MemoCafeHomesteal(AbstractMemo1):
-# AbstractMemo1
+class MemoCafeHomesteal(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_cafe_homesteal'
 
-class MemoCafeIris(AbstractMemo1):
-# AbstractMemo1
+class MemoCafeIris(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_cafe_iris'
 
-class MemoCafeItSecurity(AbstractMemo1):
-# AbstractMemo1
+class MemoCafeItSecurity(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_cafe_it_security'
 
-class MemoCafeJokbal(AbstractMemo1):
-# AbstractMemo1
+class MemoCafeJokbal(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_cafe_jokbal'
 
-class MemoCafeJstorm(AbstractMemo1):
-# AbstractMemo1
+class MemoCafeJstorm(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_cafe_jstorm'
 
-class MemoCafeMountainLove(AbstractMemo1):
-# AbstractMemo1
+class MemoCafeMountainLove(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_cafe_mountain_love'
 
-class MemoCafeNote(AbstractMemo1):
-# AbstractMemo1
+class MemoCafeNote(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_cafe_note'
 
-class MemoCafePresent(AbstractMemo1):
-# AbstractMemo1
+class MemoCafePresent(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_cafe_present'
 
-class MemoCafeSecurelab(AbstractMemo1):
-# AbstractMemo1
+class MemoCafeSecurelab(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_cafe_securelab'
 
-class MemoCafeSnsd(AbstractMemo1):
-# AbstractMemo1
+class MemoCafeSnsd(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_cafe_snsd'
 
-class MemoCafeSteamers(AbstractMemo1):
-# AbstractMemo1
+class MemoCafeSteamers(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_cafe_steamers'
 
-class MemoCafeTspin(AbstractMemo1):
-# AbstractMemo1
+class MemoCafeTspin(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_cafe_tspin'
 
-class MemoCafeWow(AbstractMemo1):
-# AbstractMemo1
+class MemoCafeWow(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_cafe_wow'
 
-class MemoCgraph(AbstractMemo1):
-# AbstractMemo1
+class MemoCgraph(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_cgraph'
 
-class MemoClubAbroad(AbstractMemo1):
-# AbstractMemo1
+class MemoClubAbroad(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_club_abroad'
 
-class MemoClubBrenntano(AbstractMemo1):
-# AbstractMemo1
+class MemoClubBrenntano(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_club_brenntano'
 
-class MemoClubCurseware(AbstractMemo1):
-# AbstractMemo1
+class MemoClubCurseware(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_club_curseware'
 
-class MemoClubDumb(AbstractMemo1):
-# AbstractMemo1
+class MemoClubDumb(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_club_dumb'
 
-class MemoClubEcs(AbstractMemo1):
-# AbstractMemo1
+class MemoClubEcs(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_club_ecs'
 
-class MemoClubFootlove(AbstractMemo1):
-# AbstractMemo1
+class MemoClubFootlove(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_club_footlove'
 
-class MemoClubFr(AbstractMemo1):
-# AbstractMemo1
+class MemoClubFr(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_club_fr'
 
-class MemoClubMios(AbstractMemo1):
-# AbstractMemo1
+class MemoClubMios(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_club_mios'
 
-class MemoClubWithweve(AbstractMemo1):
-# AbstractMemo1
+class MemoClubWithweve(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_club_withweve'
 
-class MemoCsebiz(AbstractMemo1):
-# AbstractMemo1
+class MemoCsebiz(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_csebiz'
 
-class MemoCsesa(AbstractMemo1):
-# AbstractMemo1
+class MemoCsesa(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_csesa'
 
-class MemoCsesac(AbstractMemo1):
-# AbstractMemo1
+class MemoCsesac(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_csesac'
 
-class MemoDcgallers(AbstractMemo1):
-# AbstractMemo1
+class MemoDcgallers(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_dcgallers'
 
-class MemoDogsix(AbstractMemo1):
-# AbstractMemo1
+class MemoDogsix(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_dogsix'
 
-class MemoDongneteam(AbstractMemo1):
-# AbstractMemo1
+class MemoDongneteam(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_dongneteam'
 
-class MemoEtc(AbstractMemo1):
-# AbstractMemo1
+class MemoEtc(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_etc'
 
-class MemoExtreamsport(AbstractMemo1):
-# AbstractMemo1
+class MemoExtreamsport(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_extreamsport'
 
-class MemoFacse(AbstractMemo1):
-# AbstractMemo1
+class MemoFacse(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_facse'
 
-class MemoFishgrow(AbstractMemo1):
-# AbstractMemo1
+class MemoFishgrow(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_fishgrow'
 
-class MemoGamemoney(AbstractMemo1):
-# AbstractMemo1
+class MemoGamemoney(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_gamemoney'
 
-class MemoGraduation(AbstractMemo1):
-# AbstractMemo1
+class MemoGraduation(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_graduation'
 
-class MemoGujja(AbstractMemo1):
-# AbstractMemo1
+class MemoGujja(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_gujja'
 
-class MemoHex(AbstractMemo1):
-# AbstractMemo1
+class MemoHex(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_hex'
 
-class MemoInfo02(AbstractMemo1):
-# AbstractMemo1
+class MemoInfo02(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_info_02'
 
-class MemoInfoMemory(AbstractMemo1):
-# AbstractMemo1
+class MemoInfoMemory(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_info_memory'
 
-class MemoInfoMisc(AbstractMemo1):
-# AbstractMemo1
+class MemoInfoMisc(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_info_misc'
 
-class MemoJhonson(AbstractMemo1):
-# AbstractMemo1
+class MemoJhonson(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_jhonson'
 
-class MemoKcPhotoDc(AbstractMemo1):
-# AbstractMemo1
+class MemoKcPhotoDc(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_kc_photo_dc'
 
-class MemoKcPhotoFc(AbstractMemo1):
-# AbstractMemo1
+class MemoKcPhotoFc(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_kc_photo_fc'
 
-class MemoKichongPhoto(AbstractMemo1):
-# AbstractMemo1
+class MemoKichongPhoto(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_kichong_photo'
 
-class MemoMarket(AbstractMemo1):
-# AbstractMemo1
+class MemoMarket(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_market'
 
-class MemoMarlboro(AbstractMemo1):
-# AbstractMemo1
+class MemoMarlboro(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_marlboro'
 
-class MemoMemResearch(AbstractMemo1):
-# AbstractMemo1
+class MemoMemResearch(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_mem_research'
 
-class MemoMemory(AbstractMemo1):
-# AbstractMemo1
+class MemoMemory(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_memory'
 
-class MemoMenssmells(AbstractMemo1):
-# AbstractMemo1
+class MemoMenssmells(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_menssmells'
 
-class MemoNba(AbstractMemo1):
-# AbstractMemo1
+class MemoNba(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_nba'
 
-class MemoOekaki(AbstractMemo1):
-# AbstractMemo1
+class MemoOekaki(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_oekaki'
 
-class MemoParkcue(AbstractMemo1):
-# AbstractMemo1
+class MemoParkcue(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_parkcue'
 
-class MemoPartAd(AbstractMemo1):
-# AbstractMemo1
+class MemoPartAd(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_part_ad'
 
-class MemoPartCulture(AbstractMemo1):
-# AbstractMemo1
+class MemoPartCulture(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_part_culture'
 
-class MemoPartJungtong(AbstractMemo1):
-# AbstractMemo1
+class MemoPartJungtong(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_part_jungtong'
 
-class MemoPartNeo(AbstractMemo1):
-# AbstractMemo1
+class MemoPartNeo(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_part_neo'
 
-class MemoPartPlan(AbstractMemo1):
-# AbstractMemo1
+class MemoPartPlan(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_part_plan'
 
-class MemoPartSocial(AbstractMemo1):
-# AbstractMemo1
+class MemoPartSocial(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_part_social'
 
-class MemoPhoto(AbstractMemo1):
-# AbstractMemo1
+class MemoPhoto(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_photo'
 
-class MemoPhoto2(AbstractMemo1):
-# AbstractMemo1
+class MemoPhoto2(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_photo2'
 
-class MemoPray(AbstractMemo1):
-# AbstractMemo1
+class MemoPray(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_pray'
 
-class MemoReload(AbstractMemo1):
-# AbstractMemo1
+class MemoReload(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_reload'
 
-class MemoRevolution(AbstractMemo1):
-# AbstractMemo1
+class MemoRevolution(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_revolution'
 
-class MemoSketch(AbstractMemo1):
-# AbstractMemo1
+class MemoSketch(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_sketch'
 
-class MemoStudyBook(AbstractMemo1):
-# AbstractMemo1
+class MemoStudyBook(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_study_book'
 
-class MemoSyf(AbstractMemo1):
-# AbstractMemo1
+class MemoSyf(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_syf'
 
-class MemoTrash(AbstractMemo1):
-# AbstractMemo1
+class MemoTrash(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_trash'
 
-class MemoTwistedlife(AbstractMemo1):
-# AbstractMemo1
+class MemoTwistedlife(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_twistedlife'
 
-class MemoUnited(AbstractMemo2):
+class MemoUnited(AbstractMemo):
     class Meta:
         db_table = u'memo_united'
 
-class MemoVeryrealtrue(AbstractMemo1):
-# AbstractMemo1
+class MemoVeryrealtrue(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_veryrealtrue'
 
-class MemoVolunteers(AbstractMemo1):
-# AbstractMemo1
+class MemoVolunteers(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_volunteers'
 
-class MemoWebzineBook(AbstractMemo1):
-# AbstractMemo1
+class MemoWebzineBook(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_webzine_book'
 
-class MemoWebzinePeople(AbstractMemo1):
-# AbstractMemo1
+class MemoWebzinePeople(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_webzine_people'
 
-class MemoWebzinePhoto(AbstractMemo1):
-# AbstractMemo1
+class MemoWebzinePhoto(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_webzine_photo'
 
-class MemoWebzineculture(AbstractMemo1):
-# AbstractMemo1
+class MemoWebzineculture(AbstractMemo):
+# AbstractMemo
     class Meta:
         db_table = u'memo_webzineculture'
 
@@ -2555,27 +2555,27 @@ class PhotoAllaplus(models.Model):
     class Meta:
         db_table = u'photo_allaplus'
 
-class PhotoAlumni00(AbstractMemo1):
+class PhotoAlumni00(AbstractMemo):
     #AbstractBoardShortPassword
     class Meta:
         db_table = u'photo_alumni00'
 
-class PhotoAlumni01(AbstractMemo1):
+class PhotoAlumni01(AbstractMemo):
     #AbstractBoardShortPassword
     class Meta:
         db_table = u'photo_alumni01'
 
-class PhotoAlumni02(AbstractMemo1):
+class PhotoAlumni02(AbstractMemo):
     #AbstractBoardShortPassword
     class Meta:
         db_table = u'photo_alumni02'
 
-class PhotoAlumni03(AbstractMemo1):
+class PhotoAlumni03(AbstractMemo):
     #AbstractBoardShortPassword
     class Meta:
         db_table = u'photo_alumni03'
 
-class PhotoAlumni04(AbstractMemo1):
+class PhotoAlumni04(AbstractMemo):
     #AbstractBoardShortPassword
     class Meta:
         db_table = u'photo_alumni04'

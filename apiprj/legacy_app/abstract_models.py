@@ -75,16 +75,8 @@ class AbstractMemo(models.Model):
     content = models.TextField(blank=True)
     headnum = models.IntegerField(null=True, blank=True)
     depth = models.IntegerField(null=True, blank=True)        
+    reg_date = models.DateTimeField(null=True, blank=True)
+    password = models.CharField(max_length=48, null=True, blank=True)
     class Meta:
         abstract = True
         
-class AbstractMemo1(AbstractMemo):
-    reg_date = models.DateField(null=True, blank=True)
-    password = models.CharField(max_length=48, blank=True)
-    class Meta:
-        abstract = True        
-
-class AbstractMemo2(AbstractMemo):  
-    reg_date = models.DateTimeField(null=True, blank=True)
-    class Meta:
-        abstract = True        
