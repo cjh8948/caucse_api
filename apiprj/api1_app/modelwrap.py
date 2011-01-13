@@ -5,7 +5,7 @@ from apiprj.oauth_app.models import Token as OauthToken
 from apiprj.settings import USER_IMG_PATH, USER_IMG_PREFIX
 from django.db.models.aggregates import Max
 from django.db.models import Q
-from apiprj.exceptions import *
+from apiprj.exceptions import DatabaseTableDoesNotExist, PermissionDenied
 
 class Board(object):
     @classmethod
@@ -241,6 +241,7 @@ class User(object):
             birthday = user_model.birthday.isoformat()
         else:
             birthday = ""
+            
         packed_user = {'id': user_model.id,
                        'name': user_model.name,
                        'entrance_year': user_model.id_number,
@@ -252,7 +253,7 @@ class User(object):
                        'introduce': user_model.introduce,
                        'messenger': user_model.messenger}
         
-        # mask unopened informations 
+        # mask closed informations 
         for i, field in self.OPEN_FLAG:
             if not (user_model.open_close & (2 ^ i)):
                 packed_user[field] = None
@@ -311,8 +312,7 @@ class User(object):
         else:
             # TODO: make it returns empty list, define proper exception
             raise Exception("No matching")
-
-        
+       
 class Token(object):
     @classmethod
     def get_user_id(self, oauth_token):
