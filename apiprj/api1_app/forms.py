@@ -6,5 +6,3 @@ class AddConsumerForm(forms.Form):
     description = forms.CharField(label='설명', max_length=255, min_length=5)
     type = forms.ChoiceField(label='형태',choices=(('B', 'Browser'), 
                                                    ('C', 'Client')))
-    
-    

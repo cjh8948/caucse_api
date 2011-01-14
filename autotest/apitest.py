@@ -1,7 +1,8 @@
 #!-*-coding:utf8-*-
-from secure import *
+from secure import (ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET, CONSUMER_KEY, 
+                    CONSUMER_SECRET, URL_PREFIX)
 from oauthclient import ClientAlpha
-import unittest, re, json, urllib, urlparse, oauth2
+import unittest, json, urllib, urlparse, oauth2
 from httplib2 import Http
 
 class ApiTestCase(unittest.TestCase): 
@@ -215,7 +216,7 @@ class CommentsTest(ApiTestCase):
         obj = json.loads(content)
         status = obj['status']
         comment = obj['comment']
-        self.assertEqual(obj['status'].lower(), 'ok')
+        self.assertEqual(status.lower(), 'ok')
         self.assertEqual(comment['content'], param['message'])
 
     def test_create_restful(self):

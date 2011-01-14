@@ -1,11 +1,13 @@
 #!-*-coding:utf-8-*-
+"""
+"""
 import os, datetime, re
-from apiprj.api1_app import models
-from apiprj.oauth_app.models import Token as OauthToken
-from apiprj.settings import USER_IMG_PATH, USER_IMG_PREFIX
 from django.db.models.aggregates import Max
 from django.db.models import Q
+from apiprj.api1_app import models
 from apiprj.exceptions import DatabaseTableDoesNotExist, PermissionDenied
+from apiprj.oauth_app.models import Token as OauthToken
+from apiprj.settings import USER_IMG_PATH, USER_IMG_PREFIX
 
 def strip_quotes(buf):
     return buf.replace(r'\"', '"').replace(r"\'", "'")
