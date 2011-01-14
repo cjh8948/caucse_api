@@ -1,6 +1,6 @@
 #! -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
-from apiprj.legacy_app import models
+from apiprj.api1_app import models
 from apiprj.api1_app import modelwrap
 
 class Command(BaseCommand):

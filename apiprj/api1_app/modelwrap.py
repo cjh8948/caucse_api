@@ -1,18 +1,22 @@
 #!-*-coding:utf-8-*-
 import os, datetime, re
-from apiprj.legacy_app import models
+from apiprj.api1_app import models
 from apiprj.oauth_app.models import Token as OauthToken
 from apiprj.settings import USER_IMG_PATH, USER_IMG_PREFIX
 from django.db.models.aggregates import Max
 from django.db.models import Q
 from apiprj.exceptions import DatabaseTableDoesNotExist, PermissionDenied
 
+def strip_quotes(buf):
+    return buf.replace(r'\"', '"').replace(r"\'", "'")
+
 class Board(object):
     @classmethod
     def pack(self, boardinfo_model, count=None, count24h=None):
         packed_board = {'board_id': boardinfo_model.tablename,
-                        'title': boardinfo_model.title,
-                        'description': boardinfo_model.description,
+                        'title': strip_quotes(boardinfo_model.title),
+                        'description': 
+                            strip_quotes(boardinfo_model.description),
                         'admin': boardinfo_model.admin_id,
                         'count': count,
                         'count24h': count24h}
@@ -67,7 +71,7 @@ class Comment(object):
 
         packed_cmt = {'board_id': board_id,
                       'id': cmt_model.id,
-                      'content': cmt_model.content,
+                      'content': strip_quotes(cmt_model.content),
                       'reg_date': cmt_model.reg_date.isoformat(),
                       'author': author}
 
@@ -116,10 +120,10 @@ class Article(object):
         packed_article = {'board_id': board_id,
                           'id': article_model.id,
                           'author': author,
-                          'title': article_model.title,
+                          'title': strip_quotes(article_model.title),
                           'hits': article_model.count,
                           'reg_date': article_model.reg_date.isoformat(),
-                          'content': article_model.content,
+                          'content': strip_quotes(article_model.content),
                           'file': article_model.file_name,
                           'comments': comments,
                           'total_comments': article_model.comment}
@@ -250,7 +254,7 @@ class User(object):
                        'homepage': user_model.homepage,
                        'birthday': birthday,
                        'email': user_model.email,
-                       'introduce': user_model.introduce,
+                       'introduce': strip_quotes(user_model.introduce),
                        'messenger': user_model.messenger}
         
         # mask closed informations 

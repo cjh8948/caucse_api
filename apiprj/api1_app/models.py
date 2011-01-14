@@ -1,3 +1,11 @@
+# -*-coding:utf-8-*-
+"""
+`django-admin.py gen_models` 커맨드로 자동생성한 Board*, Comment*, Memo* 
+모델이 포함되어있음. 
+
+gen_models 커맨드는 boardinfo, photoinfo 테이블에 저장된 tablename을 기반으로
+모델을 자동생성함. boardinfo에 등록되지 않은 테이블은 자동생성되지 않음.
+"""
 from django.db import models
 from abstract_models import AbstractBoard, AbstractMemo, AbstractComment
 from fixed_models import (Boardinfo, CafeInfo, ClubInfo, Favorite, Member,

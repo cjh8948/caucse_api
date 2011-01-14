@@ -7,4 +7,4 @@
 apache/*.wsgi
 apiprj/settings.py
 autotest/secure.py
-doc/_build/
+docs/_build/

@@ -1,6 +1,6 @@
 #! -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
-from apiprj.legacy_app import fixed_models
+from apiprj.api1_app import fixed_models
 
 model_template = """\
 class %(title)s(%(class)s):

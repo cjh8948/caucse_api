@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-from apiprj.legacy_app.models import Member
+from apiprj.api1_app.models import Member
 from apiprj.oauth_app.utils import check_mysql_password 
 
 class AuthBackend:

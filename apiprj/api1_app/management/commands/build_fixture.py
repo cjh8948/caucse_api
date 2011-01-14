@@ -1,7 +1,7 @@
 #! -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
 from django.db.models import Q
-from apiprj.legacy_app import models
+from apiprj.api1_app import models
 from apiprj.api1_app import modelwrap
 import datetime, random
 
@@ -133,24 +133,6 @@ class Command(BaseCommand):
         for favorite in models.Favorite.objects.all():
             if favorite.user_id not in users:
                 favorite.delete()
-                    
-        # delete unused tables
-        models.CafeCalendarAdmin.objects.all().delete()
-        models.Calendar.objects.all().delete()
-        models.CalendarAdmin.objects.all().delete()
-        models.ClubInfo.objects.all().delete()
-        models.LoginStatistics.objects.all().delete()
-        models.MemberTest.objects.all().delete()
-        models.MemResearch.objects.all().delete()
-        models.Message.objects.all().delete()
-        models.PollData.objects.all().delete()
-        models.PollMain.objects.all().delete()
-        models.PollResult.objects.all().delete()
-        models.PopupNotice.objects.all().delete()
-        models.RssAdmin.objects.all().delete()
-        models.RssContent.objects.all().delete()
-        models.RssPersonal.objects.all().delete()
-        models.Nospam.objects.all().delete()
 
 
         

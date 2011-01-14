@@ -1,20 +1,20 @@
 #-*- coding:utf-8 -*-
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseForbidden
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from django.core.exceptions import ObjectDoesNotExist
-from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import render_to_response
-from urllib import urlencode
-from utils import check_mysql_password
-from utils.decorators import oauth_verify
-from apiprj.api1_app.utils.decorators import api_exception
-from apiprj.legacy_app.models import Member
-from models import Token, Consumer
-from urlparse import parse_qsl, urlparse, urlunparse 
-from apiprj.exceptions import * 
 from django.core.context_processors import csrf
-from urllib2 import HTTPRedirectHandler
+from django.http import (HttpResponse, HttpResponseRedirect, 
+                         HttpResponseBadRequest, HttpResponseForbidden)
+from django.shortcuts import render_to_response
+from django.views.decorators.csrf import csrf_exempt
+
+from urllib import urlencode
+from urlparse import parse_qsl, urlparse, urlunparse 
+
+from models import Token
+from utils.decorators import oauth_verify
+
+from apiprj.api1_app.utils.decorators import api_exception
+from apiprj.exceptions import RequiredParameterDoesNotExist
 
 @api_exception
 @oauth_verify 

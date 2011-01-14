@@ -1,3 +1,12 @@
+# -*- coding:utf-8 -*-
+"""
+fixed_models package
+~~~~~~~~~~~~~~~~~~~~~~~
+
+legacy의 board_*, comment_*, memo_* 테이블 이외의 테이블을 모델로 추출.
+`django-admin.py inspectdb` 커맨드를 통해 legacy 분석 후 자동 생성된 모델을
+기반으로 함.
+"""
 from django.db import models
 
 class Boardinfo(models.Model):
@@ -176,8 +185,3 @@ class PopupNotice(models.Model):
     msg = models.TextField(blank=True)
     class Meta:
         db_table = u'popup_notice'
-
-
-
-
-
