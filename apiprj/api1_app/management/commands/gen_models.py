@@ -1,6 +1,6 @@
 #! -*- coding: utf-8 -*-
+from apiprj.api1_app import models
 from django.core.management.base import BaseCommand
-from apiprj.api1_app import fixed_models
 
 model_template = """\
 class %(title)s(%(class)s):
@@ -22,8 +22,8 @@ class Command(BaseCommand):
             else:
                 return "AbstractMemo"
         
-        boardinfos = fixed_models.Boardinfo.objects.all().order_by('tablename')
-        photoinfos = fixed_models.Photoinfo.objects.all().order_by('tablename')
+        boardinfos = models.Boardinfo.objects.all().order_by('tablename')
+        photoinfos = models.Photoinfo.objects.all().order_by('tablename')
         boards = [boardinfo.tablename for boardinfo in boardinfos]
         photos = [photoinfo.tablename for photoinfo in photoinfos]
         

@@ -1,6 +1,6 @@
 #-*- coding:utf-8 -*-
-from django.forms import ModelForm
 from apiprj.oauth_app.models import Consumer
+from django.forms import ModelForm
 
 class ConsumerForm(ModelForm):
     

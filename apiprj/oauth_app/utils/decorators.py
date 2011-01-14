@@ -1,8 +1,8 @@
 #!-*-coding:utf8-*-
 """Functions in this module mark view functions and verify requests are vaild 
 under oauth protocol."""
-from oauthserver import ServerAlpha
 from django.http import HttpResponseBadRequest
+from oauthserver import ServerAlpha
 from functools import wraps
 
 def oauth_required(view_func):

@@ -1,9 +1,9 @@
 #! -*- coding: utf-8 -*-
-from django.core.management.base import BaseCommand
-from django.db.models import Q
 from apiprj.api1_app import models
 from apiprj.api1_app import modelwrap
 import datetime, random
+from django.core.management.base import BaseCommand
+from django.db.models import Q
 
 def ask_continue(msg="Continue? (y/n) "):
     answer = ''

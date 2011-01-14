@@ -1,4 +1,6 @@
 #-*- coding:utf-8 -*-
+from apiprj.api1_app.utils.decorators import api_exception
+from apiprj.exceptions import RequiredParameterDoesNotExist
 from django.contrib.auth import authenticate, login
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import (HttpResponse, HttpResponseRedirect,
@@ -6,12 +8,10 @@ from django.http import (HttpResponse, HttpResponseRedirect,
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 from django.views.decorators.csrf import csrf_exempt
+from models import Token
 from urllib import urlencode
 from urlparse import parse_qsl, urlparse, urlunparse 
-from models import Token
 from utils.decorators import oauth_verify
-from apiprj.api1_app.utils.decorators import api_exception
-from apiprj.exceptions import RequiredParameterDoesNotExist
 
 @api_exception
 @oauth_verify 

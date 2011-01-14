@@ -1,6 +1,6 @@
+from apiprj.exceptions import AuthError, RequiredParameterDoesNotExist
 from apiprj.ext import oauth2
 from apiprj.oauth_app import models
-from apiprj.exceptions import AuthError, RequiredParameterDoesNotExist
 from django.core.exceptions import ObjectDoesNotExist
 
 class ServerAlpha(oauth2.Server):

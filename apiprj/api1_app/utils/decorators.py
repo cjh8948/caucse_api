@@ -1,8 +1,8 @@
+from apiprj.exceptions import *
+from apiprj.ext.oauth2 import Error
 from django.http import HttpResponse
 from functools import wraps
 import json
-from apiprj.exceptions import *
-from apiprj.ext.oauth2 import Error
 
 def api_exception(view_func):
     def handle_exception(request, *arg, **keywords):

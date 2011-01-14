@@ -7,8 +7,8 @@ Memo* 모델을 포함하였음.
 * gen_models 커맨드는 boardinfo, photoinfo 테이블에 저장된 tablename을 기반으로
 모델을 자동생성함. boardinfo에 등록되지 않은 테이블은 자동생성되지 않음.
 """
-from django.db import models
 from abstract_models import AbstractBoard, AbstractMemo, AbstractComment
+from django.db import models
 
 class Boardinfo(models.Model):
     no = models.IntegerField(primary_key=True)

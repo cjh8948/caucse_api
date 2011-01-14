@@ -1,7 +1,7 @@
 #! -*- coding: utf-8 -*-
-from django.core.management.base import BaseCommand
 from apiprj.api1_app import models
 from apiprj.api1_app import modelwrap
+from django.core.management.base import BaseCommand
 
 class Command(BaseCommand):
     """삭제된 글에 남아있는 코멘트를 삭제함."""

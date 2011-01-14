@@ -1,7 +1,7 @@
-from django.db import models
-import random, uuid, datetime
 from apiprj.ext import oauth2
 from apiprj.exceptions import AuthError
+from django.db import models
+import random, uuid, datetime
 
 class Consumer(models.Model):
     key = models.CharField(unique=True, max_length=255)
