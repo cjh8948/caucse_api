@@ -31,6 +31,7 @@ class Boardinfo(models.Model):
     filter = models.TextField(blank=True)
     count = models.IntegerField(null=True, blank=True)
     random = models.IntegerField(null=True, blank=True)
+    
     class Meta:
         db_table = u'boardinfo'
 
@@ -38,6 +39,7 @@ class CafeCalendarAdmin(models.Model):
     no = models.IntegerField(primary_key=True)
     width = models.TextField(blank=True)
     height = models.TextField(blank=True)
+    
     class Meta:
         db_table = u'cafe_calendar_admin'
 
@@ -53,6 +55,7 @@ class CafeInfo(models.Model):
     front_photo = models.CharField(max_length=180, blank=True)
     front_text = models.TextField(blank=True)
     section = models.IntegerField(null=True, blank=True)
+    
     class Meta:
         db_table = u'cafe_info'
 
@@ -65,6 +68,7 @@ class Calendar(models.Model):
     writer_name = models.CharField(max_length=60, blank=True)
     type = models.CharField(max_length=60, blank=True)
     type_open = models.IntegerField(null=True, blank=True)
+    
     class Meta:
         db_table = u'calendar'
 
@@ -72,6 +76,7 @@ class CalendarAdmin(models.Model):
     no = models.IntegerField(primary_key=True)
     width = models.TextField(blank=True)
     height = models.TextField(blank=True)
+    
     class Meta:
         db_table = u'calendar_admin'
 
@@ -82,6 +87,7 @@ class ClubInfo(models.Model):
     board_table_name = models.CharField(max_length=150)
     homepage = models.CharField(max_length=120, blank=True)
     section = models.IntegerField(null=True, blank=True)
+    
     class Meta:
         db_table = u'club_info'
 
@@ -90,6 +96,7 @@ class Favorite(models.Model):
     user_id = models.CharField(max_length=30, blank=True)
     tablename = models.CharField(max_length=60, blank=True)
     priority = models.IntegerField(null=True, blank=True)
+    
     class Meta:
         db_table = u'favorite'
 
@@ -97,6 +104,7 @@ class MemResearch(models.Model):
     no = models.IntegerField(primary_key=True)
     id = models.CharField(max_length=30, blank=True)
     picture = models.CharField(max_length=180, blank=True)
+    
     class Meta:
         db_table = u'mem_research'
 
@@ -136,6 +144,7 @@ class Member(models.Model):
     favorite = models.IntegerField(null=True, blank=True)
     flag = models.IntegerField(null=True, blank=True)
     society_number = models.CharField(max_length=39, blank=True)
+    
     class Meta:
         db_table = u'member'
         
@@ -149,12 +158,14 @@ class Message(models.Model):
     t_received = models.IntegerField(null=True, blank=True)
     confirm = models.IntegerField()
     deletion = models.IntegerField()
+    
     class Meta:
         db_table = u'message'
 
 class Nospam(models.Model):
     id = models.AutoField(primary_key=True)
     word = models.CharField(max_length=765, blank=True)
+    
     class Meta:
         db_table = u'nospam'
 
@@ -179,12 +190,14 @@ class Photoinfo(models.Model):
     use_filtering = models.IntegerField(null=True, blank=True)
     filter = models.TextField(blank=True)
     count = models.IntegerField(null=True, blank=True)
+    
     class Meta:
         db_table = u'photoinfo'
 
 class PopupNotice(models.Model):
     num = models.IntegerField(primary_key=True)
     msg = models.TextField(blank=True)
+    
     class Meta:
         db_table = u'popup_notice'
 
