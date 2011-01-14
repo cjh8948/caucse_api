@@ -108,7 +108,7 @@ class Member(models.Model):
     id = models.CharField(max_length=30)
     password = models.CharField(max_length=123, blank=True)
     department = models.IntegerField(null=True, blank=True)
-    email = models.TextField(blank=True)
+    email = models.EmailField(blank=True)
     homepage = models.TextField(blank=True)
     birthday = models.DateField(null=True, blank=True)
     sun_moon = models.IntegerField(null=True, blank=True)
@@ -138,6 +138,7 @@ class Member(models.Model):
     society_number = models.CharField(max_length=39, blank=True)
     class Meta:
         db_table = u'member'
+        
 class Message(models.Model):
     msg_no = models.IntegerField(primary_key=True)
     receive_id = models.CharField(max_length=30, blank=True)
