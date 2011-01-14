@@ -14,8 +14,12 @@ iframe {
     padding-top: 10px;
 }
 
-h2, h3 {
+h2 {
     background-color: #5487a8;
+}
+
+h3 {
+    background-color: #9497b8;
 }
 
 ul.nav {

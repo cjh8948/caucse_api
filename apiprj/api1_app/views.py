@@ -272,18 +272,9 @@ def apireference(request):
 
 @login_required
 def accounts_profile(request):
-    consumers = Consumer.objects.filter(user_id=request.user.username)
-    consumer_token = []
-    consumer_forms = []
-    for consumer in consumers:
-        try:
-            token = TokenModel.objects.filter(type='A')\
-                                      .filter(consumer=consumer)\
-                                      .filter(user=consumer.user_id)[0]
-        except IndexError:
-            token = None
-        consumer_token.append((consumer, token))
-        consumer_forms.append(ConsumerForm(instance=consumer))
-    return render_to_response('myapp.tpl', {'consumer_token': consumer_token,
-                                             'consumer_forms': consumer_forms},
+    user_id=request.user.username
+    consumers = Consumer.objects.filter(user_id=user_id)
+    tokens = TokenModel.objects.filter(user=user_id).filter(type='A')
+    params = {'consumers': consumers, 'tokens': tokens}
+    return render_to_response('profile.tpl', params,
                               context_instance=RequestContext(request))
