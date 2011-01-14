@@ -259,15 +259,15 @@ def favorites_list(request, oauth_params):
     return HttpResponse(ret)
 
 def index(request):
-    return render_to_response('index.html', 
+    return render_to_response('index.tpl', 
                               context_instance=RequestContext(request))
 
 def apistatus(request):
-    return render_to_response('apistatus.html', 
+    return render_to_response('apistatus.tpl', 
                               context_instance=RequestContext(request))
 
 def apireference(request):
-    return render_to_response('apireference.html', 
+    return render_to_response('apireference.tpl', 
                               context_instance=RequestContext(request))
 
 @login_required
@@ -284,6 +284,6 @@ def accounts_profile(request):
             token = None
         consumer_token.append((consumer, token))
         consumer_forms.append(ConsumerForm(instance=consumer))
-    return render_to_response('myapp.html', {'consumer_token': consumer_token,
+    return render_to_response('myapp.tpl', {'consumer_token': consumer_token,
                                              'consumer_forms': consumer_forms},
                               context_instance=RequestContext(request))

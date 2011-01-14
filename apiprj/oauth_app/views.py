@@ -82,7 +82,7 @@ def authorize(request):
         except ObjectDoesNotExist:
             return HttpResponseForbidden()
         params = {'oauth_token' : oauth_token, 'consumer' : token.consumer}
-        return render_to_response('oauth/auth_form.html', params,
+        return render_to_response('oauth/auth_form.tpl', params,
                                   context_instance=RequestContext(request))
 
     elif request.method == "POST":
@@ -103,7 +103,7 @@ def authorize(request):
                 params = {'oauth_token' : oauth_token,
                           'consumer' : token.consumer,
                           'message': message}
-                return render_to_response('oauth/auth_form.html', params,
+                return render_to_response('oauth/auth_form.tpl', params,
                                           context_instance=RequestContext(request))
                     
         # make verifier 
@@ -115,7 +115,7 @@ def authorize(request):
         # callback processing
         if token.callback == "oob": # pin processing
             params = {'verifier': token.verifier}
-            return render_to_response('oauth/auth_verifier.html', params,
+            return render_to_response('oauth/auth_verifier.tpl', params,
                                       context_instance=RequestContext(request))
         else:
             params = {'oauth_token': token.key,
