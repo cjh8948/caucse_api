@@ -6,3 +6,4 @@ class ConsumerForm(ModelForm):
     
     class Meta:
         model = Consumer
+        fields = ('name', 'description')

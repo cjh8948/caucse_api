@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.utils.simplejson import dumps
 from django.views.decorators.csrf import csrf_exempt
+from django.template.context import RequestContext
 from apiprj.oauth_app.models import Consumer
 from apiprj.oauth_app.models import Token as TokenModel
 from apiprj.oauth_app.utils.decorators import oauth_required
@@ -197,7 +198,6 @@ def comments_create(request, oauth_params, board_id=None, article_id=None):
     ret = dumps({'status':'ok', 'comment':cmt})    
     return HttpResponse(ret)
 
-
 @api_exception
 @oauth_required
 def comments_delete(request, oauth_params, board_id=None, comment_id=None):
@@ -259,18 +259,22 @@ def favorites_list(request, oauth_params):
     return HttpResponse(ret)
 
 def index(request):
-    return render_to_response('index.html', {'user': request.user})
+    return render_to_response('index.html', 
+                              context_instance=RequestContext(request))
 
 def apistatus(request):
-    return render_to_response('apistatus.html', {'user': request.user})
+    return render_to_response('apistatus.html', 
+                              context_instance=RequestContext(request))
 
 def apireference(request):
-    return render_to_response('apireference.html', {'user': request.user})
+    return render_to_response('apireference.html', 
+                              context_instance=RequestContext(request))
 
 @login_required
-def myapp(request):
+def accounts_profile(request):
     consumers = Consumer.objects.filter(user_id=request.user.username)
     consumer_token = []
+    consumer_forms = []
     for consumer in consumers:
         try:
             token = TokenModel.objects.filter(type='A')\
@@ -279,5 +283,7 @@ def myapp(request):
         except IndexError:
             token = None
         consumer_token.append((consumer, token))
-    return render_to_response('myapp.html', {'user': request.user,
-                                             'consumer_token': consumer_token})
+        consumer_forms.append(ConsumerForm(instance=consumer))
+    return render_to_response('myapp.html', {'consumer_token': consumer_token,
+                                             'consumer_forms': consumer_forms},
+                              context_instance=RequestContext(request))

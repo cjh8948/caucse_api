@@ -2,9 +2,8 @@ body {
     background-color: #deeff6;
 }
 
-h1, h2 {
+h1, h2, h3 {
     border: hidden;
-    border-radius: 25px;
     background-color: #5083a3;
     padding: 5px 10px 5px 10px;
     color: #ffffff;
@@ -15,7 +14,7 @@ iframe {
     padding-top: 10px;
 }
 
-h2 {
+h2, h3 {
     background-color: #5487a8;
 }
 
@@ -24,7 +23,6 @@ ul.nav {
     list-style-type: none;
     margin: 30px 0px 5px 0px;
     padding: 5px;
-    border-radius: 3px;
     color: #000033;
 }
 
@@ -45,7 +43,6 @@ li.nav {
     display: block;
     margin-bottom: 3px;
     padding: 10px;
-    border-radius: 3px;
 }
 
 #logo {
@@ -64,7 +61,6 @@ li.nav {
     display: block;
     padding: 1px 10px 1px 10px;
     background-color: #ffffff;
-    border-radius: 10px;
 }
 
 #footer {
@@ -73,5 +69,4 @@ li.nav {
     margin-top: 3px;
     padding: 1px 10px 1px 10px;
     background-color: #ffffff;
-    border-radius: 10px;
 }

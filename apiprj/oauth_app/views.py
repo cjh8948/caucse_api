@@ -1,18 +1,15 @@
 #-*- coding:utf-8 -*-
 from django.contrib.auth import authenticate, login
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.context_processors import csrf
-from django.http import (HttpResponse, HttpResponseRedirect, 
+from django.http import (HttpResponse, HttpResponseRedirect,
                          HttpResponseBadRequest, HttpResponseForbidden)
 from django.shortcuts import render_to_response
+from django.template.context import RequestContext
 from django.views.decorators.csrf import csrf_exempt
-
 from urllib import urlencode
 from urlparse import parse_qsl, urlparse, urlunparse 
-
 from models import Token
 from utils.decorators import oauth_verify
-
 from apiprj.api1_app.utils.decorators import api_exception
 from apiprj.exceptions import RequiredParameterDoesNotExist
 
@@ -84,10 +81,9 @@ def authorize(request):
             token = Token.objects.get(key=oauth_token)
         except ObjectDoesNotExist:
             return HttpResponseForbidden()
-        params = {'oauth_token' : oauth_token, 'consumer' : token.consumer,
-                  'user': request.user}
-        params.update(csrf(request))
-        return render_to_response('oauth/auth_form.html', params)
+        params = {'oauth_token' : oauth_token, 'consumer' : token.consumer}
+        return render_to_response('oauth/auth_form.html', params,
+                                  context_instance=RequestContext(request))
 
     elif request.method == "POST":
         if request.user.is_authenticated():
@@ -106,10 +102,9 @@ def authorize(request):
                 message = u"사용자 아이디와 비밀번호가 일치하지 않습니다."
                 params = {'oauth_token' : oauth_token,
                           'consumer' : token.consumer,
-                          'user': request.user,
                           'message': message}
-                params.update(csrf(request))
-                return render_to_response('oauth/auth_form.html', params)
+                return render_to_response('oauth/auth_form.html', params,
+                                          context_instance=RequestContext(request))
                     
         # make verifier 
         oauth_token = request.REQUEST['oauth_token']
@@ -119,8 +114,9 @@ def authorize(request):
 
         # callback processing
         if token.callback == "oob": # pin processing
-            params = {'verifier': token.verifier, 'user': request.user}
-            return render_to_response('oauth/auth_verifier.html', params)
+            params = {'verifier': token.verifier}
+            return render_to_response('oauth/auth_verifier.html', params,
+                                      context_instance=RequestContext(request))
         else:
             params = {'oauth_token': token.key,
                       'oauth_verifier': token.verifier}

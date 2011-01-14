@@ -1,11 +1,11 @@
 {%extends "base.html"%}
 
 {% block title %}
-	동네API - 상태
+동네API - 상태
 {% endblock %}
 
 {% block content %}
-<h1>내 애플리케이션</h1>
+<h1>My Consumers</h1>
 {% for consumer,token in consumer_token %}
 <h2>{{ consumer.name|escape }}</h2>
 <ul>
@@ -17,9 +17,6 @@
     </li>
     <li>
         설명: {{consumer.description|escape}}
-    </li>
-    <li>
-        consumer type:{{consumer.type}} 
     </li>
     <li>
         consumer key: {{consumer.key|escape}}
@@ -36,5 +33,5 @@
     </li>
     {% endif %}
 </ul>
-{% endfor %} 
-{%endblock%} 
+{% endfor %}
+{%endblock%}

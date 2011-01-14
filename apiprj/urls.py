@@ -9,7 +9,7 @@ urlpatterns = patterns('',
     (r'^accounts/login/$', 'django.contrib.auth.views.login'),
     (r'^accounts/logout/$', 'django.contrib.auth.views.logout'),
     (r'^accounts/logout_then_login/$', 'django.contrib.auth.views.logout_then_login'),
-    (r'^accounts/profile/$', 'apiprj.api1_app.views.myapp'),
+    (r'^accounts/profile/$', 'apiprj.api1_app.views.accounts_profile'),
     # admin
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
     (r'^admin/', include(admin.site.urls)),
