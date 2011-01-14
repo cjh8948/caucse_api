@@ -1,1 +1,30 @@
-[{"pk": 1, "model": "oauth_app.consumer", "fields": {"user_id": "gochi", "name": "test consumer", "created": "2010-11-24 15:33:47", "modified": "2010-11-24 15:33:47", "secret": "consumer_secret", "key": "consumer_key", "description": "test"}}, {"pk": 1, "model": "oauth_app.token", "fields": {"created": "2010-11-24 18:51:46", "type": "A", "verifier": "123456", "modified": "2010-11-24 18:51:46", "callback": "oob", "secret": "access_token_secret", "user": "gochi", "key": "access_token_key", "consumer": 1}}]
+[
+    {
+        "pk": 1, 
+        "model": "oauth_app.consumer", 
+        "fields": {
+            "user_id": "gochi", 
+            "name": "test consumer", 
+            "created": "2010-11-24 15:33:47", 
+            "modified": "2010-11-24 15:33:47", 
+            "secret": "consumer_secret", 
+            "key": "consumer_key", 
+            "description": "test"
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "oauth_app.token", 
+        "fields": {
+            "created": "2010-11-24 18:51:46", 
+            "consumer": 1, 
+            "secret": "access_token_secret", 
+            "modified": "2010-11-24 18:51:46", 
+            "callback": "oob", 
+            "verifier": "123456", 
+            "user": "gochi", 
+            "key": "access_token_key", 
+            "type": "A"
+        }
+    }
+]
