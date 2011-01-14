@@ -10,6 +10,7 @@ from apiprj.oauth_app.utils.decorators import oauth_required
 from apiprj.exceptions import NotImplementedYet
 from utils.decorators import api_exception
 from modelwrap import Article, Board, Comment, User, Token, Favorite, Cafe
+from forms import ConsumerForm
 
 @csrf_exempt 
 @api_exception

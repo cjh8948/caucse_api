@@ -22,7 +22,7 @@
                         </li>
                         {% if user.is_authenticated %}
                         <li class='nav'>
-                            <a href='/myapp'>내 애플리케이션</a>
+                            <a href='/accounts/profile'>내 애플리케이션</a>
                         </li>
                         <li class='nav'>
                             {% if oauth_token %}<a href='/accounts/logout?next=/oauth/authorize?oauth_token={{oauth_token}}'>logout</a>
