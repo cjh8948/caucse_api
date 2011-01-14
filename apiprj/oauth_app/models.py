@@ -4,15 +4,11 @@ from apiprj.ext import oauth2
 from apiprj.exceptions import AuthError
 
 class Consumer(models.Model):
-    TYPE_CHOICES = (('C', 'CLIENT'), ('B', 'BROWSER'))
-
     key = models.CharField(unique=True, max_length=255)
     secret = models.CharField(max_length=255)
     name = models.CharField(max_length=100)
     user_id = models.CharField(max_length=20)
     description = models.TextField()
-    type = models.CharField(max_length=1, choices=TYPE_CHOICES,
-                            default='C')
     modified = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
     

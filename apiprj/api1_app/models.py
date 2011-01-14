@@ -1,8 +1,8 @@
 # -*-coding:utf-8-*-
 """
-`django-admin.py inspectdb` 커맨드를 통해 legacy 분석 후 자동 생성된 모델을
+`django-admin.py inspectdb` 커맨드를 통해 legacy db 분석 후 자동 생성된 모델을
 기반으로 `django-admin.py gen_models` 커맨드로 자동생성한 Board*, Comment*, 
-Memo* 모델이 포함하였음. 
+Memo* 모델을 포함하였음. 
 
 * gen_models 커맨드는 boardinfo, photoinfo 테이블에 저장된 tablename을 기반으로
 모델을 자동생성함. boardinfo에 등록되지 않은 테이블은 자동생성되지 않음.
