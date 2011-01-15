@@ -14,7 +14,7 @@
 		 since {{ token.created|timesince }}
 	</p>
 
-	{% if user.username == token.user %}
+	{% if user.username == token.consumer.user_id %}
 		<p>
 			본인이 개발 중인 애플리케이션에 한해 개발의 편의를 위해 
 			Access Token을 본 페이지에서 조회할 수 있도록 하였습니다.
