@@ -22,6 +22,22 @@ h3 {
     background-color: #9497b8;
 }
 
+div.side_by_side_left{
+	display: inline-block;
+	width: 49%;
+}
+
+
+div.side_by_side_right{
+	display: inline-block;
+	width: 49%;
+	float: right;
+}
+
+div.app {
+	background-color: #eeeeee;
+}
+
 ul.nav {
     display: block;
     list-style-type: none;
