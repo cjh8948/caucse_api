@@ -1,15 +1,9 @@
 #! -*- coding: utf8 -*- 
-from apiprj.oauth_app.models import Consumer
-from apiprj.oauth_app.models import Token as TokenModel
 from apiprj.oauth_app.utils.decorators import oauth_required
 from apiprj.exceptions import NotImplementedYet
-from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.shortcuts import render_to_response
 from django.utils.simplejson import dumps
 from django.views.decorators.csrf import csrf_exempt
-from django.template.context import RequestContext
-from forms import ConsumerForm
 from modelwrap import Article, Board, Comment, User, Token, Favorite, Cafe
 from utils.decorators import api_exception
 
@@ -257,24 +251,3 @@ def favorites_list(request, oauth_params):
     favorites = Favorite.get_by_user(user_id)
     ret = dumps(favorites)
     return HttpResponse(ret)
-
-def index(request):
-    return render_to_response('index.tpl', 
-                              context_instance=RequestContext(request))
-
-def apistatus(request):
-    return render_to_response('apistatus.tpl', 
-                              context_instance=RequestContext(request))
-
-def apireference(request):
-    return render_to_response('apireference.tpl', 
-                              context_instance=RequestContext(request))
-
-@login_required
-def accounts_profile(request):
-    user_id=request.user.username
-    consumers = Consumer.objects.filter(user_id=user_id)
-    tokens = TokenModel.objects.filter(user=user_id).filter(type='A')
-    params = {'consumers': consumers, 'tokens': tokens}
-    return render_to_response('profile.tpl', params,
-                              context_instance=RequestContext(request))

@@ -2,13 +2,14 @@
 from apiprj.api1_app.utils.decorators import api_exception
 from apiprj.exceptions import RequiredParameterDoesNotExist
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import (HttpResponse, HttpResponseRedirect,
                          HttpResponseBadRequest, HttpResponseForbidden)
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 from django.views.decorators.csrf import csrf_exempt
-from models import Token
+from models import Token, Consumer
 from urllib import urlencode
 from urlparse import parse_qsl, urlparse, urlunparse 
 from utils.decorators import oauth_verify
@@ -125,3 +126,25 @@ def authorize(request):
             parsed_callback[4] = urlencode(params)
             callback_url = urlunparse(parsed_callback)
             return HttpResponseRedirect(callback_url)
+
+def index(request):
+    return render_to_response('index.tpl', 
+                              context_instance=RequestContext(request))    
+
+@login_required
+def accounts_profile(request):
+    user_id=request.user.username
+    consumers = Consumer.objects.filter(user_id=user_id)
+    tokens = Token.objects.filter(user=user_id).filter(type='A')
+    params = {'consumers': consumers, 'tokens': tokens}
+    return render_to_response('profile.tpl', params,
+                              context_instance=RequestContext(request))    
+    
+def apistatus(request):
+    return render_to_response('apistatus.tpl', 
+                              context_instance=RequestContext(request))
+
+def apireference(request):
+    return render_to_response('apireference.tpl', 
+                              context_instance=RequestContext(request))
+    

@@ -6,15 +6,18 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # accounts
-    (r'^accounts/$', 'apiprj.api1_app.views.index'),
+    (r'^$', 'apiprj.oauth_app.views.index'),
+    (r'^accounts/$', 'apiprj.oauth_app.views.index'),
     (r'^accounts/login/$', 'django.contrib.auth.views.login'),
     (r'^accounts/logout/$', 'django.contrib.auth.views.logout'),
     (r'^accounts/logout_then_login/$', 'django.contrib.auth.views.logout_then_login'),
-    (r'^accounts/profile/$', 'apiprj.api1_app.views.accounts_profile'),
+    (r'^accounts/profile/$', 'apiprj.oauth_app.views.accounts_profile'),
     # admin
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
     (r'^admin/', include(admin.site.urls)),
     # oauth
+    (r'^apireference/$', 'apiprj.oauth_app.views.apireference'),
+    (r'^apistatus/$', 'apiprj.oauth_app.views.apistatus'),    
     (r'^oauth/', include('apiprj.oauth_app.urls')),
     # api
     (r'^1/', include('apiprj.api1_app.urls')),
