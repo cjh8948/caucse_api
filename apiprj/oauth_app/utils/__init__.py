@@ -1,3 +1,4 @@
+#-*-coding:utf-8-*-
 import uuid, hashlib
 
 def _mysql_password(password):

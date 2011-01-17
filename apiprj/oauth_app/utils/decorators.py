@@ -1,14 +1,12 @@
 #!-*-coding:utf8-*-
-"""Functions in this module mark view functions and verify requests are vaild 
-under oauth protocol."""
+"""oauth 인증이 필요한 view function에 대한 데코레이터"""
 from django.http import HttpResponseBadRequest
 from oauthserver import ServerAlpha
 from functools import wraps
 
 def oauth_required(view_func):
-    """Marks view function to verify that the request is valid for 
-    oauth required resources. 
-    """
+    "oauth 인증이 필요한 django view function에 대한 데코레이터 함수"
+    
     def verify_request(request, *arg, **keywords):
         keywords['oauth_params'] = ServerAlpha().verify_access_request(request)
         return view_func(request, *arg, **keywords)
@@ -16,12 +14,13 @@ def oauth_required(view_func):
     return wraps(view_func)(verify_request)
 
 def oauth_verify(view_func):
-    """Marks view function to verify that a request is valid for oauth 
-    authentication flow(1.0a).
-    
-    If the request is not valid, HttpResponseBadRequest(400 status code) 
-    will be returned.
+    """\
+    oauth flow request가 유효한지 검증이 필요한 django view function에 대한 
+    데코레이터 함수
+
+    요청이 유효하지 않은 경우 HttpResponseBadRequest(400 status code)을 반환
     """
+    
     def verify_request(request, *arg, **keywords):
         try:
             keywords['oauth_params'] = ServerAlpha().verify_flow_request(request)
