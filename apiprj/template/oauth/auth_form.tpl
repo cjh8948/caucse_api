@@ -20,15 +20,18 @@
 				후 이용해 주세요.
 		    </p>
 		{% else %}
-		    <p>
-		        {{ message }}
-		    </p>
-		    <p>
-		        아이디: <input name='user_id'/>
-		    </p>
-		    <p>
-		        비밀 번호: <input name='password' type='password'/>
-		    </p>
+			{% if form.errors %}
+			<p>
+		    	사용자 아이디와 비밀번호가 일치하지 않습니다.
+			</p>
+			{% endif %}
+		    {{ form.username.label_tag }}
+		    {{ form.username }}
+		    <br/>
+		    {{ form.password.label_tag }}
+		    {{ form.password }}
+		    <br/>
+		    <input type="hidden" name="next" value="{{ next }}" />
 		{% endif %}
 		<p>
 		    <input type='submit' value='Allow'/><input type='hidden' name='oauth_token' value='{{ oauth_token }}'/>

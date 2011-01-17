@@ -5,7 +5,11 @@ from django.core.exceptions import ObjectDoesNotExist
 
 class AuthBackend:
     def authenticate(self, username=None, password=None):
-        member = Member.objects.get(id=username)
+        try:
+            member = Member.objects.get(id=username)
+        except ObjectDoesNotExist:
+            return None
+        
         if check_mysql_password(password, member.password):
             try:
                 user = User.objects.get(username=username)

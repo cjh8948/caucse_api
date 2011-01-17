@@ -3,6 +3,7 @@ from apiprj.api1_app.utils.decorators import api_exception
 from apiprj.exceptions import RequiredParameterDoesNotExist
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import (HttpResponse, HttpResponseRedirect,
                          HttpResponseBadRequest, HttpResponseForbidden)
@@ -72,60 +73,48 @@ def authorize(request):
     ** method: POST
     ** mandatory parameter: see [[OauthAuthentication]]
     """
-    if request.method == "GET":
-        try:
-            oauth_token = request.REQUEST['oauth_token']
-        except KeyError as e:
-            raise RequiredParameterDoesNotExist(str(e))
-         
-        try:
-            token = Token.objects.get(key=oauth_token)
-        except ObjectDoesNotExist:
-            return HttpResponseForbidden()
-        params = {'oauth_token' : oauth_token, 'consumer' : token.consumer}
-        return render_to_response('oauth/auth_form.tpl', params,
-                                  context_instance=RequestContext(request))
-
-    elif request.method == "POST":
-        if request.user.is_authenticated():
-            user_id = request.user.username
-        else:
-            # check user_id, password
-            user_id = request.REQUEST['user_id']
-            password = request.REQUEST['password']
-            oauth_token = request.REQUEST['oauth_token']
-            user = authenticate(username=user_id, password=password)
-            if user:
-                if user.is_active:
-                    login(request, user)
-            else:
-                token = Token.objects.get(key=oauth_token)
-                message = u"사용자 아이디와 비밀번호가 일치하지 않습니다."
-                params = {'oauth_token' : oauth_token,
-                          'consumer' : token.consumer,
-                          'message': message}
-                return render_to_response('oauth/auth_form.tpl', params,
-                                          context_instance=RequestContext(request))
+    if request.method == "POST":
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            login(request, form.get_user())
+            if request.session.test_cookie_worked():
+                request.session.delete_test_cookie()   
+            user_id = request.user.username 
                     
-        # make verifier 
+            # make verifier 
+            oauth_token = request.REQUEST['oauth_token']
+            token = Token.objects.get(key=oauth_token)
+            token.new_verifier(user_id)
+            oauth_token = token.to_oauth()
+    
+            # callback processing
+            if token.callback == "oob": # pin processing
+                params = {'verifier': token.verifier}
+                return render_to_response('oauth/auth_verifier.tpl', params,
+                                          context_instance=RequestContext(request))
+            else:
+                params = {'oauth_token': token.key,
+                          'oauth_verifier': token.verifier}
+                parsed_callback = list(urlparse(token.callback))
+                params.update(dict(parse_qsl(parsed_callback[4])))
+                parsed_callback[4] = urlencode(params)
+                callback_url = urlunparse(parsed_callback)
+                return HttpResponseRedirect(callback_url)                 
+            
+    # form is not valid or GET
+    form = AuthenticationForm(request)
+    try:
         oauth_token = request.REQUEST['oauth_token']
+    except KeyError as e:
+        raise RequiredParameterDoesNotExist(str(e))     
+    try:
         token = Token.objects.get(key=oauth_token)
-        token.new_verifier(user_id)
-        oauth_token = token.to_oauth()
-
-        # callback processing
-        if token.callback == "oob": # pin processing
-            params = {'verifier': token.verifier}
-            return render_to_response('oauth/auth_verifier.tpl', params,
-                                      context_instance=RequestContext(request))
-        else:
-            params = {'oauth_token': token.key,
-                      'oauth_verifier': token.verifier}
-            parsed_callback = list(urlparse(token.callback))
-            params.update(dict(parse_qsl(parsed_callback[4])))
-            parsed_callback[4] = urlencode(params)
-            callback_url = urlunparse(parsed_callback)
-            return HttpResponseRedirect(callback_url)
+    except ObjectDoesNotExist:
+        return HttpResponseForbidden()    
+    params = {'oauth_token' : oauth_token, 'consumer' : token.consumer,
+              'form': form}    
+    return render_to_response('oauth/auth_form.tpl', params,
+                              context_instance=RequestContext(request))
 
 def index(request):
     return render_to_response('index.tpl', 
