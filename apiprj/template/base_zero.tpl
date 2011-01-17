@@ -3,8 +3,8 @@
 <head>
     <title>
     
-    	{%block title%}
-		{%endblock%}
+    	{% block title %}
+		{% endblock %}
     
     </title>
     <meta content='text/html; charset=UTF-8'>
@@ -32,7 +32,7 @@
     <div id='content'>
     
         {% block content %} 
-    	{%endblock%}
+    	{% endblock %}
     	
     </div>
     
