@@ -4,10 +4,18 @@
 	동네API - 상태
 {% endblock %}
 
+{% block breadcrumbs %}
+	<div class="breadcrumbs">
+		<a href="../">홈</a> &rsaquo; 
+		API 레퍼런스
+	</div>
+{% endblock %}
+
 {% block content %}
-	<iframe src ="https://github.com/caucse-dev/caucse_api/wiki/Apireference" width="100%" height="1000px">
-	    <p>
-	        Your browser does not support iframes.
-	    </p>
-	</iframe>
+	<h1>Articles</h1>
+	<p>
+		<a href="apiprj.api1_app.views.articles_create">
+			/articles/create/&lt;board_id>
+		</a>
+	</p>
 {%endblock%} 

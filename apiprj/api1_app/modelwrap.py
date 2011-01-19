@@ -2,7 +2,8 @@
 """
 """
 from apiprj.api1_app import models
-from apiprj.exceptions import DatabaseTableDoesNotExist, PermissionDenied
+from apiprj.exceptions import (DatabaseTableDoesNotExist, PermissionDenied, 
+                               NoMatchingResult)
 from apiprj.oauth_app.models import Token as OauthToken
 from apiprj.settings import USER_IMG_PATH, USER_IMG_PREFIX
 from django.db.models.aggregates import Max
@@ -316,8 +317,7 @@ class User(object):
         if users:
             return map(self.pack, users)
         else:
-            # TODO: make it returns empty list, define proper exception
-            raise Exception("No matching")
+            raise NoMatchingResult("No matching")
        
 class Token(object):
     @classmethod

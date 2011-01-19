@@ -1,7 +1,7 @@
 #-*- coding:utf-8 -*-
 from apiprj.api1_app.utils.decorators import api_exception
 from apiprj.exceptions import RequiredParameterDoesNotExist
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.exceptions import ObjectDoesNotExist
@@ -74,13 +74,18 @@ def authorize(request):
     ** mandatory parameter: see [[OauthAuthentication]]
     """
     if request.method == "POST":
-        form = AuthenticationForm(data=request.POST)
-        if form.is_valid():
-            login(request, form.get_user())
-            if request.session.test_cookie_worked():
-                request.session.delete_test_cookie()   
-            user_id = request.user.username 
-                    
+        user_id = None
+        if not request.user.is_authenticated():
+            form = AuthenticationForm(data=request.POST)
+            if form.is_valid():
+                login(request, form.get_user())
+                if request.session.test_cookie_worked():
+                    request.session.delete_test_cookie()   
+                user_id = request.user.username
+        else: 
+            user_id = request.user.username
+        
+        if user_id:            
             # make verifier 
             oauth_token = request.REQUEST['oauth_token']
             token = Token.objects.get(key=oauth_token)

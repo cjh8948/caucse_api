@@ -8,6 +8,9 @@ class %(title)s(%(class)s):
         db_table = u'%(tablename)s'"""
 
 class Command(BaseCommand):
+    """ boardinfo, photoinfo에 저장된 게시판 정보를 바탕으로 
+    board_*, comment_*, photo_*, memo_* 테이블의 모델을 출력
+    """
     def handle(self, *args, **options):
         def to_title(board):
             return board.replace("_", " ").title().replace(' ', '')

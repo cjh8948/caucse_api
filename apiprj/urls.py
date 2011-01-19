@@ -1,6 +1,7 @@
 from django.conf import settings
-from django.conf.urls.defaults import patterns, include
+from django.conf.urls.defaults import patterns, include, url
 from django.contrib import admin
+from django.contrib.admindocs import views
 
 admin.autodiscover()
 
@@ -12,12 +13,16 @@ urlpatterns = patterns('',
     (r'^accounts/logout/$', 'django.contrib.auth.views.logout'),
     (r'^accounts/logout_then_login/$', 'django.contrib.auth.views.logout_then_login'),
     (r'^accounts/profile/$', 'apiprj.oauth_app.views.accounts_profile'),
+    
     # admin
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
     (r'^admin/', include(admin.site.urls)),
-    # oauth
-    (r'^apireference/$', 'apiprj.oauth_app.views.apireference'),
+
+    # doc, user interfaces
+    (r'^apireference/(?P<view>[^/]+)/$', 'apiprj.api1_app.views.view_detail'),
+    (r'^apireference/$', 'apiprj.api1_app.views.view_index'),
     (r'^apistatus/$', 'apiprj.oauth_app.views.apistatus'),    
+    # oauth
     (r'^oauth/', include('apiprj.oauth_app.urls')),
     # api
     (r'^1/', include('apiprj.api1_app.urls')),

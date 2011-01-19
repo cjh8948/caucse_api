@@ -19,7 +19,8 @@ def shuffle_str(buf):
     return "".join(buf_list)
 
 class Command(BaseCommand):
-    """"""
+    "실제 데이터베이스에서 fixture를 추출하는 커맨드. 사용에 주의가 필요함."
+    
     args = 'TODO: fill here'
     help = u"실제 데이터베이스의 내용을 지우고 변경해서 fixture를 생성할 수 있을만큼의 분량만 남김."
     
@@ -133,7 +134,3 @@ class Command(BaseCommand):
         for favorite in models.Favorite.objects.all():
             if favorite.user_id not in users:
                 favorite.delete()
-
-
-        
-        

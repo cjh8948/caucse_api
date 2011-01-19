@@ -21,6 +21,11 @@ class ApiTestCase(unittest.TestCase):
         client = ClientAlpha(consumer, token)
         if callback: client.set_callback(callback)
         resp, content = client.request(url, "GET")
+#        print resource
+#        try:
+#            print json.dumps(json.loads(content),indent=4)
+#        except:
+#            pass
         return resp, content
 
     def oauth_post(self, resource, consumer, token, param={}):
@@ -28,6 +33,11 @@ class ApiTestCase(unittest.TestCase):
         client = ClientAlpha(consumer, token)
         body = urllib.urlencode(param)
         resp, content = client.request(url, "POST", body=body)
+#        print resource
+#        try:
+#            print json.dumps(json.loads(content),indent=4)
+#        except:
+#            pass
         return resp, content
 
     def plain_get(self, resource, param):
