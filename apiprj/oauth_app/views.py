@@ -137,8 +137,4 @@ def accounts_profile(request):
 def apistatus(request):
     return render_to_response('apistatus.tpl', 
                               context_instance=RequestContext(request))
-
-def apireference(request):
-    return render_to_response('apireference.tpl', 
-                              context_instance=RequestContext(request))
     
