@@ -60,9 +60,9 @@ class ApiTestCase(unittest.TestCase):
 class ArticlesTest(ApiTestCase):
     def test_list(self):
         'GET articles/list with oauth'
-        param = {'board_id': 'board_alumni99'}
-        resp, content = self.oauth_get('articles/list', self.consumer,
-                                       self.access_token, param)
+        resp, content = self.oauth_get('articles/list/board_alumni99', 
+                                        self.consumer,
+                                        self.access_token)
         self.assertEqual(resp['status'], '200')
         obj = json.loads(content)
         listinfo = obj['listinfo']
@@ -100,9 +100,9 @@ class ArticlesTest(ApiTestCase):
     
     def test_show(self):
         'GET articles/show with oauth'
-        param = {'board_id': 'board_alumni99',
-                 'article_id': '100'}
-        resp, content = self.oauth_get('articles/show', self.consumer,
+        param = {}
+        resp, content = self.oauth_get('articles/show/board_alumni99/100', 
+                                       self.consumer,
                                        self.access_token, param)
         self.assertEqual(resp['status'], '200')
         obj = json.loads(content)
@@ -120,9 +120,9 @@ class ArticlesTest(ApiTestCase):
 
     def test_create(self):
         'POST articles/create with oauth'        
-        param = {'board_id': 'board_alumni99', 'title': 'title',
+        param = {'title': 'title',
                  'message': u'message 한글 메시지 테스트.'.encode('utf8')}
-        resp, content = self.oauth_post("articles/create", self.consumer,
+        resp, content = self.oauth_post("articles/create/board_alumni99", self.consumer,
                                         self.access_token, param)
         self.assertEqual(resp['status'], '200')
         obj = json.loads(content)
@@ -216,19 +216,6 @@ class BoardsTest(ApiTestCase):
         self.assertTrue(obj)
         
 class CommentsTest(ApiTestCase):
-    def test_create(self):
-        'POST comments/create with oauth'
-        param = {'board_id':'board_alumni99', 'article_id':'20',
-                 'message':'comment test'}
-        resp, content = self.oauth_post("comments/create", self.consumer,
-                                        self.access_token, param)
-        self.assertEqual(resp['status'], '200')
-        obj = json.loads(content)
-        status = obj['status']
-        comment = obj['comment']
-        self.assertEqual(status.lower(), 'ok')
-        self.assertEqual(comment['content'], param['message'])
-
     def test_create_restful(self):
         'POST comments/create/board_alumni99/20 with oauth'
         param = {'message':'restful comment test'}
@@ -240,9 +227,9 @@ class CommentsTest(ApiTestCase):
 
     def test_create_wrong_board(self):
         'POST comments/create on wrong board with oauth'
-        param = {'board_id':'board_not_registered', 'article_id':'20',
-                 'message':'comment test'}
-        resp, content = self.oauth_post("comments/create", self.consumer,
+        param = {'message':'comment test'}
+        resp, content = self.oauth_post("comments/create/board_not_registered/20", 
+                                        self.consumer,
                                         self.access_token, param)
         self.assertEqual(resp['status'], '200')
         obj = json.loads(content)
@@ -251,9 +238,9 @@ class CommentsTest(ApiTestCase):
     def test_delete(self):
         'GET comments/delete/board_alumni99/:comment_id'
         # create first
-        param = {'board_id':'board_alumni99', 'article_id':'20',
-                 'message':'comment test'}
-        resp, content = self.oauth_post("comments/create", self.consumer,
+        param = {'message':'comment test'}
+        resp, content = self.oauth_post("comments/create/board_alumni99/20", 
+                                        self.consumer,
                                         self.access_token, param)
         self.assertEqual(resp['status'], '200')
         obj = json.loads(content)

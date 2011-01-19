@@ -26,14 +26,17 @@ import urls
 @api_exception
 @oauth_required
 def articles_create(request, oauth_params, board_id=None):
-    r"""게시물을 등록하고 결과를 json 포맷으로 반환
-    
+    r"""
+    게시물을 등록하고 결과를 json 포맷으로 반환
+
+    resource
+     * /articles/create/<board_id> 
+     
     method
      * POST
      * oauth required
 
     parameters (bold체는 필수)
-     * **board_id**
      * **title**
      * **message**     
     
@@ -41,50 +44,41 @@ def articles_create(request, oauth_params, board_id=None):
      * 사진게시판은 지원하지 않는다.    
 
     example
-     아래와 같이 요청하거나, 
-     
-    .. parsed-literal:: 
-
-       POST /articles/create HTTP/1.1 
-       Host: api.caucse.net
-       Content-Type: application/x-www-form-urlencoded
-       board_id=board_test&title=...&message=...
+     아래와 같이 요청하면,
     
-    아래와 같이 요청하면,
-    
-    .. parsed-literal::
+     .. parsed-literal::
     
        POST /articles/create/board_test HTTP/1.1 
        Host: api.caucse.net
        Content-Type: application/x-www-form-urlencoded
        title=...&message=...
 
-    성공시에는 다음과 같은 결과를 얻는다.
+     성공시에는 다음과 같은 결과를 얻는다.
     
-    .. parsed-literal::
+     .. parsed-literal::
 
        HTTP/1.0 200 OK
        Content-Type: text/html; charset=utf-8
 
-        {
-            "status": "ok", 
-            "article": {
-                "board_id": "board_alumni99", 
-                "hits": 0, 
-                "total_comments": 0, 
-                "author": {
-                    "img_url": "http://s.twimg.com/a/1278188204/images/default_profile_0_normal.png", 
-                    "name": "\\uc774\\ub355\\uc900", 
-                    "id": "gochi"
-                }, 
-                "title": "title", 
-                "comments": [], 
-                "content": "message \\ud55c\\uae00 \\uba54\\uc2dc\\uc9c0 \\ud14c\\uc2a4\\ud2b8.", 
-                "reg_date": "2011-01-19T13:24:08.949779", 
-                "file": "", 
-                "id": 3514
-            }
-        }
+       {
+           "status": "ok", 
+           "article": {
+               "board_id": "board_alumni99", 
+               "hits": 0, 
+               "total_comments": 0, 
+               "author": {
+                   "img_url": "http://s.twimg.com/a/1278188204/images/default_profile_0_normal.png", 
+                   "name": "\\uc774\\ub355\\uc900", 
+                   "id": "gochi"
+               }, 
+               "title": "title", 
+               "comments": [], 
+               "content": "message \\ud55c\\uae00 \\uba54\\uc2dc\\uc9c0 \\ud14c\\uc2a4\\ud2b8.", 
+               "reg_date": "2011-01-19T13:24:08.949779", 
+               "file": "", 
+               "id": 3514
+           }
+       }
         
     실패시에는 다음과 같은 결과를 얻는다.
     
@@ -93,11 +87,11 @@ def articles_create(request, oauth_params, board_id=None):
        HTTP/1.0 200 OK
        Content-Type: text/html; charset=utf-8   
        
-        {
-            "status": "error", 
-            "message": "\\uc0ac\\uc9c4\\uac8c\\uc2dc\\ud310 \\uac8c\\uc2dc \\uae30\\ub2a5\\uc740 \\uc9c0\\uc6d0\\ud558\\uc9c0 \\uc54a\\uc2b5\\ub2c8\\ub2e4.", 
-            "type": "<type 'exceptions.NotImplementedError'>"
-        }     
+       {
+           "status": "error", 
+           "message": "\\uc0ac\\uc9c4\\uac8c\\uc2dc\\ud310 \\uac8c\\uc2dc \\uae30\\ub2a5\\uc740 \\uc9c0\\uc6d0\\ud558\\uc9c0 \\uc54a\\uc2b5\\ub2c8\\ub2e4.", 
+           "type": "<type 'exceptions.NotImplementedError'>"
+       }     
     """
     try:
         if not board_id:
@@ -123,36 +117,30 @@ def articles_create(request, oauth_params, board_id=None):
 @api_exception
 @oauth_required
 def articles_delete(request, oauth_params, board_id=None, article_id=None):
-    r"""게시물을 삭제한다.
+    r"""
+    게시물을 삭제한다.
+
+    resource
+     * /articles/delete/<board_id>/<article_id> 
     
     method
      * GET
      * oauth required
-    
-    parameters (bold체는 필수)
-     * **board_id**
-     * **article_id**
     
     note
      * 사진게시판은 지원하지 않음
      * 인증된 사용자 본인의 게시물만 삭제 가능 
      
     example
-     아래와 같은 요청을 보내거나 (oauth 서명 포함)
+     아래 요청을 보내면, (oauth 서명 포함)
 
-    .. parsed-literal::
+     .. parsed-literal::
          
-      GET /articles/delete/board_test/20 HTTP/1.1
+       GET /articles/delete/board_test/20 HTTP/1.1
       
-    아래와 같은 요청을 보내면,
-     
-    .. parsed-literal::
-         
-       GET /articles/delete?board_id=board_test&article_id=20 HTTP/1.1
-
-    해당 게시물을 삭제하고 다음과 같은 결과를 반환한다.
+     해당 게시물을 삭제하고 다음과 같은 결과를 반환한다.
     
-    .. parsed-literal::
+     .. parsed-literal::
        
        HTTP/1.0 200 OK
        Content-Type: text/html; charset=utf-8   
@@ -160,8 +148,6 @@ def articles_delete(request, oauth_params, board_id=None, article_id=None):
        {
            "status": "ok"
        }       
-       
-
     """ 
     try:   
         if not board_id:
@@ -184,11 +170,77 @@ def articles_delete(request, oauth_params, board_id=None, article_id=None):
     ret = dumps({'status':'ok'})
     return HttpResponse(ret)
 
+@api_exception
+@oauth_required
+def articles_list(request, oauth_params, board_id=None):
+    """
+    질의 조건에 맞는 게시물의 리스트의 배열과 관련 정보를 반환한다.
+
+    resource
+     * /articles/list/<board_id>
+
+    method
+     * GET
+     * oauth required
+    
+    parameters
+     * page (default=0)
+     * per_page (default=20)
+     * q (default=""): 검색 질의어
+    """
+    page = 0
+    per_page = 20
+    q = ""
+    
+    # get request parameter
+    try:
+        if not board_id:
+            board_id = request.GET['board_id']
+    except KeyError as e:
+        raise RequiredParameterDoesNotExist(e)
+
+    if request.GET.has_key('page'):
+        page = int(request.GET['page'])
+    if request.GET.has_key('per_page'):
+        per_page = int(request.GET['per_page'])
+    if request.GET.has_key('q'):
+        q = request.GET['q']
+
+    # make json object to return
+    listinfo, articles = Article.get_list(board_id, page, per_page, q)
+
+    ret_item = {'listinfo': listinfo, 'articles': articles}
+    ret = dumps(ret_item)
+
+    return HttpResponse(ret)
+
+@api_exception
+@oauth_required
+def articles_show(request, oauth_params, board_id=None, article_id=None):
+    """
+    게시물의 내용을 보여준다.
+    
+    resorce
+     * /articles/show/<board_id>/<article_id>
+     
+    method
+     * GET
+     * oauth required
+    """
+    if not board_id:
+        board_id = request.GET['board_id']
+    if not article_id:
+        article_id = int(request.GET['article_id'])
+    article = Article.get(board_id, article_id)
+    ret = dumps(article) 
+    return HttpResponse(ret)
+
 @csrf_exempt 
 @api_exception
 @oauth_required
 def articles_update(request, oauth_params, board_id=None, article_id=None):
-    """게시물을 수정한다.
+    """
+    게시물을 수정한다.
 
     method
      * POST
@@ -217,65 +269,6 @@ def articles_update(request, oauth_params, board_id=None, article_id=None):
     ret = dumps({'status':'ok', 'article': article})    
     return HttpResponse(ret)
     
-@api_exception
-@oauth_required
-def articles_list(request, oauth_params, board_id=None):
-    """질의 조건에 맞는 게시물의 리스트의 배열과 관련 정보를 반환한다.
-
-    method
-     * POST
-     * oauth required
-    
-    parameters (bold체는 필수)
-     * **board_id**
-     * page (default=0)
-     * per_page (default=20)
-     * q (default=""): 검색 질의어
-    """
-    page = 0
-    per_page = 20
-    q = ""
-    
-    # get request parameter
-    if not board_id:
-        board_id = request.GET['board_id']
-
-    if request.GET.has_key('page'):
-        page = int(request.GET['page'])
-    if request.GET.has_key('per_page'):
-        per_page = int(request.GET['per_page'])
-    if request.GET.has_key('q'):
-        q = request.GET['q']
-
-    # make json object to return
-    listinfo, articles = Article.get_list(board_id, page, per_page, q)
-
-    ret_item = {'listinfo': listinfo, 'articles': articles}
-    ret = dumps(ret_item)
-
-    return HttpResponse(ret)
-
-@api_exception
-@oauth_required
-def articles_show(request, oauth_params, board_id=None, article_id=None):
-    """게시물의 내용을 보여준다.
-    
-    method
-     * GET
-     * oauth required
-        
-    parameter (bold체는 필수)
-     * **board_id**
-     * **article_id**
-    """
-    if not board_id:
-        board_id = request.GET['board_id']
-    if not article_id:
-        article_id = int(request.GET['article_id'])
-    article = Article.get(board_id, article_id)
-    ret = dumps(article) 
-    return HttpResponse(ret)
-
 @api_exception
 @oauth_required
 def boards_favorite(request, oauth_params):
