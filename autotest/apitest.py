@@ -21,11 +21,12 @@ class ApiTestCase(unittest.TestCase):
         client = ClientAlpha(consumer, token)
         if callback: client.set_callback(callback)
         resp, content = client.request(url, "GET")
-#        print resource
-#        try:
-#            print json.dumps(json.loads(content),indent=4)
-#        except:
-#            pass
+        print resource
+        try:
+            s = json.dumps(json.loads(content),indent=4,ensure_ascii=False)
+            print s.encode('utf8')
+        except:
+            pass
         return resp, content
 
     def oauth_post(self, resource, consumer, token, param={}):
@@ -33,11 +34,12 @@ class ApiTestCase(unittest.TestCase):
         client = ClientAlpha(consumer, token)
         body = urllib.urlencode(param)
         resp, content = client.request(url, "POST", body=body)
-#        print resource
-#        try:
-#            print json.dumps(json.loads(content),indent=4)
-#        except:
-#            pass
+        print resource
+        try:
+            s =  json.dumps(json.loads(content),indent=4,ensure_ascii=False)
+            print s.encode('utf8')
+        except Exception as e:
+            print e
         return resp, content
 
     def plain_get(self, resource, param):
@@ -50,7 +52,7 @@ class ApiTestCase(unittest.TestCase):
         self.assertEqual(obj['id'], 'gochi')
         self.assertEqual(obj['name'], u'\uc774\ub355\uc900')
         self.assertEqual(obj['email'], 'gochi@caucse.net')
-        self.assertEqual(obj['entrance_year'], 99)
+        self.assertEqual(obj['entrance_year'], 1999)
 
         # validate keys
         keys = [u'name', u'mobile', u'img_url', u'introduce', u'id',

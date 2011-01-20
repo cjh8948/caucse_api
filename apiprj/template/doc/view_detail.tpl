@@ -10,11 +10,11 @@
 {% endblock %}
 
 
-{% block title %}View: {{ name }}{% endblock %}
+{% block title %}동네 API - {{ name }}{% endblock %}
 
 {% block content %}
 
-<h1>{{ name }}</h1>
+<!--h1>{{ name }}</h1-->
 
 <h2 class="subhead">{{ summary }}</h2>
 
@@ -31,10 +31,6 @@
 {% endif %}
 
 <p class="small">
-{% if user.is_staff %}
-	<a href="../">&lsaquo; Back to Views Documentation</a>
-{% else %}
-	<a href="/apireference">&lsaquo; Back to API list</a>
-{% endif %}
+	<a href="/apireference">&lsaquo; API 레퍼런스로 돌아가기</a>
 </p>
 {% endblock %}

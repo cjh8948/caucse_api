@@ -248,10 +248,15 @@ class User(object):
             birthday = user_model.birthday.isoformat()
         else:
             birthday = ""
+        
+        if user_model.id_number:
+            entrance_year = 1900 + user_model.id_number
+        else:
+            entrance_year = None
             
         packed_user = {'id': user_model.id,
                        'name': user_model.name,
-                       'entrance_year': user_model.id_number,
+                       'entrance_year': entrance_year,
                        'img_url': self.get_img_url(user_model.id),
                        'mobile': user_model.cell_phone,
                        'homepage': user_model.homepage,
@@ -299,6 +304,11 @@ class User(object):
         # simple natural language processing
         for token in q.split():
             if re_entrance_year.match(token):
+                token = int(token)
+                if token >= 1900:
+                    token -= 1900
+                elif token < 50:
+                    token += 100 
                 years.append(token)
             elif re_id.match(token):
                 ids.append(token)

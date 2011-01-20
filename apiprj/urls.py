@@ -19,8 +19,8 @@ urlpatterns = patterns('',
     (r'^admin/', include(admin.site.urls)),
 
     # doc, user interfaces
-    (r'^apireference/(?P<view>[^/]+)/$', 'apiprj.api1_app.views.view_detail'),
-    (r'^apireference/$', 'apiprj.api1_app.views.view_index'),
+    (r'^apireference/(?P<view>[^/]+)/$', 'apiprj.api1_app.doc_views.view_detail'),
+    (r'^apireference/$', 'apiprj.api1_app.doc_views.view_index'),
     (r'^apistatus/$', 'apiprj.oauth_app.views.apistatus'),    
     # oauth
     (r'^oauth/', include('apiprj.oauth_app.urls')),

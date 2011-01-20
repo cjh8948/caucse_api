@@ -1,7 +1,7 @@
 {%extends "base.tpl"%}
 
 {% block title %}
-	동네API - 상태
+	동네API - 시스템 상태
 {% endblock %}
 
 {% block breadcrumbs %}

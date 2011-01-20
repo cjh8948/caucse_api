@@ -4,94 +4,78 @@ from apiprj.exceptions import (NotImplementedYet, ParameterIsNotValid,
                                RequiredParameterDoesNotExist, NoMatchingResult,
                                AuthError)
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse
 from django.utils.simplejson import dumps
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.admindocs import utils
-from django.contrib.admindocs.views import (get_root_path, 
-                                            missing_docutils_page,
-                                            extract_views_from_urlpatterns,
-                                            simplify_regex)
-
-from django.template import RequestContext
-from django.shortcuts import render_to_response
-from django.utils.importlib import import_module
-from django.utils.translation import ugettext as _
 from modelwrap import Article, Board, Comment, User, Token, Favorite, Cafe
 from utils.decorators import api_exception
-from django.core import urlresolvers
-import urls
 
 @csrf_exempt 
 @api_exception
 @oauth_required
 def articles_create(request, oauth_params, board_id=None):
     r"""
-    게시물을 등록하고 결과를 json 포맷으로 반환
+    **/articles/create/<board_id>**
+    
+    게시물을 등록
 
-    resource
-     * /articles/create/<board_id> 
-     
     method
      * POST
      * oauth required
 
-    parameters (bold체는 필수)
-     * **title**
-     * **message**     
+    parameters
+     * **title** (필수)
+     * **message** (필수)     
     
     note
      * 사진게시판은 지원하지 않는다.    
 
     example
-     아래와 같이 요청하면,
-    
-     .. parsed-literal::
-    
-       POST /articles/create/board_test HTTP/1.1 
-       Host: api.caucse.net
-       Content-Type: application/x-www-form-urlencoded
-       title=...&message=...
-
-     성공시에는 다음과 같은 결과를 얻는다.
-    
-     .. parsed-literal::
-
-       HTTP/1.0 200 OK
-       Content-Type: text/html; charset=utf-8
-
-       {
-           "status": "ok", 
-           "article": {
-               "board_id": "board_alumni99", 
-               "hits": 0, 
-               "total_comments": 0, 
-               "author": {
-                   "img_url": "http://s.twimg.com/a/1278188204/images/default_profile_0_normal.png", 
-                   "name": "\\uc774\\ub355\\uc900", 
-                   "id": "gochi"
-               }, 
-               "title": "title", 
-               "comments": [], 
-               "content": "message \\ud55c\\uae00 \\uba54\\uc2dc\\uc9c0 \\ud14c\\uc2a4\\ud2b8.", 
-               "reg_date": "2011-01-19T13:24:08.949779", 
-               "file": "", 
-               "id": 3514
-           }
-       }
+     * request (oauth 인증 관련 parameter는 예제에서 생략)
+         .. parsed-literal::
         
-    실패시에는 다음과 같은 결과를 얻는다.
-    
-    .. parsed-literal::
+           POST /articles/create/board_test HTTP/1.1 
+           Host: api.caucse.net
+           Content-Type: application/x-www-form-urlencoded
+           title=...&message=...
 
-       HTTP/1.0 200 OK
-       Content-Type: text/html; charset=utf-8   
-       
-       {
-           "status": "error", 
-           "message": "\\uc0ac\\uc9c4\\uac8c\\uc2dc\\ud310 \\uac8c\\uc2dc \\uae30\\ub2a5\\uc740 \\uc9c0\\uc6d0\\ud558\\uc9c0 \\uc54a\\uc2b5\\ub2c8\\ub2e4.", 
-           "type": "<type 'exceptions.NotImplementedError'>"
-       }     
+     * response (success case) 
+         .. parsed-literal::
+
+           HTTP/1.0 200 OK
+           Content-Type: application/json; charset=utf-8
+    
+           {
+              "status": "ok", 
+              "article": {
+                  "board_id": "board_alumni99", 
+                  "hits": 0, 
+                  "total_comments": 0, 
+                  "author": {
+                      "img_url": "http://s.twimg.com/a/1278188204/images/default_profile_0_normal.png", 
+                      "name": "이덕준", 
+                      "id": "gochi"
+                  }, 
+                  "title": "title", 
+                  "comments": [], 
+                  "content": "message 한글 메시지 테스트.", 
+                  "reg_date": "2011-01-20T09:16:13.394124", 
+                  "file": "", 
+                  "id": 3591
+              }
+           }
+        
+     * response (failure case) 
+         .. parsed-literal::
+    
+           HTTP/1.0 200 OK
+           Content-Type: application/json; charset=utf-8
+              
+           {
+                "status": "error", 
+                "message": "사진게시판 게시 기능은 지원하지 않습니다.", 
+                "type": "<type 'exceptions.NotImplementedError'>"
+           }   
     """
     try:
         if not board_id:
@@ -111,18 +95,17 @@ def articles_create(request, oauth_params, board_id=None):
 
     # return result
     ret = dumps({'status':'ok', 'article': article})    
-    return HttpResponse(ret)
+    return HttpResponse(ret, content_type='application/json')
 
 
 @api_exception
 @oauth_required
 def articles_delete(request, oauth_params, board_id=None, article_id=None):
     r"""
-    게시물을 삭제한다.
+    **/articles/delete/<board_id>/<article_id>** 
+   
+    게시물을 삭제
 
-    resource
-     * /articles/delete/<board_id>/<article_id> 
-    
     method
      * GET
      * oauth required
@@ -132,22 +115,20 @@ def articles_delete(request, oauth_params, board_id=None, article_id=None):
      * 인증된 사용자 본인의 게시물만 삭제 가능 
      
     example
-     아래 요청을 보내면, (oauth 서명 포함)
+     * request (oauth 인증 관련 parameter는 예제에서 생략)
+        .. parsed-literal::
 
-     .. parsed-literal::
-         
-       GET /articles/delete/board_test/20 HTTP/1.1
+            GET /articles/delete/board_test/20 HTTP/1.1
       
-     해당 게시물을 삭제하고 다음과 같은 결과를 반환한다.
-    
-     .. parsed-literal::
-       
-       HTTP/1.0 200 OK
-       Content-Type: text/html; charset=utf-8   
-       
-       {
-           "status": "ok"
-       }       
+     * response (success case) 
+        .. parsed-literal::
+          
+            HTTP/1.0 200 OK
+            Content-Type: application/json; charset=utf-8   
+            
+            {
+                "status": "ok"
+            }       
     """ 
     try:   
         if not board_id:
@@ -168,25 +149,86 @@ def articles_delete(request, oauth_params, board_id=None, article_id=None):
     user_id = Token.get_user_id(oauth_token)
     Article.delete(board_id, article_id, user_id)
     ret = dumps({'status':'ok'})
-    return HttpResponse(ret)
+    return HttpResponse(ret, content_type='application/json')
 
 @api_exception
 @oauth_required
 def articles_list(request, oauth_params, board_id=None):
     """
-    질의 조건에 맞는 게시물의 리스트의 배열과 관련 정보를 반환한다.
-
-    resource
-     * /articles/list/<board_id>
+    **/articles/list/<board_id>**
+    
+    게시물의 리스트와 질의 조건를 반환
 
     method
      * GET
      * oauth required
     
     parameters
-     * page (default=0)
-     * per_page (default=20)
-     * q (default=""): 검색 질의어
+     * page (default=0): 0 부터 count
+     * per_page (default=20): 한 페이지에 조회할 게시물 갯수
+     * q (default=""): 제목, 내용, 이름, id 를 검색할 검색어
+
+    example
+     * request (oauth parameter는 예제에서 생략)
+             .. parsed-literal::
+           
+                GET /articles/list/board_test?page=2&per_page=15&q=... HTTP/1.1  
+                    
+     * response
+            .. parsed-literal::
+           
+                HTTP/1.0 200 OK
+                Content-Type: application/json; charset=utf-8   
+                   
+                {
+                    "articles": [
+                        {
+                            "board_id": "board_alumni99", 
+                            "hits": 0, 
+                            "total_comments": 0, 
+                            "author": {
+                                "img_url": "http://s.twimg.com/a/1278188204/images/default_profile_0_normal.png", 
+                                "name": "이덕준", 
+                                "id": "gochi"
+                            }, 
+                            "title": "title", 
+                            "comments": [], 
+                            "content": "message 한글 메시지 테스트.", 
+                            "reg_date": "2011-01-20T09:21:17", 
+                            "file": "", 
+                            "id": 3595
+                        }, 
+                
+                        ...
+                
+                        {
+                            "board_id": "board_alumni99", 
+                            "hits": 0, 
+                            "total_comments": 0, 
+                            "author": {
+                                "img_url": "http://s.twimg.com/a/1278188204/images/default_profile_0_normal.png", 
+                                "name": "이덕준", 
+                                "id": "gochi"
+                            }, 
+                            "title": "title!!!", 
+                            "comments": [], 
+                            "content": "message changed!!!!!", 
+                            "reg_date": "2011-01-20T09:12:08", 
+                            "file": "", 
+                            "id": 3574
+                        }
+                    ], 
+                    "listinfo": {
+                        "board_id": "board_alumni99", 
+                        "board_title": "99학번 게시판", 
+                        "total_articles": 3382, 
+                        "total_pages": 169, 
+                        "total_matched_articles": 3382, 
+                        "q": "", 
+                        "per_page": 20, 
+                        "page": 0
+                    }
+                }    
     """
     page = 0
     per_page = 20
@@ -212,20 +254,82 @@ def articles_list(request, oauth_params, board_id=None):
     ret_item = {'listinfo': listinfo, 'articles': articles}
     ret = dumps(ret_item)
 
-    return HttpResponse(ret)
+    return HttpResponse(ret, content_type='application/json')
 
 @api_exception
 @oauth_required
 def articles_show(request, oauth_params, board_id=None, article_id=None):
-    """
-    게시물의 내용을 보여준다.
+    r"""
+    **/articles/show/<board_id>/<article_id>**
     
-    resorce
-     * /articles/show/<board_id>/<article_id>
-     
+    게시물 및 게시물에 달린 커멘트의 내용을 반환
+
     method
      * GET
      * oauth required
+     
+    example
+     * response (oauth 인증 관련 parameter는 예제에서 생략)
+         .. parsed-literal::
+           
+           GET /articles/show/board_test/100 HTTP/1.1
+               
+     * response
+         .. parsed-literal::
+           
+            HTTP/1.0 200 OK
+            Content-Type: application/json; charset=utf-8   
+                   
+            {
+                "board_id": "board_alumni99", 
+                "hits": 28, 
+                "total_comments": 3, 
+                "author": {
+                    "img_url": "http://s.twimg.com/a/1278188204/images/default_profile_0_normal.png", 
+                    "name": "이덕준", 
+                    "id": "gochi"
+                }, 
+                "title": "RE : 수학여행!!!", 
+                "comments": [
+                    {
+                        "board_id": "board_alumni99", 
+                        "content": "커멘트 테스트 하는 중....", 
+                        "reg_date": "2011-01-19", 
+                        "id": 17253, 
+                        "author": {
+                            "img_url": "http://s.twimg.com/a/1278188204/images/default_profile_0_normal.png", 
+                            "name": "이덕준", 
+                            "id": "gochi"
+                        }
+                    }, 
+                    {
+                        "board_id": "board_alumni99", 
+                        "content": "커멘트 테스트 하는 중....", 
+                        "reg_date": "2011-01-19", 
+                        "id": 17254, 
+                        "author": {
+                            "img_url": "http://s.twimg.com/a/1278188204/images/default_profile_0_normal.png", 
+                            "name": "이덕준", 
+                            "id": "gochi"
+                        }
+                    }, 
+                    {
+                        "board_id": "board_alumni99", 
+                        "content": "커멘트 테스트 하는 중....", 
+                        "reg_date": "2011-01-19", 
+                        "id": 17255, 
+                        "author": {
+                            "img_url": "http://s.twimg.com/a/1278188204/images/default_profile_0_normal.png", 
+                            "name": "이덕준", 
+                            "id": "gochi"
+                        }
+                    }
+                ], 
+                "content": "수학여행 가자고~~", 
+                "reg_date": "2001-04-05T22:55:23", 
+                "file": "", 
+                "id": 100
+            }     
     """
     if not board_id:
         board_id = request.GET['board_id']
@@ -233,23 +337,59 @@ def articles_show(request, oauth_params, board_id=None, article_id=None):
         article_id = int(request.GET['article_id'])
     article = Article.get(board_id, article_id)
     ret = dumps(article) 
-    return HttpResponse(ret)
+    return HttpResponse(ret, content_type='application/json')
 
 @csrf_exempt 
 @api_exception
 @oauth_required
 def articles_update(request, oauth_params, board_id=None, article_id=None):
     """
-    게시물을 수정한다.
+    **/articles/update/<board_id>/<article_id>**
+    
+    게시물을 수정
 
     method
      * POST
      * oauth required
     
-    parameters (bold체는 필수)
-     * **board_id**
-     * **title**
-     * **message**
+    parameters
+     * **title** (필수)
+     * **message** (필수)
+
+    example
+     * request (oauth 인증 관련 parameter는 예제에서 생략)
+        .. parsed-literal::
+        
+            POST /articles/update/board_alumni99/3598 HTTP/1.1
+            Host: api.caucse.net
+            Content-Type: application/x-www-form-urlencoded
+            title=...&message=...     
+
+     * response
+        .. parsed-literal::
+        
+            HTTP/1.0 200 OK
+            Content-Type: application/json; charset=utf-8   
+                 
+            {
+                "status": "ok", 
+                "article": {
+                    "board_id": "board_alumni99", 
+                    "hits": 0, 
+                    "total_comments": 0, 
+                    "author": {
+                        "img_url": "http://s.twimg.com/a/1278188204/images/default_profile_0_normal.png", 
+                        "name": "이덕준", 
+                        "id": "gochi"
+                    }, 
+                    "title": "title!!!", 
+                    "comments": [], 
+                    "content": "message changed!!!!!", 
+                    "reg_date": "2011-01-20T09:21:18", 
+                    "file": "", 
+                    "id": 3598
+                }
+            }     
     """
     if not board_id:
         board_id = request.POST['board_id']
@@ -267,17 +407,56 @@ def articles_update(request, oauth_params, board_id=None, article_id=None):
 
     # return result
     ret = dumps({'status':'ok', 'article': article})    
-    return HttpResponse(ret)
+    return HttpResponse(ret, content_type='application/json')
     
 @api_exception
 @oauth_required
 def boards_favorite(request, oauth_params):
-    """즐겨찾기 게시판(자유게시판과 가입한 cafe의 게시판을 포함)들의 정보를 
-    배열로 반환한다.
+    r"""
+    **/boards/favorite**
+    
+    즐겨찾는 게시판 리스트 반환 
     
     method
      * GET
      * oauth required    
+    
+    note
+     * 즐겨찾는 게시판은 즐겨찾기 등록된 게시판 및 자유게시판과 가입한 cafe의 게시판을 포함한다.
+     
+    example
+     * request (oauth parameter는 예제에서 생략)
+        .. parsed-literal::
+
+            GET /boards/favorite HTTP/1.1     
+
+     * response
+        .. parsed-literal::
+       
+            HTTP/1.0 200 OK
+            Content-Type: application/json; charset=utf-8  
+            
+            [
+                {
+                    "board_id": "board_freeboard", 
+                    "count": 10147, 
+                    "description": "", 
+                    "title": "자유게시판", 
+                    "admin": "anjae83", 
+                    "count24h": 0
+                }, 
+                
+                ...
+                
+                {
+                    "board_id": "photo_part_plan", 
+                    "count": 1670, 
+                    "description": "", 
+                    "title": "기획총무부 사진 게시판", 
+                    "admin": "hyojeong28", 
+                    "count24h": 0
+                }
+            ]                 
     """
     def join_list(list1, list2):
         return list1 + [item for item in list2 if item not in list1]
@@ -303,7 +482,7 @@ def boards_favorite(request, oauth_params):
     # get boards
     boards = filter(None, map(Board.get_or_none, board_list))
     ret = dumps(boards)
-    return HttpResponse(ret)
+    return HttpResponse(ret, content_type='application/json')
 
 @api_exception     
 def boards_lookup(request, **kw):
@@ -319,13 +498,13 @@ def boards_lookup(request, **kw):
     board_list = request.GET['board_id'].split(',')
     boards = map(Board.get, board_list)
     ret = dumps(boards)
-    return HttpResponse(ret)
+    return HttpResponse(ret, content_type='application/json')
 
 @csrf_exempt
 @api_exception
 @oauth_required
 def comments_create(request, oauth_params, board_id=None, article_id=None):
-    """게시물에 댓글을 단다.
+    r"""게시물에 댓글을 단다.
     
     method
      * POST 
@@ -335,6 +514,34 @@ def comments_create(request, oauth_params, board_id=None, article_id=None):
      * **board_id**
      * **article_id**
      * **message**
+     
+    example
+     결과
+     
+     .. parsed-literal::
+     
+        {
+            "status": "ok", 
+            "comment": {
+                "board_id": "board_alumni99", 
+                "content": "restful comment test", 
+                "reg_date": "2011-01-20T09:21:18.378891", 
+                "id": 17311, 
+                "author": {
+                    "img_url": "http://s.twimg.com/a/1278188204/images/default_profile_0_normal.png", 
+                    "name": "이덕준", 
+                    "id": "gochi"
+                }
+            }
+        }
+        
+     .. parsed-literal::        
+
+        {
+            "status": "error", 
+            "message": "BoardNotRegistered", 
+            "type": "<class 'apiprj.exceptions.DatabaseTableDoesNotExist'>"
+        }        
     """
     # read parameter
     if not board_id:
@@ -351,7 +558,7 @@ def comments_create(request, oauth_params, board_id=None, article_id=None):
     
     # return result
     ret = dumps({'status':'ok', 'comment':cmt})    
-    return HttpResponse(ret)
+    return HttpResponse(ret, content_type='application/json')
 
 @api_exception
 @oauth_required
@@ -374,7 +581,7 @@ def comments_delete(request, oauth_params, board_id=None, comment_id=None):
     user_id = Token.get_user_id(oauth_token)
     Comment.delete(board_id, comment_id, user_id)
     ret = dumps({'status':'ok'})
-    return HttpResponse(ret)
+    return HttpResponse(ret, content_type='application/json')
 
 @api_exception
 @oauth_required
@@ -398,7 +605,7 @@ def users_lookup(request, oauth_params):
         raise ParameterIsNotValid("user_id 파라미터에 유효하지 않은 값이 포함되어있습니다.")
     
     ret = dumps(users)
-    return HttpResponse(ret)
+    return HttpResponse(ret, content_type='application/json')
 
 @api_exception
 @oauth_required
@@ -425,7 +632,7 @@ def users_show(request, oauth_params, user_id=None):
         raise ParameterIsNotValid("user_id가 올바르지 않습니다.")
     
     ret = dumps(user)
-    return HttpResponse(ret)
+    return HttpResponse(ret, content_type='application/json')
 
 @api_exception
 @oauth_required
@@ -453,7 +660,7 @@ def users_search(request, oauth_params):
         users = []
         
     ret = dumps(users[:200])
-    return HttpResponse(ret)
+    return HttpResponse(ret, content_type='application/json')
 
 @api_exception
 @oauth_required
@@ -462,48 +669,4 @@ def favorites_list(request, oauth_params):
     user_id = Token.get_user_id(oauth_token)
     favorites = Favorite.get_by_user(user_id)
     ret = dumps(favorites)
-    return HttpResponse(ret)
-
-def view_index(request):
-    if not utils.docutils_is_available:
-        return missing_docutils_page(request)
-
-    views = []
-    view_functions = extract_views_from_urlpatterns(urls.urlpatterns)
-    for (func, regex) in view_functions:
-        views.append({
-            'name': getattr(func, '__name__', func.__class__.__name__),
-            'module': func.__module__,
-            'url': simplify_regex(regex),
-        })
-    
-    return render_to_response('doc/view_index.tpl', {
-        'root_path': get_root_path(),
-        'views': views
-    }, context_instance=RequestContext(request))
-    
-def view_detail(request, view):
-    if not utils.docutils_is_available:
-        return missing_docutils_page(request)
-
-    mod, func = urlresolvers.get_mod_func(view)
-    try:
-        view_func = getattr(import_module(mod), func)
-    except (ImportError, AttributeError):
-        raise Http404
-    title, body, metadata = utils.parse_docstring(view_func.__doc__)
-    if title:
-        title = utils.parse_rst(title, 'view', _('view:') + view)
-    if body:
-        body = utils.parse_rst(body, 'view', _('view:') + view)
-    for key in metadata:
-        metadata[key] = utils.parse_rst(metadata[key], 'model', _('view:') + view)
-    
-    name = view.split('.')[-1].replace('_','/')
-    return render_to_response('doc/view_detail.tpl', {
-        'root_path': get_root_path(),
-        'name': name,
-        'summary': title,
-        'body': body,
-        'meta': metadata,
-    }, context_instance=RequestContext(request))
+    return HttpResponse(ret, content_type='application/json')

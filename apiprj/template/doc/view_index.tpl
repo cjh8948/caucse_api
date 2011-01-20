@@ -7,7 +7,7 @@
 	</div>
 {% endblock %}
 
-{% block title %}API 레퍼런스{% endblock %}
+{% block title %}동네API - API 레퍼런스{% endblock %}
 
 {% block content %}
 
@@ -17,7 +17,7 @@
 
 
 <div class="module">
-<h2>APIs by URL</h2>
+<h2>API 목록 (url 순)</h2>
 
 {% for view in views|dictsort:"url" %}
 {% ifchanged %}
