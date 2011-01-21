@@ -486,14 +486,47 @@ def boards_favorite(request, oauth_params):
 
 @api_exception     
 def boards_lookup(request, **kw):
-    """게시판 정보를 배열로 반환한다.
+    """
+    **/boards/lookup**
     
-    method
-     * GET 
-     * oauth not required
+    게시판 리스트 반환
 
-    parameter (bold체는 필수)
-     * **board_id**: comma separated string (ex: "board_alumni99,photo_alumni99")
+    method
+     * GET  
+
+    parameter
+     * **board_id** (필수): comma separated string
+     
+    example
+     * request
+        .. parsed-literal::
+
+            GET /boards/lookup?board_id=board_alumni99,board_alumni00 HTTP/1.1
+            
+     * response
+        .. parsed-literal::
+            
+            HTTP/1.0 200 OK
+            Content-Type: application/json; charset=utf-8  
+
+            [
+                {
+                    "board_id": "board_alumni99", 
+                    "count": 3225, 
+                    "description": "", 
+                    "title": "99학번 게시판", 
+                    "admin": "hipbrain", 
+                    "count24h": 0
+                }, 
+                {
+                    "board_id": "board_alumni00", 
+                    "count": 4041, 
+                    "description": "", 
+                    "title": "00학번 게시판", 
+                    "admin": "alsrnwkd", 
+                    "count24h": 0
+                }
+            ]
     """
     board_list = request.GET['board_id'].split(',')
     boards = map(Board.get, board_list)
@@ -504,44 +537,59 @@ def boards_lookup(request, **kw):
 @api_exception
 @oauth_required
 def comments_create(request, oauth_params, board_id=None, article_id=None):
-    r"""게시물에 댓글을 단다.
+    r"""
+    **/comments/create/<board_id>/<article_id>**
+    
+    댓글 생성
     
     method
      * POST 
      * oauth required
 
-    parameter (bold체는 필수)
-     * **board_id**
-     * **article_id**
-     * **message**
+    parameters
+     * **message** (필수)
      
     example
-     결과
+     * request
+        .. parsed-literal::
+
+            POST /comments/create/board_alumni99/100 HTTP/1.1
+            Host: api.caucse.net
+            Content-Type: application/x-www-form-urlencoded
+            message=...            
+            
+     * response (성공)
+        .. parsed-literal::
+            
+            HTTP/1.0 200 OK
+            Content-Type: application/json; charset=utf-8  
      
-     .. parsed-literal::
-     
-        {
-            "status": "ok", 
-            "comment": {
-                "board_id": "board_alumni99", 
-                "content": "restful comment test", 
-                "reg_date": "2011-01-20T09:21:18.378891", 
-                "id": 17311, 
-                "author": {
-                    "img_url": "http://s.twimg.com/a/1278188204/images/default_profile_0_normal.png", 
-                    "name": "이덕준", 
-                    "id": "gochi"
+            {
+                "status": "ok", 
+                "comment": {
+                    "board_id": "board_alumni99", 
+                    "content": "restful comment test", 
+                    "reg_date": "2011-01-20T09:21:18.378891", 
+                    "id": 17311, 
+                    "author": {
+                        "img_url": "http://s.twimg.com/a/1278188204/images/default_profile_0_normal.png", 
+                        "name": "이덕준", 
+                        "id": "gochi"
+                    }
                 }
             }
-        }
-        
-     .. parsed-literal::        
 
-        {
-            "status": "error", 
-            "message": "BoardNotRegistered", 
-            "type": "<class 'apiprj.exceptions.DatabaseTableDoesNotExist'>"
-        }        
+     * response (실패)        
+        .. parsed-literal::        
+            
+            HTTP/1.0 200 OK
+            Content-Type: application/json; charset=utf-8  
+            
+            {
+                "status": "error", 
+                "message": "BoardNotRegistered", 
+                "type": "<class 'apiprj.exceptions.DatabaseTableDoesNotExist'>"
+            }        
     """
     # read parameter
     if not board_id:

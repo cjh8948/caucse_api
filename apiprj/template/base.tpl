@@ -15,7 +15,7 @@
     <a href='/apistatus'>시스템 상태</a> /
     <a href='/apireference'>API 레퍼런스</a> / 
     {% if user.is_authenticated %}
-        <a href='/accounts/profile'>내 애플리케이션</a> /
+        <a href='/accounts/profile'>내 애플리케이션 관리</a> /
         {% if oauth_token %}
         	<a href='/accounts/logout?next=/oauth/authorize?oauth_token={{oauth_token}}'>로그아웃</a>
         {% else %}

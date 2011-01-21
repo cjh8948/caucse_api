@@ -1,18 +1,18 @@
 {%extends "base.tpl"%}
 
 {% block title %}
-	동네API - 내 애플리케이션
+	동네API - 내 애플리케이션 관리
 {% endblock %}
 
 {% block breadcrumbs %}
 	<div class="breadcrumbs">
 		<a href="../">홈</a> &rsaquo; 
-		내 애플리케이션
+		내 애플리케이션 관리
 	</div>
 {% endblock %}
 
 {% block content %}
-	<h1>내 애플리케이션</h1>
+	<h1>내 애플리케이션 관리</h1>
 	<div class='module'>
 		<h2>내가 등록한 애플리케이션 - 
 		{{ user.username }}님이 등록하신 애플리케이션이 {{ consumers.count }}개 있습니다.
@@ -28,7 +28,7 @@
 		        consumer secret: {{ consumer.secret|escape }}
 			</p>
 			<p>
-				since {{ consumer.created|timesince }}
+				since {{ consumer.created }}
 			</p>
 			<p>
 			<a href="/consumer/edit/{{ consumer.key }}" class="changelink">편집</a> |
@@ -57,9 +57,9 @@
 		</h2>
 		{% for token in tokens %}
 		<div class='app'>
-			<h3>{{ token.consumer.name|escape }} by {{ token.consumer.user_id }}</h3>
+			<h3>{{ token.consumer.name|escape }} <span class='small'>by {{ token.consumer.user_id }}</span></h3>
 			<p>
-				 {{ token.consumer.description|escape }}
+				 {{ token.consumer.description|urlize|linebreaks|escape }}
 			</p>
 		
 			{% if user.username == token.consumer.user_id %}

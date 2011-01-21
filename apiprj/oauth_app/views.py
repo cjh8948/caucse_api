@@ -5,6 +5,7 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Count
 from django.http import (HttpResponse, HttpResponseRedirect,
                          HttpResponseBadRequest, HttpResponseForbidden)
 from django.shortcuts import render_to_response
@@ -122,12 +123,12 @@ def authorize(request):
                               context_instance=RequestContext(request))
 
 def index(request):
-    return render_to_response('index.tpl', 
+    return render_to_response('index.tpl',
                               context_instance=RequestContext(request))    
 
 @login_required
 def accounts_profile(request):
-    user_id=request.user.username
+    user_id = request.user.username
     consumers = Consumer.objects.filter(user_id=user_id)
     tokens = Token.objects.filter(user=user_id).filter(type='A')
     params = {'consumers': consumers, 'tokens': tokens}
@@ -135,6 +136,10 @@ def accounts_profile(request):
                               context_instance=RequestContext(request))    
     
 def apistatus(request):
-    return render_to_response('apistatus.tpl', 
-                              context_instance=RequestContext(request))
+    consumers = Consumer.objects.annotate(num_tokens=Count('token'))\
+                                .order_by('-num_tokens')
+                                
+    params = {'consumers' : consumers}
     
+    return render_to_response('apistatus.tpl', params,
+                              context_instance=RequestContext(request))
