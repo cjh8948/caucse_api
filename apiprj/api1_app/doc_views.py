@@ -10,20 +10,24 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.utils.importlib import import_module
 from django.utils.translation import ugettext as _
-import urls
+import urls as api1_urls
+import apiprj.oauth_app.urls as oauth_urls
 
 def view_index(request):
     if not utils.docutils_is_available:
         return missing_docutils_page(request)
 
     views = []
-    view_functions = extract_views_from_urlpatterns(urls.urlpatterns)
+    view_functions = extract_views_from_urlpatterns(api1_urls.urlpatterns) + \
+                     extract_views_from_urlpatterns(oauth_urls.urlpatterns)
+
     for (func, regex) in view_functions:
-        views.append({
-            'name': getattr(func, '__name__', func.__class__.__name__),
-            'module': func.__module__,
-            'url': simplify_regex(regex),
-        })
+        view = {'name': getattr(func, '__name__', func.__class__.__name__),
+                'module': func.__module__,
+                'url': simplify_regex(regex)}
+        if view['name'] in ['authorize', 'access_token', 'request_token']:
+            view['url'] = "/oauth%s"%view['url']
+        views.append(view)
     
     return render_to_response('doc/view_index.tpl', {
         'root_path': get_root_path(),

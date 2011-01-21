@@ -21,15 +21,17 @@
 		<div class='app'>
 			<h3>{{ consumer.name|escape }}</h3>
 			<p>
-				{{ consumer.description|escape }}
+				{{ consumer.description|urlize|linebreaks|escape }}
 			</p>
+			<span class='small'>
 			<p>
 		        consumer key: {{ consumer.key|escape }} <br/>
-		        consumer secret: {{ consumer.secret|escape }}
+		        consumer secret: {{ consumer.secret|escape }} <br/>
 			</p>
 			<p>
 				since {{ consumer.created }}
 			</p>
+			</span>
 			<p>
 			<a href="/consumer/edit/{{ consumer.key }}" class="changelink">편집</a> |
 			<a href="/consumer/delete/{{ consumer.key }}" class="deletelink">삭제</a>
@@ -57,18 +59,18 @@
 		</h2>
 		{% for token in tokens %}
 		<div class='app'>
-			<h3>{{ token.consumer.name|escape }} <span class='small'>by {{ token.consumer.user_id }}</span></h3>
-			<p>
-				 {{ token.consumer.description|urlize|linebreaks|escape }}
-			</p>
-		
+			<h3>{{ token.consumer.name|escape }} 
+			<span class='small'>
+				by {{ token.consumer.user_id }}
+			</span></h3>
+
 			{% if user.username == token.consumer.user_id %}
-				<p>
-					Access Token: ({{ token.key }}, {{ token.secret }})
+				<p class='small'>
+				Access Token Key: {{ token.key }} <br/> 
+				Access Token Secret: {{ token.secret }}
 				</p>
 			{% endif %}
-			
-			<p>
+			<p class='small'>
 				since {{ token.created }}
 			</p>
 
