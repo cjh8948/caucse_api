@@ -21,25 +21,26 @@ class ApiTestCase(unittest.TestCase):
         client = ClientAlpha(consumer, token)
         if callback: client.set_callback(callback)
         resp, content = client.request(url, "GET")
-        print resource
-        try:
-            s = json.dumps(json.loads(content),indent=4,ensure_ascii=False)
-            print s.encode('utf8')
-        except:
-            pass
+#        print resource
+#        try:
+#            s = json.dumps(json.loads(content),indent=4,ensure_ascii=False)
+#            print s.encode('utf8')
+#        except:
+#            pass
         return resp, content
 
-    def oauth_post(self, resource, consumer, token, param={}):
+    def oauth_post(self, resource, consumer, token, param={}, callback=None):
         url = URL_PREFIX + resource
         client = ClientAlpha(consumer, token)
+        if callback: client.set_callback(callback)
         body = urllib.urlencode(param)
         resp, content = client.request(url, "POST", body=body)
-        print resource
-        try:
-            s =  json.dumps(json.loads(content),indent=4,ensure_ascii=False)
-            print s.encode('utf8')
-        except Exception as e:
-            print e
+#        print resource
+#        try:
+#            s =  json.dumps(json.loads(content),indent=4,ensure_ascii=False)
+#            print s.encode('utf8')
+#        except Exception as e:
+#            print e
         return resp, content
 
     def plain_get(self, resource, param):
@@ -274,12 +275,12 @@ class FavoriteTest(ApiTestCase):
 
 class OauthTestCase(ApiTestCase):
     def test_request_token(self):
-        'GET oauth/request_token'
+        'POST oauth/request_token'
         resource = "oauth/request_token"
-        resp, content = self.oauth_get(resource=resource,
-                                       consumer=self.consumer,
-                                       token=None, param=None,
-                                       callback="oob")
+        resp, content = self.oauth_post(resource=resource,
+                                        consumer=self.consumer,
+                                        token=None, param={},
+                                        callback="oob")
         self.assertEquals(resp['status'], '200')
         request_token = dict(urlparse.parse_qsl(content))
         self.assertTrue(request_token.has_key('oauth_token'))
@@ -287,20 +288,20 @@ class OauthTestCase(ApiTestCase):
         self.assertTrue(request_token.has_key('oauth_callback_confirmed'))
 
     def test_request_token_nocallback(self):
-        'GET oauth/request_token without oauth_callback (expect 400)'
+        'POST oauth/request_token without oauth_callback (expect 400)'
         resource = "oauth/request_token"
-        resp, content = self.oauth_get(resource, consumer=self.consumer,
-                                       token=None, param=None)
+        resp, content = self.oauth_post(resource, consumer=self.consumer,
+                                       token=None, param={})
         self.assertEquals(resp['status'], '400')
         self.assertEquals(content, "")
 
     def test_request_token_wrong_consumer_secret(self):
-        'GET oauth/request_token with bad consumer secret (expect 400)'
+        'POST oauth/request_token with bad consumer secret (expect 400)'
         resource = "oauth/request_token"
         consumer = oauth2.Consumer(CONSUMER_KEY, "wrong_secret")
-        resp, content = self.oauth_get(resource=resource,
-                                       consumer=consumer, token=None,
-                                       param=None, callback="oob")
+        resp, content = self.oauth_post(resource=resource,
+                                        consumer=consumer, token=None,
+                                        param={}, callback="oob")
         # status code 400 is bad request
         self.assertEquals(resp['status'], '400') 
         self.assertEquals(content, "")

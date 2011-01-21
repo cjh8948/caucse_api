@@ -1,6 +1,6 @@
 #-*- coding:utf-8 -*-
 from apiprj.api1_app.utils.decorators import api_exception
-from apiprj.exceptions import RequiredParameterDoesNotExist
+from apiprj.exceptions import RequiredParameterDoesNotExist, AuthError
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
@@ -16,6 +16,7 @@ from urllib import urlencode
 from urlparse import parse_qsl, urlparse, urlunparse 
 from utils.decorators import oauth_verify
 
+@csrf_exempt
 @api_exception
 @oauth_verify 
 def request_token(request, oauth_params):
@@ -47,6 +48,9 @@ def request_token(request, oauth_params):
      .. [3] user; 동네 회원. 컨슈머에게 패스워드를 알려주지 않는 대신, access token을 발급해주어서 보호된 자원을 컨슈머가 사용하도록 허가 또는 불허할 수 있다.
     
     """
+    if request.method is "GET":
+        raise AuthError("request method for 'request token' should be POST")
+    
     try:
         consumer_key = oauth_params['oauth_consumer_key']
         callback = oauth_params['oauth_callback']
