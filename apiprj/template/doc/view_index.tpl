@@ -12,21 +12,20 @@
 {% block content %}
 
 <h1>API 레퍼런스</h1>
-
+<p>
+</p>
 <div id="content-main">
 
-
+{% for group, views in view_dict.items %}
 <div class="module">
-<h2>API 목록 (url 순)</h2>
-
+<h2>{{ group }}</h2>
 {% for view in views|dictsort:"url" %}
-{% ifchanged %}
 <h3><a href="{{ view.module }}.{{ view.name }}/">{{ view.url }}</a></h3>
 <p>{{ view.title }}</p>
 <hr />
-{% endifchanged %}
 {% endfor %}
 </div>
+{% endfor %}
 </div>
 {% endblock %}
 

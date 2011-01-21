@@ -17,7 +17,7 @@ def view_index(request):
     if not utils.docutils_is_available:
         return missing_docutils_page(request)
 
-    views = []
+    view_dict = {}
     view_functions = extract_views_from_urlpatterns(api1_urls.urlpatterns) + \
                      extract_views_from_urlpatterns(oauth_urls.urlpatterns)
 
@@ -27,11 +27,16 @@ def view_index(request):
                 'url': simplify_regex(regex)}
         if view['name'] in ['authorize', 'access_token', 'request_token']:
             view['url'] = "/oauth%s"%view['url']
-        views.append(view)
+        view['group'] = view['url'].split('/')[1]
+
+        if view_dict.has_key(view['group']):
+            view_dict[view['group']].append(view)
+        else:
+            view_dict[view['group']] = [view]
     
     return render_to_response('doc/view_index.tpl', {
         'root_path': get_root_path(),
-        'views': views
+        'view_dict': view_dict
     }, context_instance=RequestContext(request))
     
 def view_detail(request, view):

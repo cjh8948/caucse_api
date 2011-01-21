@@ -19,11 +19,34 @@ from utils.decorators import oauth_verify
 @api_exception
 @oauth_verify 
 def request_token(request, oauth_params):
-    """This API grants request_token
+    """
+    **/oauth/request_token**
+
+    3 legged 인증의 첫번째 단계. 리소스 프로바이더가 [1]_ 컨슈머 [2]_ 의 
+    서명을 확인 후 request token을 반환
     
-    * resource: 'oauth/request_token'
-    ** method: oauth
-    ** mandatory parameter: see [[OauthAuthentication]]"""
+    다음 단계는 authorize 단계로, 컨슈머가 [2]_ 사용자 [3]_ 를 authorize 
+    페이지로 보내어(리다이렉트 또는 url 제공) access token을 발급하도록 한다.  
+    
+    oauth paramters
+     * oauth_callback
+     * oauth_consumer_key
+     * oauth_nonce
+     * oauth_signature_method
+     * oauth_timestamp
+     * oauth_version
+    
+    note
+     * 동네API는 oauth_signature_method 로 HMAC-SHA1만을 지원한다.
+     * 동네API는 oauth_version 1.0을 지원한다.
+     * callback을 처리할 수 없는 클라이언트는 oauth_callback 값으로 "oob"(out-of-band)를 설정하면 PIN(개인 인증 번호) flow을 따를 수 있다.
+    
+    footnote
+     .. [1] resource provider; 자원 제공자인 동네API를 의미
+     .. [2] consumer; 동네API를 사용하는 것이 허가된 애플리케이션
+     .. [3] user; 동네 회원. 컨슈머에게 패스워드를 알려주지 않는 대신, access token을 발급해주어서 보호된 자원을 컨슈머가 사용하도록 허가 또는 불허할 수 있다.
+    
+    """
     try:
         consumer_key = oauth_params['oauth_consumer_key']
         callback = oauth_params['oauth_callback']
