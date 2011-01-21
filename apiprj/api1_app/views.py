@@ -606,7 +606,7 @@ def comments_delete(request, oauth_params, board_id=None, comment_id=None):
     """댓글을 삭제한다.
     
     method
-     * GET 
+     * DELETE 
      * oauth required
 
     parameter (bold체는 필수)
