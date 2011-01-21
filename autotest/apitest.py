@@ -16,6 +16,13 @@ class ApiTestCase(unittest.TestCase):
             url += '?' + urllib.urlencode(param).replace('+', '%20')
         return url
 
+
+    def oauth_delete(self, resource, consumer, token):
+        url = URL_PREFIX + resource
+        client = ClientAlpha(consumer, token)
+        resp, content = client.request(url, "DELETE")
+        return resp, content
+
     def oauth_get(self, resource, consumer, token, param=None, callback=None):
         url = self._get_url(resource, param)
         client = ClientAlpha(consumer, token)
@@ -195,10 +202,11 @@ class ArticlesTest(ApiTestCase):
         
         # delete it
         delete_url = 'articles/delete/board_alumni99/%d' % article_id
-        resp, content = self.oauth_get(delete_url, self.consumer,
-                                       self.access_token)
+        resp, content = self.oauth_delete(delete_url, self.consumer,
+                                          self.access_token)
         obj = json.loads(content)
         self.assertEqual(resp['status'], '200')
+        self.assertEqual(obj['status'], 'ok')
         
         
 class BoardsTest(ApiTestCase):
@@ -239,7 +247,7 @@ class CommentsTest(ApiTestCase):
         self.assertEqual(obj['status'].lower(), 'error')
     
     def test_delete(self):
-        'GET comments/delete/board_alumni99/:comment_id'
+        'DELETE comments/delete/board_alumni99/:comment_id'
         # create first
         param = {'message':'comment test'}
         resp, content = self.oauth_post("comments/create/board_alumni99/20", 
@@ -255,8 +263,8 @@ class CommentsTest(ApiTestCase):
         
         # and then delete
         comment_url = 'comments/delete/board_alumni99/%d' % comment_id
-        resp, content = self.oauth_get(comment_url, self.consumer,
-                                      self.access_token)
+        resp, content = self.oauth_delete(comment_url, self.consumer,
+                                          self.access_token)
         self.assertEqual(resp['status'], '200')
         obj = json.loads(content)
         status = obj['status']

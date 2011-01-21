@@ -52,7 +52,7 @@ def request_token(request, oauth_params):
      .. [3] user; 동네 회원. 컨슈머에게 패스워드를 알려주지 않는 대신, access token을 발급해주어서 보호된 자원을 컨슈머가 사용하도록 허가 또는 불허할 수 있다.
     
     """
-    if request.method is "GET":
+    if request.method == "GET":
         raise AuthError("request method for 'request token' should be POST")
     
     try:
@@ -94,16 +94,27 @@ def access_token(request, oauth_params):
 
 @api_exception
 def authorize(request):
-    """This API asks the user for granting the consumer access protected 
-    resources. 
+    r"""
+    **/oauth/authorize**
     
-    * resource: 'oauth/access_token'
-    ** method: GET
-    ** mandatory parameter: see [[OauthAuthentication]]    
+    3 legged 인증의 두번째 단계. 첫번째 단계에서 획득한 request token를 가지고
+    컨슈머가 보호된 자원에 접근할 수 있도록 access token을 발행할지 사용자에게 
+    확인한다.
     
-    * resource: 'oauth/access_token'
-    ** method: POST
-    ** mandatory parameter: see [[OauthAuthentication]]
+    GET method case
+    ~~~~~~~~~~~~~~~
+    사용자의 인증 정보(아이디/패스워드)를 포함, access token을 발행할지 여부를 
+    물어보는 양식(form) 페이지를 보여준다. 
+            
+    parameters
+        * oauth_token: request token key 
+     
+    POST method case
+    ~~~~~~~~~~~~~~~~
+    access token 발행 양식 페이지에서 사용자 및 컨슈머를 인증하고 첫번째 
+    단계에서 획득한 callback url로 리다이렉트 한다. callback이 "oob"인 경우 
+    PIN(개인 인증 번호)를 포함한 페이지를 보여준다.
+
     """
     if request.method == "POST":
         user_id = None

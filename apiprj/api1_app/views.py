@@ -85,7 +85,7 @@ def articles_create(request, oauth_params, board_id=None):
     except KeyError as e:
         raise RequiredParameterDoesNotExist(e)
     
-    oauth_token = request.POST['oauth_token']    
+    oauth_token = oauth_params['oauth_token']    
     if board_id.startswith('photo'):
         raise NotImplementedYet('사진게시판 게시 기능은 지원하지 않습니다.')
     
@@ -107,7 +107,7 @@ def articles_delete(request, oauth_params, board_id=None, article_id=None):
     게시물을 삭제
 
     method
-     * GET
+     * DELETE
      * oauth required
     
     note
@@ -118,7 +118,7 @@ def articles_delete(request, oauth_params, board_id=None, article_id=None):
      * request (oauth 인증 관련 parameter는 예제에서 생략)
         .. parsed-literal::
 
-            GET /articles/delete/board_test/20 HTTP/1.1
+            DELETE /articles/delete/board_test/20 HTTP/1.1
       
      * response (success case) 
         .. parsed-literal::
@@ -130,16 +130,8 @@ def articles_delete(request, oauth_params, board_id=None, article_id=None):
                 "status": "ok"
             }       
     """ 
-    try:   
-        if not board_id:
-            board_id = request.GET['board_id']
-        if not article_id:
-            article_id = int(request.GET['article_id'])
-    except KeyError as e:
-        raise RequiredParameterDoesNotExist(e)
-    
     try:    
-        oauth_token = request.REQUEST['oauth_token']
+        oauth_token = oauth_params['oauth_token']
     except KeyError as e:
         raise AuthError(e)
 
@@ -397,7 +389,7 @@ def articles_update(request, oauth_params, board_id=None, article_id=None):
         article_id = request.POST['article_id']
     title = request.POST['title']
     message = request.POST['message']
-    oauth_token = request.POST['oauth_token']    
+    oauth_token = oauth_params['oauth_token']    
     if board_id.startswith('photo'):
         raise NotImplementedYet('사진게시판 게시 기능은 지원하지 않습니다.')
     
@@ -461,7 +453,7 @@ def boards_favorite(request, oauth_params):
     def join_list(list1, list2):
         return list1 + [item for item in list2 if item not in list1]
     
-    oauth_token = request.REQUEST['oauth_token']
+    oauth_token = oauth_params['oauth_token']
     user_id = Token.get_user_id(oauth_token)
 
     # add default
@@ -597,7 +589,7 @@ def comments_create(request, oauth_params, board_id=None, article_id=None):
     if not article_id:
         article_id = request.POST['article_id']
     message = request.POST['message']
-    oauth_token = request.POST['oauth_token']
+    oauth_token = oauth_params['oauth_token']
     
     # update comment
     user_id = Token.get_user_id(oauth_token)
@@ -621,11 +613,7 @@ def comments_delete(request, oauth_params, board_id=None, comment_id=None):
      * **board_id**
      * **comment_id**
     """
-    if not board_id:
-        board_id = request.GET['board_id']
-    if not comment_id:
-        comment_id = int(request.GET['comment_id'])
-    oauth_token = request.REQUEST['oauth_token']
+    oauth_token = oauth_params['oauth_token']
     user_id = Token.get_user_id(oauth_token)
     Comment.delete(board_id, comment_id, user_id)
     ret = dumps({'status':'ok'})
@@ -671,7 +659,7 @@ def users_show(request, oauth_params, user_id=None):
         if request.GET.has_key('user_id'):
             user_id = request.GET['user_id']
         else:
-            oauth_token = request.REQUEST['oauth_token']
+            oauth_token = oauth_params['oauth_token']
             user_id = Token.get_user_id(oauth_token)
     
     try:
@@ -713,7 +701,7 @@ def users_search(request, oauth_params):
 @api_exception
 @oauth_required
 def favorites_list(request, oauth_params):
-    oauth_token = request.REQUEST['oauth_token']
+    oauth_token = oauth_params['oauth_token']
     user_id = Token.get_user_id(oauth_token)
     favorites = Favorite.get_by_user(user_id)
     ret = dumps(favorites)
