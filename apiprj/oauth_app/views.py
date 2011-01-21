@@ -27,7 +27,11 @@ def request_token(request, oauth_params):
     서명을 확인 후 request token을 반환
     
     다음 단계는 authorize 단계로, 컨슈머가 [2]_ 사용자 [3]_ 를 authorize 
-    페이지로 보내어(리다이렉트 또는 url 제공) access token을 발급하도록 한다.  
+    페이지로 보내어(리다이렉트 또는 url 제공) access token을 발급하도록 한다. 
+    
+    method
+     * POST
+     * oauth_signature required 
     
     oauth paramters
      * oauth_callback
