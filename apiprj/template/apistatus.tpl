@@ -22,7 +22,7 @@
 		{% for consumer in consumers %}
 		<div class='app'>
 			<h3>{{ consumer.name|escape }}<span class='small'>
-				by{{ consumer.user_id }}
+				by {{ consumer.user_id }}
 				with {{ consumer.num_tokens }} users 
 				since {{ consumer.created }}
 			</span></h3>
