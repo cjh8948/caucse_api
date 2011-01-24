@@ -222,6 +222,14 @@ def token_delete(request, key):
     return HttpResponseRedirect('/accounts/profile')
 
 @login_required
+def consumer_delete(request, key):
+    consumer = Consumer.objects.get(key=key)
+    if consumer.user_id == request.user.username:
+        Token.objects.filter(consumer=consumer).delete() 
+        consumer.delete()
+    return HttpResponseRedirect('/accounts/profile')
+    
+@login_required
 def consumer_create(request):
     if request.method == "POST":
         form = ConsumerCreateForm(request.POST)

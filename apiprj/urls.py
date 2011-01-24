@@ -26,6 +26,7 @@ urlpatterns = patterns('',
     # token, consumer 관리
     (r'^token/delete/(?P<key>.+)/$', 'apiprj.oauth_app.views.token_delete'),
     (r'^consumer/create/$',  'apiprj.oauth_app.views.consumer_create'),
+    (r'^consumer/delete/(?P<key>.+)$',  'apiprj.oauth_app.views.consumer_delete'),    
     
     # oauth
     (r'^oauth/', include('apiprj.oauth_app.urls')),
