@@ -67,11 +67,38 @@ def request_token(request, oauth_params):
 @api_exception
 @oauth_verify 
 def access_token(request, oauth_params):
-    """This API grants access_token
+    """
+    **/oauth/access_token**
+
+    3 legged 인증의 세번째 단계. 리소스 프로바이더가 [1]_ 컨슈머 [2]_ 의 
+    서명과 User [3]_ 가 리소스 프로바이더 [1]_ 로 부터 제공받은 Verifier를 
+    확인 후 access token을 반환
     
-    * resource: 'oauth/access_token'
-    ** method: oauth
-    ** mandatory parameter: see [[OauthAuthentication]]"""    
+    이 단계 이후부터 컨슈머 [2]_ 는 access token을 이용해서 protected 
+    resource에 접근할 수 있다. 
+    
+    method
+     * POST
+     * oauth_signature required 
+    
+    oauth paramters
+     * oauth_consumer_key
+     * oauth_nonce
+     * oauth_signature_method
+     * oauth_timestamp
+     * oauth_token
+     * oauth_version
+    
+    note
+     * 동네API는 oauth_signature_method 로 HMAC-SHA1만을 지원한다.
+     * 동네API는 oauth_version 1.0을 지원한다.
+    
+    footnote
+     .. [1] resource provider; 자원 제공자인 동네API를 의미
+     .. [2] consumer; 동네API를 사용하는 것이 허가된 애플리케이션
+     .. [3] user; 동네 회원. 컨슈머에게 패스워드를 알려주지 않는 대신, access token을 발급해주어서 보호된 자원을 컨슈머가 사용하도록 허가 또는 불허할 수 있다.
+    
+    """    
     # need to verify verifier
     try:
         request_token = oauth_params['oauth_token']
