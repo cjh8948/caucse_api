@@ -15,8 +15,17 @@ class Consumer(models.Model):
     def to_oauth(self):
         return oauth2.Consumer(self.key, self.secret)
 
+    @staticmethod
+    def generate_token():
+        return str(uuid.uuid4()).replace('-', '')
+    
+    def refresh_key_secret(self):
+        self.key = self.generate_token()
+        self.secret = self.generate_token()            
+     
     def __unicode__(self):
         return self.key
+    
 
 class Token(models.Model):
     TYPE_CHOICES = (('R', 'REQUEST'), ('A', 'ACCESS'))

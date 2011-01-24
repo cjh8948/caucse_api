@@ -15,6 +15,7 @@ from models import Token, Consumer
 from urllib import urlencode
 from urlparse import parse_qsl, urlparse, urlunparse 
 from utils.decorators import oauth_verify
+from forms import ConsumerCreateForm
 
 @csrf_exempt
 @api_exception
@@ -219,3 +220,31 @@ def token_delete(request, key):
     if token.user == request.user.username:
         token.delete()
     return HttpResponseRedirect('/accounts/profile')
+
+@login_required
+def consumer_create(request):
+    if request.method == "POST":
+        form = ConsumerCreateForm(request.POST)
+        if form.is_valid():
+            consumer = Consumer()
+            consumer.name = form.cleaned_data['name']
+            consumer.description = form.cleaned_data['description']
+            consumer.user_id = request.user.username
+            consumer.refresh_key_secret()
+            consumer.save()
+            
+            token = Token()
+            token.key = Token.generate_token()
+            token.secret = Token.generate_token()
+            token.consumer = consumer
+            token.user = request.user.username
+            token.type = 'A'
+            token.save()
+            
+            return HttpResponseRedirect('/accounts/profile')
+    else: 
+        form = ConsumerCreateForm()    
+
+    params = {'form': form}
+    return render_to_response('oauth/consumer_form.tpl', params,
+                              context_instance=RequestContext(request))

@@ -1,3 +1,4 @@
+#-*-coding:utf-8-*-
 from django.conf import settings
 from django.conf.urls.defaults import patterns, include
 from django.contrib import admin
@@ -22,8 +23,9 @@ urlpatterns = patterns('',
     (r'^apireference/$', 'apiprj.api1_app.doc_views.view_index'),
     (r'^apistatus/$', 'apiprj.oauth_app.views.apistatus'),    
     
-    # token 
+    # token, consumer 관리
     (r'^token/delete/(?P<key>.+)/$', 'apiprj.oauth_app.views.token_delete'),
+    (r'^consumer/create/$',  'apiprj.oauth_app.views.consumer_create'),
     
     # oauth
     (r'^oauth/', include('apiprj.oauth_app.urls')),
