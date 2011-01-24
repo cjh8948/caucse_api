@@ -21,8 +21,10 @@ urlpatterns = patterns('',
     (r'^apireference/(?P<view>[^/]+)/$', 'apiprj.api1_app.doc_views.view_detail'),
     (r'^apireference/$', 'apiprj.api1_app.doc_views.view_index'),
     (r'^apistatus/$', 'apiprj.oauth_app.views.apistatus'),    
+    
     # oauth
     (r'^oauth/', include('apiprj.oauth_app.urls')),
+    
     # api
     (r'^1/', include('apiprj.api1_app.urls')),
     (r'^', include('apiprj.api1_app.urls')),
