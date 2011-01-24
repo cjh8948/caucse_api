@@ -27,7 +27,10 @@ def view_index(request):
                 'url': simplify_regex(regex)}
         if view['name'] in ['authorize', 'access_token', 'request_token']:
             view['url'] = "/oauth%s" % view['url']
-        view['group'] = view['url'].split('/')[1]
+            view['group'] = 'oauth'
+        else:
+            view['group'] = view['url'].split('/')[1]
+            view['url'] = "/1" + view['url']
 
         if view_dict.has_key(view['group']):
             view_dict[view['group']].append(view)
