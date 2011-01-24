@@ -15,7 +15,7 @@ from models import Token, Consumer
 from urllib import urlencode
 from urlparse import parse_qsl, urlparse, urlunparse 
 from utils.decorators import oauth_verify
-from forms import ConsumerCreateForm
+from forms import ConsumerCreateForm, ConsumerEditForm
 
 @csrf_exempt
 @api_exception
@@ -256,3 +256,25 @@ def consumer_create(request):
     params = {'form': form}
     return render_to_response('oauth/consumer_form.tpl', params,
                               context_instance=RequestContext(request))
+    
+@login_required
+def consumer_edit(request, key):
+    if request.method == "POST":
+        form = ConsumerEditForm(request.POST)
+        if form.is_valid():
+            consumer = Consumer.objects.get(key=key)
+            consumer.name = form.cleaned_data['name']
+            consumer.description = form.cleaned_data['description']
+            if form.cleaned_data['refresh_key']:
+                consumer.refresh_key_secret()
+            consumer.save()
+            
+            return HttpResponseRedirect('/accounts/profile')
+    else:
+        consumer = Consumer.objects.get(key=key) 
+        form = ConsumerEditForm(initial={'name':consumer.name, 
+                                         'description':consumer.description})
+
+    params = {'form': form}
+    return render_to_response('oauth/consumer_edit_form.tpl', params,
+                              context_instance=RequestContext(request))    
