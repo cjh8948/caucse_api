@@ -730,14 +730,55 @@ def users_lookup(request, oauth_params):
 @api_exception
 @oauth_required
 def users_show(request, oauth_params, user_id=None):
-    """사용자 정보를 반환한다.
+    """
+    **/users/show/<user_id>**
+    
+    사용자 조회 
     
     method
-     * GET
+     * GET 
      * oauth required
-    
-    parameter (bold체는 필수)
-     * user_id: user_id가 생략되면 oauth 인증된 사용자의 id로 대체된다.
+     
+    note
+     * user_id 생략시, oauth 인증된 사용자 정보 반환
+     
+    example
+     * request
+        .. parsed-literal::
+
+            GET /users/show/gochi HTTP/1.1
+            
+     * response (성공)
+        .. parsed-literal::
+            
+            HTTP/1.0 200 OK
+            Content-Type: application/json; charset=utf-8  
+
+            {
+                "name": "이덕준", 
+                "mobile": "123-4567-8900", 
+                "img_url": "http://s.twimg.com/a/1278188204/images/default_profile_0_normal.png", 
+                "introduce": "", 
+                "id": "gochi", 
+                "birthday": null, 
+                "messenger": "google talk : gochist@gmail.com", 
+                "homepage": "gochi.kr", 
+                "email": "gochi@caucse.net", 
+                "entrance_year": 1999
+            }
+
+     * response (실패)        
+        .. parsed-literal::        
+            
+            HTTP/1.0 200 OK
+            Content-Type: application/json; charset=utf-8  
+            
+            {
+                "status": "error", 
+                "message": "user_id가 올바르지 않습니다.", 
+                "type": "<class 'apiprj.exceptions.ParameterIsNotValid'>"
+            }     
+            
     """
     if not user_id:
         if request.GET.has_key('user_id'):
