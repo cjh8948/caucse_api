@@ -1,7 +1,7 @@
 #! -*- coding: utf8 -*- 
 from django.core import urlresolvers
 from django.contrib.admindocs import utils
-from django.contrib.admindocs.views import (get_root_path, 
+from django.contrib.admindocs.views import (get_root_path,
                                             missing_docutils_page,
                                             extract_views_from_urlpatterns,
                                             simplify_regex)
@@ -26,7 +26,7 @@ def view_index(request):
                 'module': func.__module__,
                 'url': simplify_regex(regex)}
         if view['name'] in ['authorize', 'access_token', 'request_token']:
-            view['url'] = "/oauth%s"%view['url']
+            view['url'] = "/oauth%s" % view['url']
         view['group'] = view['url'].split('/')[1]
 
         if view_dict.has_key(view['group']):
@@ -56,11 +56,9 @@ def view_detail(request, view):
     for key in metadata:
         metadata[key] = utils.parse_rst(metadata[key], 'model', _('view:') + view)
     
-    name = view.split('.')[-1].replace('_','/')
-    return render_to_response('doc/view_detail.tpl', {
-        'root_path': get_root_path(),
-        'name': name,
-        'summary': title,
-        'body': body,
-        'meta': metadata,
-    }, context_instance=RequestContext(request))
+    name = view.split('.')[-1].replace('_', '/')
+    param = {'root_path': get_root_path(), 'name': name, 'summary': title,
+             'body': body, 'meta': metadata}
+    
+    return render_to_response('doc/view_detail.tpl', param,
+                              context_instance=RequestContext(request))
