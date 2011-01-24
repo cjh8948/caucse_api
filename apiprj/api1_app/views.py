@@ -532,7 +532,7 @@ def comments_create(request, oauth_params, board_id=None, article_id=None):
     r"""
     **/comments/create/<board_id>/<article_id>**
     
-    댓글 생성
+    커멘트 생성
     
     method
      * POST 
@@ -603,15 +603,42 @@ def comments_create(request, oauth_params, board_id=None, article_id=None):
 @api_exception
 @oauth_required
 def comments_delete(request, oauth_params, board_id=None, comment_id=None):
-    """댓글을 삭제한다.
+    """
+    **/comments/delete/<board_id>/<comment_id>**
+    
+    커맨트 삭제
     
     method
      * DELETE 
      * oauth required
+     
+    example
+     * request
+        .. parsed-literal::
 
-    parameter (bold체는 필수)
-     * **board_id**
-     * **comment_id**
+            DELETE /comments/delete/board_alumni99/1234 HTTP/1.1
+            
+     * response (성공)
+        .. parsed-literal::
+            
+            HTTP/1.0 200 OK
+            Content-Type: application/json; charset=utf-8  
+     
+            {
+                "status": "ok"
+            }
+
+     * response (실패)        
+        .. parsed-literal::        
+            
+            HTTP/1.0 200 OK
+            Content-Type: application/json; charset=utf-8  
+            
+            {
+                "status": "error", 
+                "message": "BoardNotRegistered", 
+                "type": "<class 'apiprj.exceptions.DatabaseTableDoesNotExist'>"
+            }            
     """
     oauth_token = oauth_params['oauth_token']
     user_id = Token.get_user_id(oauth_token)
