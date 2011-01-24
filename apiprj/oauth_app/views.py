@@ -212,3 +212,10 @@ def apistatus(request):
     
     return render_to_response('apistatus.tpl', params,
                               context_instance=RequestContext(request))
+    
+@login_required
+def token_delete(request, key):
+    token = Token.objects.get(key=key)
+    if token.user == request.user.username:
+        token.delete()
+    return HttpResponseRedirect('/accounts/profile')
