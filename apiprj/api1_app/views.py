@@ -487,13 +487,13 @@ def boards_lookup(request, **kw):
      * GET  
 
     parameter
-     * **board_id** (필수): comma separated string
+     * **board_id** (필수): comma(%2C) separated string
      
     example
      * request
         .. parsed-literal::
 
-            GET /boards/lookup?board_id=board_alumni99,board_alumni00 HTTP/1.1
+            GET /boards/lookup?board_id=board_alumni99%2Cboard_alumni00 HTTP/1.1
             
      * response
         .. parsed-literal::
@@ -649,14 +649,71 @@ def comments_delete(request, oauth_params, board_id=None, comment_id=None):
 @api_exception
 @oauth_required
 def users_lookup(request, oauth_params):
-    """사용자 정보를 배열로 반환한다.
+    """
+    **/users/lookup**
+    
+    여러 사용자 조회 
     
     method
-     * GET
+     * GET 
      * oauth required
-    
-    parameter (bold체는 필수)
-     * **user_id**: comma separated string (ex: "gochi,jeppy,reset"), 최대 100명
+
+    parameter
+     * **user_id** (필수): comma(%2C) separated string (ex: "gochi,reset")
+     
+    note
+     * 조회 가능한 사용자는 최대 100명
+     
+    example
+     * request
+        .. parsed-literal::
+
+            GET /users/lookup?user_id=gochi%2Creset HTTP/1.1
+            
+     * response (성공)
+        .. parsed-literal::
+            
+            HTTP/1.0 200 OK
+            Content-Type: application/json; charset=utf-8  
+     
+            [
+                {
+                    "name": "이덕준", 
+                    "mobile": "123-4567-8900", 
+                    "img_url": "http://s.twimg.com/a/1278188204/images/default_profile_0_normal.png", 
+                    "introduce": "", 
+                    "id": "gochi", 
+                    "birthday": null, 
+                    "messenger": "google talk : gochist@gmail.com", 
+                    "homepage": "gochi.kr", 
+                    "email": "gochi@caucse.net", 
+                    "entrance_year": 1999
+                }, 
+                {
+                    "name": "강석천", 
+                    "mobile": null, 
+                    "img_url": "http://s.twimg.com/a/1278188204/images/default_profile_0_normal.png", 
+                    "introduce": null, 
+                    "id": "reset", 
+                    "birthday": null, 
+                    "messenger": null, 
+                    "homepage": null, 
+                    "email": null, 
+                    "entrance_year": 1999
+                }
+            ]
+
+     * response (실패)        
+        .. parsed-literal::        
+            
+            HTTP/1.0 200 OK
+            Content-Type: application/json; charset=utf-8  
+            
+            {
+                "status": "error", 
+                "message": "user_id 파라미터에 유효하지 않은 값이 포함되어있습니다.", 
+                "type": "<class 'apiprj.exceptions.ParameterIsNotValid'>"
+            }     
     """
     id_list = request.GET['user_id'].split(',')
     if len(id_list) > 100:
