@@ -146,7 +146,7 @@ def articles_delete(request, oauth_params, board_id=None, article_id=None):
 @api_exception
 @oauth_required
 def articles_list(request, oauth_params, board_id=None):
-    """
+    r"""
     **/articles/list/<board_id>**
     
     게시물의 리스트와 질의 조건를 반환
@@ -162,65 +162,65 @@ def articles_list(request, oauth_params, board_id=None):
 
     example
      * request (oauth parameter는 예제에서 생략)
-             .. parsed-literal::
-           
-                GET /articles/list/board_test?page=2&per_page=15&q=... HTTP/1.1  
+         .. parsed-literal::
+       
+            GET /articles/list/board_test?page=2&per_page=15&q=... HTTP/1.1  
                     
      * response
-            .. parsed-literal::
-           
-                HTTP/1.0 200 OK
-                Content-Type: application/json; charset=utf-8   
-                   
-                {
-                    "articles": [
-                        {
-                            "board_id": "board_alumni99", 
-                            "hits": 0, 
-                            "total_comments": 0, 
-                            "author": {
-                                "img_url": "http://s.twimg.com/a/1278188204/images/default_profile_0_normal.png", 
-                                "name": "이덕준", 
-                                "id": "gochi"
-                            }, 
-                            "title": "title", 
-                            "comments": [], 
-                            "content": "message 한글 메시지 테스트.", 
-                            "reg_date": "2011-01-20T09:21:17", 
-                            "file": "", 
-                            "id": 3595
-                        }, 
-                
-                        ...
-                
-                        {
-                            "board_id": "board_alumni99", 
-                            "hits": 0, 
-                            "total_comments": 0, 
-                            "author": {
-                                "img_url": "http://s.twimg.com/a/1278188204/images/default_profile_0_normal.png", 
-                                "name": "이덕준", 
-                                "id": "gochi"
-                            }, 
-                            "title": "title!!!", 
-                            "comments": [], 
-                            "content": "message changed!!!!!", 
-                            "reg_date": "2011-01-20T09:12:08", 
-                            "file": "", 
-                            "id": 3574
-                        }
-                    ], 
-                    "listinfo": {
+        .. parsed-literal::
+       
+            HTTP/1.0 200 OK
+            Content-Type: application/json; charset=utf-8   
+               
+            {
+                "articles": [
+                    {
                         "board_id": "board_alumni99", 
-                        "board_title": "99학번 게시판", 
-                        "total_articles": 3382, 
-                        "total_pages": 169, 
-                        "total_matched_articles": 3382, 
-                        "q": "", 
-                        "per_page": 20, 
-                        "page": 0
+                        "hits": 0, 
+                        "total_comments": 0, 
+                        "author": {
+                            "img_url": "http://s.twimg.com/a/1278188204/images/default_profile_0_normal.png", 
+                            "name": "이덕준", 
+                            "id": "gochi"
+                        }, 
+                        "title": "title", 
+                        "comments": [], 
+                        "content": "message 한글 메시지 테스트.", 
+                        "reg_date": "2011-01-20T09:21:17", 
+                        "file": "", 
+                        "id": 3595
+                    }, 
+            
+                    ...
+            
+                    {
+                        "board_id": "board_alumni99", 
+                        "hits": 0, 
+                        "total_comments": 0, 
+                        "author": {
+                            "img_url": "http://s.twimg.com/a/1278188204/images/default_profile_0_normal.png", 
+                            "name": "이덕준", 
+                            "id": "gochi"
+                        }, 
+                        "title": "title!!!", 
+                        "comments": [], 
+                        "content": "message changed!!!!!", 
+                        "reg_date": "2011-01-20T09:12:08", 
+                        "file": "", 
+                        "id": 3574
                     }
-                }    
+                ], 
+                "listinfo": {
+                    "board_id": "board_alumni99", 
+                    "board_title": "99학번 게시판", 
+                    "total_articles": 3382, 
+                    "total_pages": 169, 
+                    "total_matched_articles": 3382, 
+                    "q": "", 
+                    "per_page": 20, 
+                    "page": 0
+                }
+            }    
     """
     page = 0
     per_page = 20
@@ -335,7 +335,7 @@ def articles_show(request, oauth_params, board_id=None, article_id=None):
 @api_exception
 @oauth_required
 def articles_update(request, oauth_params, board_id=None, article_id=None):
-    """
+    r"""
     **/articles/update/<board_id>/<article_id>**
     
     게시물을 수정
@@ -414,7 +414,8 @@ def boards_favorite(request, oauth_params):
      * oauth required    
     
     note
-     * 즐겨찾는 게시판은 즐겨찾기 등록된 게시판 및 자유게시판과 가입한 cafe의 게시판을 포함한다.
+     * 즐겨찾는 게시판은 즐겨찾기 등록된 게시판 및 자유게시판과 가입한 cafe의 
+       게시판을 포함한다.
      
     example
      * request (oauth parameter는 예제에서 생략)
@@ -478,7 +479,7 @@ def boards_favorite(request, oauth_params):
 
 @api_exception     
 def boards_lookup(request, **kw):
-    """
+    r"""
     **/boards/lookup**
     
     게시판 리스트 반환
@@ -603,7 +604,7 @@ def comments_create(request, oauth_params, board_id=None, article_id=None):
 @api_exception
 @oauth_required
 def comments_delete(request, oauth_params, board_id=None, comment_id=None):
-    """
+    r"""
     **/comments/delete/<board_id>/<comment_id>**
     
     커맨트 삭제
@@ -649,7 +650,7 @@ def comments_delete(request, oauth_params, board_id=None, comment_id=None):
 @api_exception
 @oauth_required
 def users_lookup(request, oauth_params):
-    """
+    r"""
     **/users/lookup**
     
     여러 사용자 조회 
@@ -730,7 +731,7 @@ def users_lookup(request, oauth_params):
 @api_exception
 @oauth_required
 def users_show(request, oauth_params, user_id=None):
-    """
+    r"""
     **/users/show/<user_id>**
     
     사용자 조회 
@@ -798,7 +799,7 @@ def users_show(request, oauth_params, user_id=None):
 @api_exception
 @oauth_required
 def users_search(request, oauth_params):
-    """
+    r"""
     **/users/search**
     
     사용자 검색 
@@ -877,7 +878,7 @@ def users_search(request, oauth_params):
 @api_exception
 @oauth_required
 def favorites_list(request, oauth_params):
-    """
+    r"""
     **/favorites/list**
     
     즐겨찾는 게시판(board_id) 및 우선순위 조회
@@ -921,8 +922,16 @@ def favorites_list(request, oauth_params):
                 }
             ]
     """
-    oauth_token = oauth_params['oauth_token']
-    user_id = Token.get_user_id(oauth_token)
+    try:
+        oauth_token = oauth_params['oauth_token']
+    except KeyError as e:
+        raise AuthError(e)
+    
+    try:
+        user_id = Token.get_user_id(oauth_token)
+    except ObjectDoesNotExist as e:
+        raise ParameterIsNotValid(e)
+    
     favorites = Favorite.get_by_user(user_id)
     ret = dumps(favorites)
     return HttpResponse(ret, content_type='application/json')
