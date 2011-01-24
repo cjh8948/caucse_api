@@ -876,6 +876,50 @@ def users_search(request, oauth_params):
 @api_exception
 @oauth_required
 def favorites_list(request, oauth_params):
+    """
+    **/favorites/list**
+    
+    즐겨찾는 게시판(board_id) 및 우선순위 조회
+    
+    method
+     * GET 
+     * oauth required
+
+    example
+     * request
+        .. parsed-literal::
+
+            GET /favorites/list HTTP/1.1
+            
+     * response (성공)
+        .. parsed-literal::
+            
+            HTTP/1.0 200 OK
+            Content-Type: application/json; charset=utf-8  
+     
+            [
+                {
+                    "priority": 1, 
+                    "board_id": "board_part_plan", 
+                    "no": 413
+                }, 
+                {
+                    "priority": 2, 
+                    "board_id": "board_alumni99", 
+                    "no": 416
+                }, 
+                {
+                    "priority": 3, 
+                    "board_id": "board_dongneteam", 
+                    "no": 1243
+                }, 
+                {
+                    "priority": 4, 
+                    "board_id": "board_csesa", 
+                    "no": 4684
+                }
+            ]
+    """
     oauth_token = oauth_params['oauth_token']
     user_id = Token.get_user_id(oauth_token)
     favorites = Favorite.get_by_user(user_id)
