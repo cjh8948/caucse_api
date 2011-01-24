@@ -28,6 +28,9 @@
                         
 {% block footer %} 
 <div id="footer">
-<p>문의: 이덕준 (<a href='mailto:gochist@gmail.com'>gochist@gmail.com</a>)</p>
+<p>동네API 프로젝트: 
+<a href='http://github.com/caucse-dev/caucse_api'> 
+http://github.com/caucse-dev/caucse_api</a> 
+</p>
 </div>
 {% endblock %}
