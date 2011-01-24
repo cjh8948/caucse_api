@@ -11,9 +11,10 @@
 
 {% block content %}
 
-<h1>API 레퍼런스</h1>
-<p>
-</p>
+<h1>동네API 1.0 레퍼런스</h1>
+<div class='small'>
+    <p><strong>주의: 서비스 개발 및 테스트 중 입니다. 예고 없이 변경 될 수 있습니다.</strong></p>
+</div> 
 <div id="content-main">
 
 {% for group, views in view_dict.items %}

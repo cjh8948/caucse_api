@@ -14,6 +14,3 @@
 {%endblock%}
 
 	
-<div class='small'>
-    <p><strong>주의: 서비스 개발 및 테스트 중 입니다. 예고 없이 변경 될 수 있습니다.</strong></p>
-</div> 
