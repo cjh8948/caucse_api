@@ -798,17 +798,67 @@ def users_show(request, oauth_params, user_id=None):
 @api_exception
 @oauth_required
 def users_search(request, oauth_params):
-    """사용자 검색 결과를 반환한다.
+    """
+    **/users/search**
+    
+    사용자 검색 
     
     method
-     * GET
+     * GET 
      * oauth required
     
-    parameter (bold체는 필수)
-     * **q**: 검색어를 화이트 스페이스를 기준으로 나누어, 숫자인 경우 학번으로, 영문인 경우 아이디 및 이름으로, 한글인 경우 이름으로 검색함.
-    
+    parameter
+     * **q** (필수): 검색 질의어
+     
     note
+     * 검색어를 화이트 스페이스를 기준으로 토큰화 하여, 토큰이 숫자인 경우 
+       학번으로, 영문인 경우 아이디 및 이름으로, 한글인 경우 이름으로 분류,
+       각 분류 내 OR 연산, 분류 별 AND 연산으로 검색함.
+     * 학번을 두 자리로 입력한 경우, 50보다 작으면 20XX 학번으로, 50보다 
+       크거나 같으면 19XX 학번으로 검색. 
      * 결과는 최대 200건을 반환한다.
+     
+    example
+     * request
+        .. parsed-literal::
+
+            GET /users/show?q=99 HTTP/1.1
+            
+     * response (성공)
+        .. parsed-literal::
+            
+            HTTP/1.0 200 OK
+            Content-Type: application/json; charset=utf-8  
+
+            [
+                {
+                    "name": "박종필", 
+                    "mobile": "123-4567-8900", 
+                    "img_url": "http://s.twimg.com/a/1278188204/images/default_profile_0_normal.png", 
+                    "introduce": "", 
+                    "id": "jeppy", 
+                    "birthday": null, 
+                    "messenger": "MSN:jeppy99@nownuri.net", 
+                    "homepage": "jeppy.cafe24.com", 
+                    "email": "jeppy@caucse.net", 
+                    "entrance_year": 1999
+                }, 
+                
+                ...
+                
+                {
+                    "name": "강석천", 
+                    "mobile": null, 
+                    "img_url": "http://s.twimg.com/a/1278188204/images/default_profile_0_normal.png", 
+                    "introduce": null, 
+                    "id": "reset", 
+                    "birthday": null, 
+                    "messenger": null, 
+                    "homepage": null, 
+                    "email": null, 
+                    "entrance_year": 1999
+                }
+            ]
     """    
     try:
         q = request.GET['q']
