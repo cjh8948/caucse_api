@@ -824,7 +824,7 @@ def users_search(request, oauth_params):
      * request
         .. parsed-literal::
 
-            GET /users/show?q=99 HTTP/1.1
+            GET /users/search?q=99 HTTP/1.1
             
      * response (성공)
         .. parsed-literal::

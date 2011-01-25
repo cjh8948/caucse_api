@@ -21,13 +21,13 @@ urlpatterns = patterns('',
     # doc, user interfaces
     (r'^apireference/(?P<view>[^/]+)/$', 'apiprj.api1_app.doc_views.view_detail'),
     (r'^apireference/$', 'apiprj.api1_app.doc_views.view_index'),
-    (r'^apistatus/$', 'apiprj.oauth_app.views.apistatus'),    
+    (r'^apistatus/$', 'apiprj.oauth_app.views.apistatus'),
     
     # token, consumer 관리
     (r'^token/delete/(?P<key>.+)/$', 'apiprj.oauth_app.views.token_delete'),
-    (r'^consumer/create/$',  'apiprj.oauth_app.views.consumer_create'),
-    (r'^consumer/edit/(?P<key>.+)$',  'apiprj.oauth_app.views.consumer_edit'),
-    (r'^consumer/delete/(?P<key>.+)$',  'apiprj.oauth_app.views.consumer_delete'),    
+    (r'^consumer/create/$', 'apiprj.oauth_app.views.consumer_create'),
+    (r'^consumer/edit/(?P<key>.+)$', 'apiprj.oauth_app.views.consumer_edit'),
+    (r'^consumer/delete/(?P<key>.+)$', 'apiprj.oauth_app.views.consumer_delete'),
     
     # oauth
     (r'^oauth/', include('apiprj.oauth_app.urls')),
