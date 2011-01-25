@@ -97,7 +97,9 @@ def access_token(request, oauth_params):
     footnote
      .. [1] resource provider; 자원 제공자인 동네API를 의미
      .. [2] consumer; 동네API를 사용하는 것이 허가된 애플리케이션
-     .. [3] user; 동네 회원. 컨슈머에게 패스워드를 알려주지 않는 대신, access token을 발급해주어서 보호된 자원을 컨슈머가 사용하도록 허가 또는 불허할 수 있다.
+     .. [3] user; 동네 회원. 컨슈머에게 패스워드를 알려주지 않는 대신, access 
+            token을 발급해주어서 보호된 자원을 컨슈머가 사용하도록 허가 또는 
+            불허할 수 있다.
     
     """    
     # need to verify verifier
