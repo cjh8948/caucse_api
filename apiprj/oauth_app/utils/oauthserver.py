@@ -41,11 +41,17 @@ class ServerAlpha(oauth2.Server):
         return request
 
     def _fetch_consumer(self, consumer_key):
-        consumer = models.Consumer.objects.get(key=consumer_key)
+        try:
+            consumer = models.Consumer.objects.get(key=consumer_key)
+        except ObjectDoesNotExist as e:
+            raise AuthError(e)
         return consumer.to_oauth()
 
     def _fetch_token(self, token_key):
-        token = models.Token.objects.get(key=token_key)
+        try:
+            token = models.Token.objects.get(key=token_key)
+        except ObjectDoesNotExist as e:
+            raise AuthError(e)
         return token.to_oauth()        
 
     def verify_flow_request(self, django_request):
@@ -73,8 +79,10 @@ class ServerAlpha(oauth2.Server):
         try:
             request['oauth_consumer_key']
             request['oauth_token']
+        except TypeError as e:
+            raise RequiredParameterDoesNotExist(e)
         except KeyError as e:
-            raise RequiredParameterDoesNotExist(str(e))
+            raise RequiredParameterDoesNotExist(e)
         consumer = self._fetch_consumer(request['oauth_consumer_key'])
         try:
             token = models.Token.objects.get(key=request['oauth_token'])

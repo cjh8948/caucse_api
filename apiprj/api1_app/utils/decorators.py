@@ -10,7 +10,7 @@ def api_exception(view_func):
             return view_func(request, *arg, **keywords)
         except (ParameterIsNotValid, RequiredParameterDoesNotExist, 
                 DatabaseTableDoesNotExist, PermissionDenied, AuthError, 
-                NotImplementedYet, Error) as e:
+                NotImplementedYet, KeyError, Error) as e:
             return HttpResponse(json.dumps({'status': 'error',
                                             'type': str(type(e)),
                                             'message': str(e)}))
