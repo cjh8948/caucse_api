@@ -30,19 +30,19 @@ class AbstractBoardinfo(models.Model):
     filter = models.TextField(blank=True)
     count = models.IntegerField(null=True, blank=True)    
 
-    ADMIN_LEVEL = 1
+    ADMIN_LEVEL = 1 # not implemented
     BOARD_ADMIN_LEVEL = 2
     CAFE_MEMBER_LEVEL = 3
     ALL_ALUMNI_LEVEL = 4
-    GUEST_LEVEL = 5  
+    GUEST_LEVEL = 5 # not implemented 
     
     LIST_DIGIT = 1
     VIEW_DIGIT = 2
     WRITE_DIGIT = 3
-    #REPLY_DIGIT = 4
-    #DELETE_DIGIT = 5
+    REPLY_DIGIT = 4 # not implemented
+    DELETE_DIGIT = 5 # not implemented
     COMMENT_DIGIT = 6
-    #NOTICE_DIGIT = 7
+    NOTICE_DIGIT = 7 # not implemented
     
     def _split_permission_digit(self, pos):
         if not (isinstance(pos, int) and pos > 0):
