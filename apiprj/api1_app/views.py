@@ -28,7 +28,7 @@ def articles_create(request, oauth_params, board_id=None):
      * **message** (필수)     
     
     note
-     * 사진게시판은 지원하지 않는다.    
+     * 사진게시판 및 익명게시판은 지원하지 않는다.    
 
     example
      * request (oauth 인증 관련 parameter는 예제에서 생략)

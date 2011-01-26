@@ -265,6 +265,8 @@ def consumer_edit(request, key):
         form = ConsumerEditForm(request.POST)
         if form.is_valid():
             consumer = Consumer.objects.get(key=key)
+            if consumer.user_id != request.user.username:
+                return HttpResponseForbidden()
             consumer.name = form.cleaned_data['name']
             consumer.description = form.cleaned_data['description']
             if form.cleaned_data['refresh_key']:
@@ -274,6 +276,8 @@ def consumer_edit(request, key):
             return HttpResponseRedirect('/accounts/profile')
     else:
         consumer = Consumer.objects.get(key=key) 
+        if consumer.user_id != request.user.username:
+            return HttpResponseForbidden()
         form = ConsumerEditForm(initial={'name':consumer.name, 
                                          'description':consumer.description})
 
