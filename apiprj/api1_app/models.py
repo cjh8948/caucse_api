@@ -7,10 +7,9 @@ Memo* 모델을 포함하였음.
 * gen_models 커맨드는 boardinfo, photoinfo 테이블에 저장된 tablename을 기반으로
 모델을 자동생성함. boardinfo에 등록되지 않은 테이블은 자동생성되지 않음.
 """
-from abstract_models import AbstractBoard, AbstractMemo, AbstractComment
 from django.db import models
 
-class Boardinfo(models.Model):
+class AbstractBoardinfo(models.Model):
     no = models.IntegerField(primary_key=True)
     tablename = models.CharField(max_length=75)
     title = models.CharField(max_length=300)
@@ -29,19 +28,103 @@ class Boardinfo(models.Model):
     max_filesize = models.BigIntegerField(null=True, blank=True)
     use_filtering = models.IntegerField(null=True, blank=True)
     filter = models.TextField(blank=True)
-    count = models.IntegerField(null=True, blank=True)
-    random = models.IntegerField(null=True, blank=True)
-    
-    class Meta:
-        db_table = u'boardinfo'
+    count = models.IntegerField(null=True, blank=True)    
 
-class CafeCalendarAdmin(models.Model):
-    no = models.IntegerField(primary_key=True)
-    width = models.TextField(blank=True)
-    height = models.TextField(blank=True)
+    ADMIN_LEVEL = 1
+    BOARD_ADMIN_LEVEL = 2
+    CAFE_MEMBER_LEVEL = 3
+    ALL_ALUMNI_LEVEL = 4
+    GUEST_LEVEL = 5  
     
+    LIST_DIGIT = 1
+    VIEW_DIGIT = 2
+    WRITE_DIGIT = 3
+    #REPLY_DIGIT = 4
+    #DELETE_DIGIT = 5
+    COMMENT_DIGIT = 6
+    #NOTICE_DIGIT = 7
+    
+    def _split_permission_digit(self, pos):
+        if not (isinstance(pos, int) and pos > 0):
+            raise TypeError
+        return (self.permission % (10 ** pos)) / (10 ** (pos - 1))
+    
+    def _check_level(self, level, user_id):
+        if level >= self.GUEST_LEVEL:
+            return True
+        if level >= self.ALL_ALUMNI_LEVEL:
+            if user_id != 'guest':
+                return True
+        if level >= self.CAFE_MEMBER_LEVEL:
+            cafe = CafeInfo.objects.get(cafe_name=self.belongto)
+            if user_id in cafe.member_list:
+                return True
+        if level >= self.BOARD_ADMIN_LEVEL:
+            if user_id == self.admin_id:
+                return True
+        return False
+                    
+    def check_permission(self, digit, user_id):
+        level = self._split_permission_digit(digit)
+        return self._check_level(level, user_id)   
+
     class Meta:
-        db_table = u'cafe_calendar_admin'
+        abstract = True     
+  
+class AbstractBoard(models.Model):
+    id = models.AutoField(primary_key=True)
+    idx = models.IntegerField()
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=75)
+    ip = models.IPAddressField(max_length=51, blank=True)
+    email = models.CharField(max_length=120, blank=True)
+    category = models.CharField(max_length=72, blank=True)
+    notice_deadline = models.DateField(null=True, blank=True)
+    title = models.CharField(max_length=300)
+    count = models.IntegerField(null=True, blank=True)
+    reg_date = models.DateTimeField(null=True, blank=True)
+    content = models.TextField(blank=True)
+    thread = models.CharField(max_length=765)
+    comment = models.IntegerField()
+    password = models.CharField(max_length=123, blank=True)
+    file_name = models.CharField(max_length=300, blank=True)
+
+    class Meta:
+        abstract = True
+        
+    def __unicode__(self):
+        return ",".join((str(self.id), self.title, self.name))        
+   
+class AbstractComment(models.Model):        
+    id = models.AutoField(primary_key=True)
+    idx = models.IntegerField()
+    reg_date = models.DateField(null=True, blank=True)
+    content = models.TextField(blank=True)  
+    user_id = models.CharField(max_length=90)
+    name = models.CharField(max_length=225) 
+    password = models.CharField(max_length=144, blank=True) 
+
+    class Meta:
+        abstract = True  
+              
+    def __unicode__(self):
+        return ",".join((str(self.id), self.content, self.name))
+         
+class AbstractMemo(models.Model):            
+    id = models.AutoField(primary_key=True)
+    idx = models.IntegerField(null=True, blank=True)
+    user_id = models.CharField(max_length=30)
+    name = models.CharField(max_length=60)
+    content = models.TextField(blank=True)
+    headnum = models.IntegerField(null=True, blank=True)
+    depth = models.IntegerField(null=True, blank=True)
+    reg_date = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        abstract = True
+
+    def __unicode__(self):
+        return ",".join((str(self.id), self.content, self.name))
 
 class CafeInfo(models.Model):
     no = models.IntegerField(primary_key=True)
@@ -58,6 +141,23 @@ class CafeInfo(models.Model):
     
     class Meta:
         db_table = u'cafe_info'
+
+class Boardinfo(AbstractBoardinfo):    
+    random = models.IntegerField(null=True, blank=True)
+    class Meta:
+        db_table = u'boardinfo'
+        
+class Photoinfo(AbstractBoardinfo):
+    class Meta:
+        db_table = u'photoinfo'        
+
+class CafeCalendarAdmin(models.Model):
+    no = models.IntegerField(primary_key=True)
+    width = models.TextField(blank=True)
+    height = models.TextField(blank=True)
+    
+    class Meta:
+        db_table = u'cafe_calendar_admin'
 
 class Calendar(models.Model):
     id = models.AutoField(primary_key=True)
@@ -168,31 +268,6 @@ class Nospam(models.Model):
     
     class Meta:
         db_table = u'nospam'
-
-
-class Photoinfo(models.Model):
-    no = models.IntegerField(primary_key=True)
-    tablename = models.CharField(max_length=75)
-    title = models.CharField(max_length=300)
-    admin_id = models.CharField(max_length=30)
-    description = models.TextField(blank=True)
-    belongto = models.CharField(max_length=90, blank=True)
-    skin = models.CharField(max_length=60, blank=True)
-    header = models.CharField(max_length=240, blank=True)
-    tail = models.CharField(max_length=240, blank=True)
-    line_number = models.IntegerField()
-    permission = models.BigIntegerField()
-    use_category = models.IntegerField()
-    category = models.TextField(blank=True)
-    use_notice = models.IntegerField(null=True, blank=True)
-    use_fileupload = models.IntegerField(null=True, blank=True)
-    max_filesize = models.BigIntegerField(null=True, blank=True)
-    use_filtering = models.IntegerField(null=True, blank=True)
-    filter = models.TextField(blank=True)
-    count = models.IntegerField(null=True, blank=True)
-    
-    class Meta:
-        db_table = u'photoinfo'
 
 class PopupNotice(models.Model):
     num = models.IntegerField(primary_key=True)

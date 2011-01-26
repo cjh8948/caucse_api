@@ -247,9 +247,12 @@ def articles_list(request, oauth_params, board_id=None):
         per_page = int(request.GET['per_page'])
     if request.GET.has_key('q'):
         q = request.GET['q']
-
+        
+    oauth_token = oauth_params['oauth_token']
+    user_id = Token.get_user_id(oauth_token)
+    
     # make json object to return
-    listinfo, articles = Article.get_list(board_id, page, per_page, q)
+    listinfo, articles = Article.get_list(board_id, user_id, page, per_page, q)
 
     ret_item = {'listinfo': listinfo, 'articles': articles}
     ret = dumps(ret_item)
@@ -335,7 +338,9 @@ def articles_show(request, oauth_params, board_id=None, article_id=None):
         board_id = request.GET['board_id']
     if not article_id:
         article_id = int(request.GET['article_id'])
-    article = Article.get(board_id, article_id)
+    oauth_token = oauth_params['oauth_token']    
+    user_id = Token.get_user_id(oauth_token)        
+    article = Article.get(board_id, article_id, user_id)
     ret = dumps(article) 
     return HttpResponse(ret, content_type='application/json')
 
@@ -401,12 +406,12 @@ def articles_update(request, oauth_params, board_id=None, article_id=None):
     title = request.POST['title']
     message = request.POST['message']
     oauth_token = oauth_params['oauth_token']    
+    user_id = Token.get_user_id(oauth_token)
     if board_id.startswith('photo'):
         raise NotImplementedYet('사진게시판 게시 기능은 지원하지 않습니다.')
     if board_id == 'board_anonymous':
         raise NotImplemented('익명게시판 게시 기능은 지원하지 않습니다.')
     
-    user_id = Token.get_user_id(oauth_token)
     article = Article.update(
         board_id=board_id, 
         article_id=article_id,

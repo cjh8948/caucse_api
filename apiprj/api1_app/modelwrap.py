@@ -10,11 +10,23 @@ from apiprj.exceptions import (
 from apiprj.oauth_app.models import Token as OauthToken
 from apiprj.settings import USER_IMG_PATH, USER_IMG_PREFIX
 from django.db.models.aggregates import Max
-from django.db.models import Q
+from django.db.models import Q, ObjectDoesNotExist
 import os, datetime, re
 
 def strip_quotes(buf):
     return buf.replace(r'\"', '"').replace(r"\'", "'")
+
+def check_permission(board_id, user_id, permission_digit):
+    try:
+        if board_id.startswith('board_'):
+            boardinfo = models.Boardinfo.objects.get(tablename=board_id)
+        elif board_id.startswith('photo_'):
+            boardinfo = models.Photoinfo.objects.get(tablename=board_id)
+    except ObjectDoesNotExist as e:
+        raise DatabaseTableDoesNotExist(e)
+    
+    if not boardinfo.check_permission(permission_digit, user_id):
+        raise PermissionDenied(user_id)
 
 class Board(object):
     @classmethod
@@ -96,6 +108,8 @@ class Comment(object):
     
     @classmethod
     def post(self, board_id, article_id, user_id, content):
+        check_permission(board_id, user_id, models.Boardinfo.COMMENT_DIGIT)
+        
         # check if article exists
         article_model = Article.eval(board_id)
         article_model.objects.get(id=article_id)
@@ -116,6 +130,8 @@ class Comment(object):
     
     @classmethod
     def delete(self, board_id, comment_id, user_id):
+        check_permission(board_id, user_id, models.Boardinfo.COMMENT_DIGIT)
+        
         comment_model = Comment.eval(board_id).objects.get(id=comment_id)
         if comment_model.user_id == user_id:
             comment_model.delete() 
@@ -152,7 +168,8 @@ class Article(object):
         return packed_article
 
     @classmethod
-    def get(self, board_id, article_id):
+    def get(self, board_id, article_id, user_id):
+        check_permission(board_id, user_id, models.Boardinfo.VIEW_DIGIT)
         board_model = Article.eval(board_id)
         article_model = board_model.objects.get(id=article_id)
         comments = Comment.get(board_id, article_id)
@@ -176,7 +193,10 @@ class Article(object):
                 Q(user_id__icontains=q) | Q(name__icontains=q))
         
     @classmethod
-    def get_list(self, board_id, page=0, per_page=20, q=""):
+    def get_list(self, board_id, user_id, page=0, per_page=20, q=""):
+        # check permission
+        check_permission(board_id, user_id, models.Boardinfo.LIST_DIGIT)
+        
         s = page * per_page
         e = s + per_page
         q = q.strip()
@@ -208,6 +228,8 @@ class Article(object):
     
     @classmethod
     def update(self, board_id, article_id, user_id, title, message):
+        check_permission(board_id, user_id, models.Boardinfo.WRITE_DIGIT)
+                
         article_model = Article.eval(board_id)
         article = article_model.objects.get(id=article_id)
         
@@ -222,6 +244,8 @@ class Article(object):
         
     @classmethod
     def post(self, board_id, user_id, title, message):
+        check_permission(board_id, user_id, models.Boardinfo.WRITE_DIGIT)
+        
         article_model = Article.eval(board_id)        
         max_idx = article_model.objects.all().aggregate(Max('idx'))['idx__max']
         if not max_idx:
