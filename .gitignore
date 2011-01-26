@@ -7,4 +7,6 @@
 apache/*.wsgi
 apiprj/settings.py
 autotest/secure.py
+static/html/
+static/doctrees/
 docs/_build/
