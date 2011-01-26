@@ -2,8 +2,11 @@
 """
 """
 from apiprj.api1_app import models
-from apiprj.exceptions import (DatabaseTableDoesNotExist, PermissionDenied, 
-                               NoMatchingResult)
+from apiprj.exceptions import (
+    DatabaseTableDoesNotExist,
+    PermissionDenied,
+    NoMatchingResult
+)
 from apiprj.oauth_app.models import Token as OauthToken
 from apiprj.settings import USER_IMG_PATH, USER_IMG_PREFIX
 from django.db.models.aggregates import Max
@@ -16,13 +19,14 @@ def strip_quotes(buf):
 class Board(object):
     @classmethod
     def pack(self, boardinfo_model, count=None, count24h=None):
-        packed_board = {'board_id': boardinfo_model.tablename,
-                        'title': strip_quotes(boardinfo_model.title),
-                        'description': 
-                            strip_quotes(boardinfo_model.description),
-                        'admin': boardinfo_model.admin_id,
-                        'count': count,
-                        'count24h': count24h}
+        packed_board = {
+            'board_id': boardinfo_model.tablename,
+            'title': strip_quotes(boardinfo_model.title),
+            'description': strip_quotes(boardinfo_model.description),
+            'admin': boardinfo_model.admin_id,
+            'count': count,
+            'count24h': count24h
+        }
         return packed_board
     
     @classmethod
@@ -68,15 +72,19 @@ class Comment(object):
 
     @classmethod
     def pack(self, cmt_model, board_id):
-        author = {'name': cmt_model.name,
-                  'id': cmt_model.user_id,
-                  'img_url': User.get_img_url(cmt_model.user_id)}
+        author = {
+            'name': cmt_model.name,
+            'id': cmt_model.user_id,
+            'img_url': User.get_img_url(cmt_model.user_id)
+        }
 
-        packed_cmt = {'board_id': board_id,
-                      'id': cmt_model.id,
-                      'content': strip_quotes(cmt_model.content),
-                      'reg_date': cmt_model.reg_date.isoformat(),
-                      'author': author}
+        packed_cmt = {
+            'board_id': board_id,
+            'id': cmt_model.id,
+            'content': strip_quotes(cmt_model.content),
+            'reg_date': cmt_model.reg_date.isoformat(),
+            'author': author
+        }
 
         return packed_cmt
     
@@ -95,9 +103,13 @@ class Comment(object):
         # add comment            
         comment_model = Comment.eval(board_id)
         user_name = models.Member.objects.get(id=user_id).name
-        cmt = comment_model(idx=article_id, user_id=user_id, name=user_name,
-                            content=content,
-                            reg_date=datetime.datetime.today())
+        cmt = comment_model(
+            idx=article_id,
+            user_id=user_id,
+            name=user_name,
+            content=content,
+            reg_date=datetime.datetime.today()
+        )
         cmt.save()
         
         return self.pack(cmt, board_id)
@@ -118,18 +130,25 @@ class Article(object):
 
     @classmethod
     def pack(self, article_model, board_id, comments=[]):
-        author = {'name': article_model.name, 'id': article_model.user_id,
-                  'img_url': User.get_img_url(article_model.user_id)}
-        packed_article = {'board_id': board_id,
-                          'id': article_model.id,
-                          'author': author,
-                          'title': strip_quotes(article_model.title),
-                          'hits': article_model.count,
-                          'reg_date': article_model.reg_date.isoformat(),
-                          'content': strip_quotes(article_model.content),
-                          'file': article_model.file_name,
-                          'comments': comments,
-                          'total_comments': article_model.comment}
+        author = {
+            'name': article_model.name,
+            'id': article_model.user_id,
+            'img_url': User.get_img_url(article_model.user_id)
+        }
+        
+        packed_article = {
+            'board_id': board_id,
+            'id': article_model.id,
+            'author': author,
+            'title': strip_quotes(article_model.title),
+            'hits': article_model.count,
+            'reg_date': article_model.reg_date.isoformat(),
+            'content': strip_quotes(article_model.content),
+            'file': article_model.file_name,
+            'comments': comments,
+            'total_comments': article_model.comment
+        }
+        
         return packed_article
 
     @classmethod
@@ -172,14 +191,16 @@ class Article(object):
         total_matched_articles = articles.count()
         paged_articles = articles.order_by('-reg_date')[s:e]
         
-        listinfo = {'board_id': board_id,
-                    'board_title': Board.get(board_id)['title'],
-                    'page': page,
-                    'per_page': per_page,
-                    'total_pages': (total_matched_articles / per_page),
-                    'total_matched_articles': total_matched_articles,
-                    'total_articles': total_articles,
-                    'q': q}
+        listinfo = {
+            'board_id': board_id,
+            'board_title': Board.get(board_id)['title'],
+            'page': page,
+            'per_page': per_page,
+            'total_pages': (total_matched_articles / per_page),
+            'total_matched_articles': total_matched_articles,
+            'total_articles': total_articles,
+            'q': q
+        }
         
         packed_articles = map(lambda article: Article.pack(article, board_id),
                               paged_articles)
@@ -190,8 +211,7 @@ class Article(object):
         article_model = Article.eval(board_id)
         article = article_model.objects.get(id=article_id)
         
-        if (board_id in ['board_anonymous', 'board_freeboard'] or 
-            article.user_id != user_id):
+        if article.user_id != user_id:
             raise PermissionDenied(user_id)
 
         article.title = title
@@ -207,40 +227,39 @@ class Article(object):
         if not max_idx:
             max_idx = 0
         user = models.Member.objects.get(id=user_id)
-        
-        if board_id == 'board_anonymous':
-            article_user_id = ""
-            article_user_name = ""
-            article_user_email = ""
-        else:
-            article_user_id = user_id
-            article_user_name = user.name
-            article_user_email = user.email
             
-        article = article_model(idx=max_idx + 1, user_id=article_user_id,
-                                name=article_user_name,
-                                email=article_user_email, category="",
-                                notice_deadline=datetime.datetime.min,
-                                reg_date=datetime.datetime.now(),
-                                count=0, title=title, content=message,
-                                thread="A", comment=0)
+        article = article_model(
+            idx=max_idx + 1,
+            user_id=user_id,
+            name=user.name,
+            email=user.email,
+            category="",
+            notice_deadline=datetime.datetime.min,
+            reg_date=datetime.datetime.now(),
+            count=0,
+            title=title,
+            content=message,
+            thread="A",
+            comment=0
+        )
         article.save()
         return self.pack(article, board_id)
 
 class User(object):
-    OPEN_FLAG = ((0, 'email'),
-                 (1, 'homepage'),
-                 (2, 'birthday'),
-                 #(3, 'homeaddress'),
-                 #(4, 'homephone'),
-                 (5, 'mobile'),
-                 #(6, 'jobcategory'),
-                 (7, 'messenger'),
-                 (8, 'introduce'),
-                 #(9, 'department'),
-                 #(10, 'workaddress'),
-                 #(11, 'workphone'),
-                 ) 
+    OPEN_FLAG = (
+        (0, 'email'),
+        (1, 'homepage'),
+        (2, 'birthday'),
+        #(3, 'homeaddress'),
+        #(4, 'homephone'),
+        (5, 'mobile'),
+        #(6, 'jobcategory'),
+        (7, 'messenger'),
+        (8, 'introduce'),
+        #(9, 'department'),
+        #(10, 'workaddress'),
+        #(11, 'workphone'),
+    ) 
     
     @classmethod
     def pack(self, user_model):
@@ -253,25 +272,26 @@ class User(object):
             entrance_year = 1900 + user_model.id_number
         else:
             entrance_year = None
-            
-        packed_user = {'id': user_model.id,
-                       'name': user_model.name,
-                       'entrance_year': entrance_year,
-                       'img_url': self.get_img_url(user_model.id),
-                       'mobile': user_model.cell_phone,
-                       'homepage': user_model.homepage,
-                       'birthday': birthday,
-                       'email': user_model.email,
-                       'introduce': strip_quotes(user_model.introduce),
-                       'messenger': user_model.messenger}
+           
+        packed_user = {
+            'id': user_model.id,
+            'name': user_model.name,
+            'entrance_year': entrance_year,
+            'img_url': self.get_img_url(user_model.id),
+            'mobile': user_model.cell_phone,
+            'homepage': user_model.homepage,
+            'birthday': birthday,
+            'email': user_model.email,
+            'introduce': strip_quotes(user_model.introduce),
+            'messenger': user_model.messenger
+        }
         
         # mask closed informations 
         for i, field in self.OPEN_FLAG:
             if not (user_model.open_close & (2 ^ i)):
                 packed_user[field] = None
-
         return packed_user
-
+    
     @classmethod
     def get_img_url(self, user_id):
         img_path = os.path.join(USER_IMG_PATH, user_id)
@@ -294,13 +314,13 @@ class User(object):
             return user.cafe_name.split(',')
         else:
             return []
-
+    
     @classmethod
     def search(self, q):
         years, ids, names = [], [], []
         re_entrance_year = re.compile(r"(\d+)")
         re_id = re.compile(r"(\w+)")
-
+    
         # simple natural language processing
         for token in q.split():
             if re_entrance_year.match(token):
@@ -337,9 +357,11 @@ class Token(object):
 class Favorite(object):
     @classmethod
     def pack(self, favorite_model):
-        packed_favorite = {'no': favorite_model.no,
-                           'priority': favorite_model.priority,
-                           'board_id': favorite_model.tablename}
+        packed_favorite = {
+            'no': favorite_model.no,
+            'priority': favorite_model.priority,
+            'board_id': favorite_model.tablename
+        }
         return packed_favorite
     
     @classmethod

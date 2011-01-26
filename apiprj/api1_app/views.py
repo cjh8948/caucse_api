@@ -88,10 +88,16 @@ def articles_create(request, oauth_params, board_id=None):
     oauth_token = oauth_params['oauth_token']    
     if board_id.startswith('photo'):
         raise NotImplementedYet('사진게시판 게시 기능은 지원하지 않습니다.')
+    if board_id == 'board_anonymous':
+        raise NotImplementedYet('익명게시판 게시 기능은 지원하지 않습니다.')
     
     user_id = Token.get_user_id(oauth_token)
-    article = Article.post(board_id=board_id, user_id=user_id, title=title,
-                           message=message)
+    article = Article.post(
+        board_id=board_id, 
+        user_id=user_id, 
+        title=title,
+        message=message
+    )
 
     # return result
     ret = dumps({'status':'ok', 'article': article})    
@@ -111,7 +117,7 @@ def articles_delete(request, oauth_params, board_id=None, article_id=None):
      * oauth required
     
     note
-     * 사진게시판은 지원하지 않음
+     * 사진게시판 및 익명게시판은 지원하지 않음
      * 인증된 사용자 본인의 게시물만 삭제 가능 
      
     example
@@ -137,6 +143,8 @@ def articles_delete(request, oauth_params, board_id=None, article_id=None):
 
     if board_id.startswith('photo'):
         raise NotImplementedYet('사진게시판 게시물 삭제 기능은 지원하지 않습니다.')
+    if board_id == 'board_anonymous':
+        raise NotImplementedYet('익명게시판 게시물 삭제 기능은 지원하지 않습니다.')
     
     user_id = Token.get_user_id(oauth_token)
     Article.delete(board_id, article_id, user_id)
@@ -347,6 +355,9 @@ def articles_update(request, oauth_params, board_id=None, article_id=None):
     parameters
      * **title** (필수)
      * **message** (필수)
+    
+    note
+     * 사진게시판 및 익명게시판은 지원하지 않는다.
 
     example
      * request (oauth 인증 관련 parameter는 예제에서 생략)
@@ -392,10 +403,17 @@ def articles_update(request, oauth_params, board_id=None, article_id=None):
     oauth_token = oauth_params['oauth_token']    
     if board_id.startswith('photo'):
         raise NotImplementedYet('사진게시판 게시 기능은 지원하지 않습니다.')
+    if board_id == 'board_anonymous':
+        raise NotImplemented('익명게시판 게시 기능은 지원하지 않습니다.')
     
     user_id = Token.get_user_id(oauth_token)
-    article = Article.update(board_id=board_id, article_id=article_id,
-                             user_id=user_id, title=title, message=message)
+    article = Article.update(
+        board_id=board_id, 
+        article_id=article_id,
+        user_id=user_id, 
+        title=title, 
+        message=message
+    )
 
     # return result
     ret = dumps({'status':'ok', 'article': article})    
@@ -470,8 +488,13 @@ def boards_favorite(request, oauth_params):
         cafe_board_list = reduce(lambda x, y: x + y, cafe_boards)
     
     # merge default, favorite, cafe list
-    board_list = reduce(join_list, (default_list, favorite_list,
-                                    cafe_board_list))
+    board_list = reduce(
+        join_list, (
+            default_list, 
+            favorite_list,
+            cafe_board_list
+        )
+    )
     # get boards
     boards = filter(None, map(Board.get_or_none, board_list))
     ret = dumps(boards)
