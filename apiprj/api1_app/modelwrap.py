@@ -189,8 +189,12 @@ class Article(object):
         q = q.strip()
         if len(q) < 2 : return None 
         
-        return (Q(content__icontains=q) | Q(title__icontains=q) | 
-                Q(user_id__icontains=q) | Q(name__icontains=q))
+        return (
+            Q(content__icontains=q) | 
+            Q(title__icontains=q) | 
+            Q(user_id__icontains=q) | 
+            Q(name__icontains=q)
+        )
         
     @classmethod
     def get_list(self, board_id, user_id, page=0, per_page=20, q=""):

@@ -53,11 +53,12 @@ def request_token(request, oauth_params):
      .. [3] user; 동네 회원. 컨슈머에게 패스워드를 알려주지 않는 대신, access token을 발급해주어서 보호된 자원을 컨슈머가 사용하도록 허가 또는 불허할 수 있다.
     
     """
-    if request.method == "GET":
-        raise AuthError("request method for 'request token' should be POST")
+    #if request.method == "GET":
+    #    raise AuthError("request method for 'request token' should be POST")
     
     try:
         consumer_key = oauth_params['oauth_consumer_key']
+        print consumer_key
         callback = oauth_params['oauth_callback']
     except KeyError:
         return HttpResponseBadRequest()

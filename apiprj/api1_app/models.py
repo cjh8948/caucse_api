@@ -56,9 +56,10 @@ class AbstractBoardinfo(models.Model):
             if user_id != 'guest':
                 return True
         if level >= self.CAFE_MEMBER_LEVEL:
-            cafe = CafeInfo.objects.get(cafe_name=self.belongto)
-            if user_id in cafe.member_list:
-                return True
+            if self.belongto:
+                cafe = CafeInfo.objects.get(cafe_name=self.belongto)
+                if user_id in cafe.member_list:
+                    return True
         if level >= self.BOARD_ADMIN_LEVEL:
             if user_id == self.admin_id:
                 return True
@@ -70,6 +71,9 @@ class AbstractBoardinfo(models.Model):
 
     class Meta:
         abstract = True     
+        
+    def __unicode__(self):
+        return ",".join((self.tablename, self.title))
   
 class AbstractBoard(models.Model):
     id = models.AutoField(primary_key=True)
