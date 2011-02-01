@@ -30,13 +30,20 @@ class ServerAlpha(oauth2.Server):
         parameters = dict(django_request.REQUEST)
         qs = django_request.META['QUERY_STRING']
 
+        uri = '%s://%s%s' % (
+            django_request.is_secure() and 'https' or 'http',
+            django_request.get_host(), 
+            django_request.path
+        )
+
         # make oauth.Request object
-        request = oauth2.Request\
-                        .from_request(django_request.method,
-                                      django_request.build_absolute_uri(),
-                                      headers=auth_header,
-                                      parameters=parameters,
-                                      query_string=qs)
+        request = oauth2.Request.from_request(
+            django_request.method,
+            uri,
+            headers=auth_header,
+            parameters=parameters,
+            query_string=qs
+        )
 
         return request
 
