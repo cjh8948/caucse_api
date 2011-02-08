@@ -242,6 +242,10 @@ class Article(object):
 
         article.title = title
         article.content = message
+        
+        if article.notice_deadline == None:
+            article.notice_deadline = datetime.datetime.min
+        
         article.save()
         return self.pack(article, board_id)
             
