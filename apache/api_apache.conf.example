@@ -4,7 +4,8 @@
 </IfModule>
 <VirtualHost *:80>
     ServerAdmin john.doe@servername
-    DocumentRoot /path/to/apiroot
+    RewriteEngine on
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
     WSGIScriptAlias / /path/to/caucse_api/apache/apiprj.wsgi
     ServerName api.server.name
     ErrorLog /var/log/httpd/api-error_log
