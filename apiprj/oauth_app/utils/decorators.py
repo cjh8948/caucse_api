@@ -1,4 +1,4 @@
-#!-*-coding:utf8-*-
+#-*-coding:utf8-*-
 """oauth 인증이 필요한 view function에 대한 데코레이터"""
 from django.http import HttpResponseBadRequest
 from oauthserver import ServerAlpha

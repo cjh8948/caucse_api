@@ -80,5 +80,8 @@ def view_detail(request, view):
         'meta': metadata
     }
     
-    return render_to_response('doc/view_detail.tpl', param,
-                              context_instance=RequestContext(request))
+    return render_to_response(
+        'doc/view_detail.tpl', 
+        param,
+        context_instance=RequestContext(request)
+    )

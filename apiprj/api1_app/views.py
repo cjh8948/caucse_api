@@ -1,4 +1,4 @@
-#! -*- coding: utf8 -*- 
+# -*- coding: utf8 -*- 
 from apiprj.oauth_app.utils.decorators import oauth_required
 from apiprj.exceptions import (NotImplementedYet, ParameterIsNotValid, 
                                RequiredParameterDoesNotExist, NoMatchingResult,

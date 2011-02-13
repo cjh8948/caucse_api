@@ -1,4 +1,4 @@
-#!-*-coding:utf8-*-
+#-*-coding:utf8-*-
 from secure import (ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET, CONSUMER_KEY, 
                     CONSUMER_SECRET, URL_PREFIX)
 from oauthclient import ClientAlpha

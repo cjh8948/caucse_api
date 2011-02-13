@@ -1,4 +1,4 @@
-#! -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from apiprj.api1_app import models
 from apiprj.api1_app import modelwrap
 import datetime, random
