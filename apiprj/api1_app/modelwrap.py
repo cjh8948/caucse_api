@@ -134,7 +134,9 @@ class Comment(object):
         
         comment_model = Comment.eval(board_id).objects.get(id=comment_id)
         if comment_model.user_id == user_id:
-            comment_model.delete() 
+            comment_model.delete()
+        else:
+            raise PermissionDenied(user_id) 
 
 class Article(object):
     @classmethod
