@@ -112,7 +112,7 @@ class Comment(object):
         
         # check if article exists
         article_model = Article.eval(board_id)
-        article_model.objects.get(id=article_id)
+        article = article_model.objects.get(id=article_id)
 
         # add comment            
         comment_model = Comment.eval(board_id)
@@ -126,6 +126,10 @@ class Comment(object):
         )
         cmt.save()
         
+        # inc article.comment 
+        article.inc_comment_count()
+        article.save()
+        
         return self.pack(cmt, board_id)
     
     @classmethod
@@ -134,7 +138,17 @@ class Comment(object):
         
         comment_model = Comment.eval(board_id).objects.get(id=comment_id)
         if comment_model.user_id == user_id:
+            # get article model
+            article_model = Article.eval(board_id)
+            article = article_model.objects.get(id=comment_model.idx)
+            
+            # delete comment_model
             comment_model.delete()
+
+            # dec article_model.comment 
+            article.dec_comment_count()
+            article.save()
+
         else:
             raise PermissionDenied(user_id) 
 

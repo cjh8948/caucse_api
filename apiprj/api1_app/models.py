@@ -96,6 +96,12 @@ class AbstractBoard(models.Model):
     class Meta:
         abstract = True
         
+    def inc_comment_count(self):
+        self.comment += 1
+
+    def dec_comment_count(self):
+        self.comment -= 1
+        
     def __unicode__(self):
         return ",".join((str(self.id), self.title, self.name))        
    
