@@ -970,7 +970,7 @@ def cafe_list(request, oauth_params):
     r"""
     **/cafe/list**
 
-    카페 리스트를 반환
+    검색된 카페 리스트를 반환
 
     method
      * GET
@@ -982,24 +982,123 @@ def cafe_list(request, oauth_params):
     note
      * q를 입력하지 않으면 모든 카페 리스트를 반환한다.
      * q는 and검색이기 때문에 띄어쓰기에 주의. ex)"기획총무부"와 "기획 총무부"는 다른 것이다.
-     * 검색 결과로 얻은 카페 리스트를 반환한다. 카페의 기본적인 정보를 반환한다.
-         - 'no': 카페 고유의 번호
-         - 'cafe_id': 카페 고유의 영문자 이름  (ex, part_plan)
-         - 'cafe_name': 사용자들이 볼 수 있는 카페 이름 (ex, 기획총무부)
-         - 'admin': 카페 관리자
-         - 'is_hidden': ???
-         - 'member_list': 카페 회원 아이디 목록
-         - 'board_list': 카페 게시판 목록
-         - 'photo_board_list': 카페 사진 게시판 목록
-         - 'front_photo': 카페 메인 이미지 주소
-         - 'front_text': 카페 메인 소개
-         - 'section': 카페 카테고리 (ex, 학회, 인문사회, 문화/예술 ...)
+     * 검색 결과로 얻은 카페 리스트(cafes)를 반환한다. 추가적으로 검색 결과(listinfo)를 반환한다.
+     * 검색 결과는 "section" 오름차순으로 정렬하되, 같은 "section"끼리는 "no" 오름차순으로 정렬한다.     
+     * cafes의 section은 카페 카테고리를 나타낸다. (학생자치 :1, 학회 :2, 레저/스포츠 :3, 인문사회 :4, 문화예술 :5, 친목모임 :6
 
-         listinfo는 검색 결과를 나타낸다. 총 몇 개의 카페가 있는지, 몇개가 검색되었는지를 반환한다.
 
     example
-     * 예제를 손으로 직접 쓰지 않고는 문자열을 얻어오는 방법을 모르겠습니다.
+        * request 
+            GET /cafe/list HTTP/1.1
 
+        * response (검색된 카페가 있는 경우)
+            .. parsed-literal::
+    
+                HTTP/1.0 200 OK
+                Content-Type: application/json; charset=utf-8
+    
+                {
+                    "cafes": [
+                        {
+                            "cafe_name": "기획총무부",
+                            "no": 9, "admin": "hyojeong28",
+                            "board_list": [
+                                "board_part_plan",
+                                "board_part_plan_records",
+                                "photo_part_plan"
+                            ],
+                            "description": "<font face = \"돋움\">\r\n<strong><font color=#FF0000>컴</font>...(생략)",
+                            "section": 1,
+                            "cafe_id": "cafe_part_plan",
+                            "member_list": [
+                                "gochi"
+                            ]
+                        }, 
+                        {
+                            "cafe_name": "정보통신부",
+                            "no": 12,
+                            "admin": "shade28",
+                            "board_list": [
+                                "board_part_jungtong",
+                                "photo_part_jungtong"
+                            ],
+                            "description": "안녕하세요^^\r\n엘리트 정보통신부에 오신 것을 환영합니다....(생략)", 
+                            "section": 1,
+                            "cafe_id": "cafe_part_jungtong",
+                            "member_list": [
+                                "jeppy"
+                            ]
+                        },
+                        {
+                            "cafe_name": "시큐어랩",
+                            "no": 42,
+                            "admin": "nookie",
+                            "board_list": [
+                                "board_cafe_securelab",
+                                "board_cafe_securelab2",
+                                "photo_cafe_securelab"
+                            ],
+                            "description": "정보보안에 관심있는 컴공 학우들의 모임입니다...(생략)",
+                            "section": 2,
+                            "cafe_id": "cafe_securelab",
+                            "member_list": [
+                                "jeppy"
+                            ]
+                        },
+                        {
+                            "cafe_name": "위디브",
+                            "no": 5,
+                            "admin": "unikth",
+                            "board_list": [
+                                "board_club_withweve",
+                                "board_withweve_data",
+                                "board_withweve_free",
+                                "photo_club_withweve"
+                            ],
+                            "description": "Basketball is played not with your height, but with your heart",
+                            "section": 3,
+                            "cafe_id": "cafe_withweve",
+                            "member_list": [
+                                "jeppy",
+                                "unikth"
+                            ]
+                        },
+                        {
+                            "cafe_name": "선배와의 대화",
+                            "no": 62,
+                            "admin": "gufrend",
+                            "board_list": [
+                                "board_cafe_present",
+                                "photo_cafe_present"
+                            ],
+                            "description": "",
+                            "section": 4,
+                            "cafe_id": "cafe_present",
+                            "member_list": [
+                                "jeppy"
+                            ]
+                        }
+                    ],
+                    "listinfo": {
+                        "q": "",
+                        "total_cafes": 5,
+                        "total_matched_cafes": 5
+                    }
+                }
+
+
+
+
+        * response (검색된 카페가 없는 경우)
+                {
+                    "cafes": [
+                    ],
+                    "listinfo": {
+                        "q": "",
+                        "total_cafes": 0,
+                        "total_matched_cafes": 0
+                    }
+                }
 
     """
 

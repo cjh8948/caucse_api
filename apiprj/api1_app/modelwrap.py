@@ -1,4 +1,4 @@
-#-*-coding:utf-8-*-
+﻿#-*-coding:utf-8-*-
 """
 """
 from apiprj.api1_app import models
@@ -444,7 +444,7 @@ class Cafe(object):
     def get_list(self, q=""):
 
         q = q.strip()
-        cafes = models.CafeInfo.objects.all()
+        cafes = models.CafeInfo.objects.filter(is_hidden=0)
         total_cafes = cafes.count()
 
         query = self._build_query(q)
@@ -452,7 +452,9 @@ class Cafe(object):
             cafes = cafes.filter(query)
 
         total_matched_cafes = cafes.count()
-        ordered_cafes = cafes.order_by('-no')
+        ordered_cafes = cafes.order_by('no')
+        ordered_cafes = cafes.order_by('section')
+        
 
         listinfo = {
             'total_matched_cafes': total_matched_cafes,
@@ -471,12 +473,9 @@ class Cafe(object):
             'cafe_id': cafe_model.cafe_name,
             'cafe_name': cafe_model.cafe_nick,
             'admin': cafe_model.adminid,
-            'is_hidden': cafe_model.is_hidden,
-            'member_list': cafe_model.member_list,
-            'board_list': cafe_model.board_list,
-            'photo_board_list': cafe_model.photo_board_list,
-            'front_photo': 'http://api.caucse.net' + cafe_model.front_photo,
-            'front_text': cafe_model.front_text,
+            'member_list': cafe_model.member_list.split(','),
+            'board_list':cafe_model.board_list.split(',') + cafe_model.photo_board_list.split(','),
+            'description': cafe_model.front_text,
             'section': cafe_model.section
         }
 
