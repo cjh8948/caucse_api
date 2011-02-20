@@ -99,7 +99,7 @@ class AbstractBoard(models.Model):
         
     def _fix_notice_deadline(self):
         if not self.notice_deadline:
-            self.notice_deadline = datetime.datetime.min()
+            self.notice_deadline = datetime.datetime.min
         
     def inc_comment_count(self):
         self.comment += 1
