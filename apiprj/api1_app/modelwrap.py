@@ -459,7 +459,9 @@ class Cafe(object):
 
         query = self._build_query(q)
         if query:
-            cafes = cafes.filter(query).order_by('no').order_by('section')
+            cafes = cafes.filter(query)
+            
+        cafes = cafes.order_by('no').order_by('section')
 
         total_matched_cafes = cafes.count()
         
@@ -476,7 +478,7 @@ class Cafe(object):
     def pack(self, cafe_model):
         board_list = cafe_model.board_list.split(',') + \
                      cafe_model.photo_board_list.split(',')
-        no = cafe_model.section
+
         packed_cafes = {
             'no': cafe_model.no,
             'cafe_id': cafe_model.cafe_name,
