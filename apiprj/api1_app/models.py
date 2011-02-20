@@ -8,6 +8,7 @@ Memo* 모델을 포함하였음.
 모델을 자동생성함. boardinfo에 등록되지 않은 테이블은 자동생성되지 않음.
 """
 from django.db import models
+import datetime
 
 class AbstractBoardinfo(models.Model):
     no = models.IntegerField(primary_key=True)
@@ -96,12 +97,18 @@ class AbstractBoard(models.Model):
     class Meta:
         abstract = True
         
+    def _fix_notice_deadline(self):
+        if not self.notice_deadline:
+            self.notice_deadline = datetime.datetime.min()
+        
     def inc_comment_count(self):
         self.comment += 1
+        self._fix_notice_deadline()
 
     def dec_comment_count(self):
         self.comment -= 1
-        
+        self._fix_notice_deadline()
+    
     def __unicode__(self):
         return ",".join((str(self.id), self.title, self.name))        
    
