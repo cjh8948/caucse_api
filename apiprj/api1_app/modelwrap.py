@@ -419,6 +419,17 @@ class Favorite(object):
         return map(self.pack, favorites)
 
 class Cafe(object):
+    category = (
+        u'N/A', # 0
+        u'학생자치', # 1
+        u'학회', # 2
+        u'레저/스포츠', # 3
+        u'인문사회', # 4
+        u'문화예술', # 5
+        u'친목모임', # 6        
+        u'동문회' # 7      
+    )
+
     @classmethod
     def get_boards(self, cafe_id):
         cafe = models.CafeInfo.objects.get(cafe_name=cafe_id)
@@ -442,41 +453,39 @@ class Cafe(object):
 
     @classmethod
     def get_list(self, q=""):
-
         q = q.strip()
         cafes = models.CafeInfo.objects.filter(is_hidden=0)
         total_cafes = cafes.count()
 
         query = self._build_query(q)
         if query:
-            cafes = cafes.filter(query)
+            cafes = cafes.filter(query).order_by('no').order_by('section')
 
         total_matched_cafes = cafes.count()
-        ordered_cafes = cafes.order_by('no')
-        ordered_cafes = cafes.order_by('section')
         
-
         listinfo = {
             'total_matched_cafes': total_matched_cafes,
             'total_cafes': total_cafes,
             'q': q
         }
 
-        packed_articles = map(lambda cafe: Cafe.pack(cafe), ordered_cafes)
+        packed_articles = map(Cafe.pack, cafes)
         return listinfo, packed_articles
 
     @classmethod
     def pack(self, cafe_model):
-
+        board_list = cafe_model.board_list.split(',') + \
+                     cafe_model.photo_board_list.split(',')
+        no = cafe_model.section
         packed_cafes = {
             'no': cafe_model.no,
             'cafe_id': cafe_model.cafe_name,
             'cafe_name': cafe_model.cafe_nick,
             'admin': cafe_model.adminid,
             'member_list': cafe_model.member_list.split(','),
-            'board_list':cafe_model.board_list.split(',') + cafe_model.photo_board_list.split(','),
+            'board_list': board_list,
             'description': cafe_model.front_text,
-            'section': cafe_model.section
+            'category': self.category[cafe_model.section]
         }
 
         return packed_cafes

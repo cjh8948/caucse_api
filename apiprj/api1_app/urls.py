@@ -16,5 +16,5 @@ urlpatterns = patterns('apiprj.api1_app.views',
     (r'^users/show', 'users_show'),
     (r'^users/lookup', 'users_lookup'),
     (r'^users/search', 'users_search'),
-	(r'^cafe/list', 'cafe_list')
+    (r'^cafes/list', 'cafes_list')
 )

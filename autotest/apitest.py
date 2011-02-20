@@ -459,29 +459,36 @@ class UsersTest(ApiTestCase):
         
         
 class CafeTest(ApiTestCase):
-    def test_cafe_list(self):
-        'GET cafe/list'
-        resp, content = self.oauth_get('cafe/list', self.consumer, self.access_token)
-
+    def test_cafes_list(self):
+        'GET cafes/list'
+        resp, content = self.oauth_get('cafes/list', 
+                                       self.consumer, 
+                                       self.access_token)
+        
         self.assertEqual(resp['status'], '200')
-
         obj = json.loads(content)
 
         listinfo = obj['listinfo']
         self.assertEqual(listinfo['q'], u'')
-        self.assertEqual(listinfo['total_cafes'], 5)
-        self.assertEqual(listinfo['total_matched_cafes'], 5)
+        self.assertTrue(listinfo['total_cafes'] >= 5)
+        self.assertTrue(listinfo['total_matched_cafes'] >= 5)
 
         cafes = obj['cafes']
+        
+        for cafe in cafes:
+            if u"기획" in cafe['cafe_name']:
+                self.assertEqual(cafe['admin'], 'hyojeong28')
+            elif u"정보" in cafe['cafe_name']:
+                self.assertTrue('jeppy' in cafe['member_list'])
 
-        self.assertEqual(cafes[0]['admin'], 'hyojeong28')
-        self.assertEqual(cafes[1]['member_list'][0], 'jeppy')
 
-
-    def test_cafe_list_q(self):
-        'GET cafe/list?q=기획""'
+    def test_cafes_list_q(self):
+        'GET cafes/list?q=기획'
         param = {'q':u'기획'.encode('utf-8')}
-        resp, content = self.oauth_get('cafe/list', self.consumer, self.access_token, param)
+        resp, content = self.oauth_get('cafes/list', 
+                                       self.consumer, 
+                                       self.access_token, 
+                                       param)
 
         self.assertEqual(resp['status'], '200')
 
@@ -489,7 +496,7 @@ class CafeTest(ApiTestCase):
 
         listinfo = obj['listinfo']
         self.assertEqual(listinfo['q'], u'기획')
-        self.assertEqual(listinfo['total_cafes'], 5)
+        self.assertTrue(listinfo['total_cafes'] >= 5)
         self.assertEqual(listinfo['total_matched_cafes'], 1)
 
         cafes = obj['cafes']
