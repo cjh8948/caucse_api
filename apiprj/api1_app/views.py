@@ -986,7 +986,7 @@ def cafes_list(request, oauth_params):
         * request 
             .. parsed-literal::
 
-                GET /cafe/list HTTP/1.1
+                GET /cafes/list HTTP/1.1
 
         * response (검색된 카페가 있는 경우)
             .. parsed-literal::
