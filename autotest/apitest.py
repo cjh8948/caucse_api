@@ -208,6 +208,26 @@ class ArticlesTest(ApiTestCase):
         self.assertEqual(resp['status'], '200')
         self.assertEqual(obj['status'], 'ok')
         
+    def test_hits_count(self):
+        'GET articles/show/ hits increasement'
+        
+        # before show article
+        resp, content = self.oauth_get('articles/show/board_alumni99/100',
+                                       self.consumer, self.access_token)
+        self.assertEqual(resp['status'], '200')
+        obj = json.loads(content)
+        before_show = obj['hits']
+        
+        # after show article
+        resp, content = self.oauth_get('articles/show/board_alumni99/100',
+                                       self.consumer, self.access_token)
+        self.assertEqual(resp['status'], '200')
+        obj = json.loads(content)
+        after_show = obj['hits']
+
+        # differences must be 1        
+        self.assertEqual(before_show+1, after_show)
+        
         
 class BoardsTest(ApiTestCase):
     def test_lookup(self):

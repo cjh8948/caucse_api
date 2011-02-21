@@ -190,6 +190,10 @@ class Article(object):
         article_model = board_model.objects.get(id=article_id)
         comments = Comment.get(board_id, article_id)
         article = Article.pack(article_model, board_id, comments)
+        
+        article_model.inc_hit_count()
+        article_model.save()  
+              
         return article
 
     @classmethod
