@@ -191,8 +191,9 @@ class Article(object):
         comments = Comment.get(board_id, article_id)
         article = Article.pack(article_model, board_id, comments)
         
-        article_model.inc_hit_count()
-        article_model.save()  
+        if user_id != article_model.user_id: 
+            article_model.inc_hit_count()
+            article_model.save()  
               
         return article
 
